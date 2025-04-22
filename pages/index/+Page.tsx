@@ -1,16 +1,12 @@
-import { Counter } from "./Counter.js";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 
 export default function Page() {
   return (
-    <>
-      <h1 className={"font-bold text-3xl pb-4"}>My Vike app</h1>
-      This page is:
-      <ul>
-        <li>Rendered to HTML.</li>
-        <li>
-          Interactive. <Counter />
-        </li>
-      </ul>
-    </>
+    <div className="h-dvh flex flex-col justify-between">
+      <Header />
+      <div id="page-content"></div>
+      <Footer />
+    </div>
   );
 }

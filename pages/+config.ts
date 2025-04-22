@@ -10,8 +10,8 @@ export default {
   Layout,
 
   // https://vike.dev/head-tags
-  title: "My Vike App",
-  description: "Demo showcasing Vike",
+  title: "IndieWolf",
+  description: "插畫修行。",
 
   extends: vikeReact,
 } satisfies Config;
