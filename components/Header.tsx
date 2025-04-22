@@ -4,6 +4,7 @@ import { usePageContext } from "vike-react/usePageContext";
 export default function Header() {
   const pageContext = usePageContext();
   const { urlPathname } = pageContext;
+  console.log("urlPathname", urlPathname);
   const notIndex = useMemo(() => urlPathname.split("/")[1], [urlPathname]);
   const [menuOpen, setMenuOpen] = useState(true);
   return (
@@ -57,7 +58,7 @@ const NavUl = () => {
       const isActive = href === "/" ? urlPathname === href : urlPathname.startsWith(href);
       return (
         <li key={href}>
-          <a className={isActive ? `border-b` : ""} href={href}>{label}</a>
+          <a className={isActive ? `border-b` : ""} href={`/indiewolf${href}`}>{label}</a>
         </li>
       )
     })
@@ -66,5 +67,5 @@ const NavUl = () => {
 }
 
 const IndieWolf = () => (
-  <div className="uppercase text-2xl font-bold"><a href="/">indiewolf</a></div>
+  <div className="uppercase text-2xl font-bold"><a href="/indiewolf">indiewolf</a></div>
 )
