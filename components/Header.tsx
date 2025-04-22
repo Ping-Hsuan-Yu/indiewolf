@@ -4,7 +4,6 @@ import { usePageContext } from "vike-react/usePageContext";
 export default function Header() {
   const pageContext = usePageContext();
   const { urlPathname } = pageContext;
-  console.log("urlPathname", urlPathname);
   const notIndex = useMemo(() => urlPathname.split("/")[1], [urlPathname]);
   const [menuOpen, setMenuOpen] = useState(true);
   return (

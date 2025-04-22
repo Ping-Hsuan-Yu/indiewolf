@@ -3,7 +3,7 @@
 @import "tailwindcss";
 
 @theme {
-  --default-font-family: "Abhaya Libre", "Noto Sans TC", ui-sans-serif,
+  --default-font-family: "Abhaya Libre", "Noto Serif TC", ui-sans-serif,
     system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
     "Segoe UI Symbol", "Noto Color Emoji";
 }
