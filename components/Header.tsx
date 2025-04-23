@@ -7,19 +7,20 @@ export default function Header() {
   const notIndex = useMemo(() => urlPathname.split("/")[1], [urlPathname]);
   const [menuOpen, setMenuOpen] = useState(true);
   return (
-    <>
+    <> 
+      {/* mobile */}
       <header className="pt-16 sticky -top-10 md:hidden">
         <IndieWolf />
       </header>
       <nav className="md:hidden">
         {(!notIndex || !menuOpen) &&
-          <ul className={`flex flex-col-reverse gap-2 text-end fixed text-xl uppercase text-nowrap ${notIndex ? "right-8 bottom-20" : "right-4 bottom-32"}`}>
+          <ul className={`flex flex-col gap-2 text-end fixed text-xl uppercase text-nowrap ${notIndex ? "right-8 bottom-22" : "right-4 bottom-32"}`}>
             <NavUl />
           </ul>
         }
         {notIndex &&
           <div
-            className="fixed right-8 bottom-8 rounded-full bg-white opacity-80 w-9 h-9 flex justify-center items-center shadow-lg cursor-pointer"
+            className="fixed right-8 bottom-12 rounded-full bg-white opacity-80 w-9 h-9 flex justify-center items-center shadow-lg cursor-pointer"
             onClick={() => setMenuOpen(!menuOpen)}
           >
             {menuOpen ? <span className="material-symbols-outlined">menu</span> :
@@ -27,6 +28,8 @@ export default function Header() {
           </div>
         }
       </nav>
+
+      {/* tablet & desktop */}
       {notIndex && <div className="uppercase text-xl text-end sticky top-7 md:hidden">{notIndex}</div>}
       <div className="hidden md:flex justify-between items-end pt-16 pb-8 sticky -top-10">
         <header>

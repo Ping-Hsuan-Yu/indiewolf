@@ -6,3 +6,7 @@
 body.page-is-transitioning #page-content {
   opacity: 0;
 }
+
+.lg-backdrop{
+  opacity: 0.75 !important;
+}
