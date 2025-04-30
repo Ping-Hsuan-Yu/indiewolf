@@ -1,0 +1,214 @@
+import Ya00 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-00.webp";
+import Ya01 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-1.webp";
+import Ya02 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-2.webp";
+import Ya03 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-3.webp";
+import Ya04 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-4.webp";
+import Ya05 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-5.webp";
+import Ya06 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-6.webp";
+import Ya07 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-7.webp";
+import Ya08 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-8.webp";
+import Ya09 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-9.webp";
+import Ya10 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-10.webp";
+import Ya11 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-11.webp";
+import Ya12 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-12.webp";
+import Ya13 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-13.webp";
+import Ya14 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-14.webp";
+import Ya15 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-15.webp";
+import Ya16 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-16.webp";
+import Ya17 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-17.webp";
+import Ya18 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-18.webp";
+import Ya19 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-19.webp";
+import Ya20 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-20.webp";
+import Ya21 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-21.webp";
+import Ya22 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-22.webp";
+import Ya23 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-23.webp";
+import Ya24 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-24.webp";
+import Ya25 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-25.webp";
+import Ya26 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-26.webp";
+import Ya27 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-27.webp";
+import Ya28 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-28.webp";
+import Ya29 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-29.webp";
+import Ya30 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-30.webp";
+import Ya31 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-31.webp";
+import Ya32 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-32.webp";
+import Ya33 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-33.webp";
+import Ya34 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-34.webp";
+import Ya35 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-35.webp";
+import Ya36 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-36.webp";
+import Ya37 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-37.webp";
+import Ya38 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-38.webp";
+import Ya39 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-39.webp";
+import Ya40 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-40.webp";
+import Ya41 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-41.webp";
+import Ya42 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-42.webp";
+import Ya43 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-43.webp";
+import Ya44 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-44.webp";
+import Ya45 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-45.webp";
+import Ya46 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-46.webp";
+import Ya47 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-47.webp";
+import Ya48 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-48.webp";
+import Ya49 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-49.webp";
+import Ya50 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-50.webp";
+import Ya51 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-51.webp";
+import Ya52 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-52.webp";
+import Ya53 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-53.webp";
+import Ya54 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-54.webp";
+import Ya55 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-55.webp";
+import Ya56 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-56.webp";
+import Ya57 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-57.webp";
+import Ya58 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-58.webp";
+import Ya59 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-59.webp";
+import Ya60 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-60.webp";
+import Ya61 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-61.webp";
+import Ya62 from "../../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-62.webp";
+
+import Canyon01 from "../../../assets/manga/2019/grand-canyon/grand-canyon-1.webp"
+import Canyon02 from "../../../assets/manga/2019/grand-canyon/grand-canyon-2.webp"
+import Canyon03 from "../../../assets/manga/2019/grand-canyon/grand-canyon-3.webp"
+import Canyon04 from "../../../assets/manga/2019/grand-canyon/grand-canyon-4.webp"
+import Canyon05 from "../../../assets/manga/2019/grand-canyon/grand-canyon-5.webp"
+import Canyon06 from "../../../assets/manga/2019/grand-canyon/grand-canyon-6.webp"
+import Canyon07 from "../../../assets/manga/2019/grand-canyon/grand-canyon-7.webp"
+import Canyon08 from "../../../assets/manga/2019/grand-canyon/grand-canyon-8.webp"
+import Canyon09 from "../../../assets/manga/2019/grand-canyon/grand-canyon-9.webp"
+import Canyon10 from "../../../assets/manga/2019/grand-canyon/grand-canyon-10.webp"
+import Canyon11 from "../../../assets/manga/2019/grand-canyon/grand-canyon-11.webp"
+import Canyon12 from "../../../assets/manga/2019/grand-canyon/grand-canyon-12.webp"
+import Canyon13 from "../../../assets/manga/2019/grand-canyon/grand-canyon-13.webp"
+
+import Waste01 from "../../../assets/manga/2018/human-waste/human-waste-1.webp"
+import Waste02 from "../../../assets/manga/2018/human-waste/human-waste-2.webp"
+import Waste03 from "../../../assets/manga/2018/human-waste/human-waste-3.webp"
+import Waste04 from "../../../assets/manga/2018/human-waste/human-waste-4.webp"
+import Waste05 from "../../../assets/manga/2018/human-waste/human-waste-5.webp"
+import Waste06 from "../../../assets/manga/2018/human-waste/human-waste-6.webp"
+import Waste07 from "../../../assets/manga/2018/human-waste/human-waste-7.webp"
+import Waste08 from "../../../assets/manga/2018/human-waste/human-waste-8.webp"
+
+import Slasher01 from "../../../assets/manga/2018/midlife-slasher/midlife-slasher-1.webp"
+import Slasher02 from "../../../assets/manga/2018/midlife-slasher/midlife-slasher-2.webp"
+import Slasher03 from "../../../assets/manga/2018/midlife-slasher/midlife-slasher-3.webp"
+import Slasher04 from "../../../assets/manga/2018/midlife-slasher/midlife-slasher-4.webp"
+import Slasher05 from "../../../assets/manga/2018/midlife-slasher/midlife-slasher-5.webp"
+import Slasher06 from "../../../assets/manga/2018/midlife-slasher/midlife-slasher-6.webp"
+import Slasher07 from "../../../assets/manga/2018/midlife-slasher/midlife-slasher-7.webp"
+import Slasher08 from "../../../assets/manga/2018/midlife-slasher/midlife-slasher-8.webp"
+
+import Evil01 from "../../../assets/manga/2018/the-innocence-of-evil/the-innocence-of-evil-1.webp"
+import Evil02 from "../../../assets/manga/2018/the-innocence-of-evil/the-innocence-of-evil-2.webp"
+import Evil03 from "../../../assets/manga/2018/the-innocence-of-evil/the-innocence-of-evil-3.webp"
+import Evil04 from "../../../assets/manga/2018/the-innocence-of-evil/the-innocence-of-evil-4.webp"
+import Evil05 from "../../../assets/manga/2018/the-innocence-of-evil/the-innocence-of-evil-5.webp"
+
+
+export const yaGalleryItems = [
+  { src: Ya00 },
+  { src: Ya01 },
+  { src: Ya02 },
+  { src: Ya03 },
+  { src: Ya04 },
+  { src: Ya05 },
+  { src: Ya06 },
+  { src: Ya07 },
+  { src: Ya08 },
+  { src: Ya09 },
+  { src: Ya10 },
+  { src: Ya11 },
+  { src: Ya12 },
+  { src: Ya13 },
+  { src: Ya14 },
+  { src: Ya15 },
+  { src: Ya16 },
+  { src: Ya17 },
+  { src: Ya18 },
+  { src: Ya19 },
+  { src: Ya20 },
+  { src: Ya21 },
+  { src: Ya22 },
+  { src: Ya23 },
+  { src: Ya24 },
+  { src: Ya25 },
+  { src: Ya26 },
+  { src: Ya27 },
+  { src: Ya28 },
+  { src: Ya29 },
+  { src: Ya30 },
+  { src: Ya31 },
+  { src: Ya32 },
+  { src: Ya33 },
+  { src: Ya34 },
+  { src: Ya35 },
+  { src: Ya36 },
+  { src: Ya37 },
+  { src: Ya38 },
+  { src: Ya39 },
+  { src: Ya40 },
+  { src: Ya41 },
+  { src: Ya42 },
+  { src: Ya43 },
+  { src: Ya44 },
+  { src: Ya45 },
+  { src: Ya46 },
+  { src: Ya47 },
+  { src: Ya48 },
+  { src: Ya49 },
+  { src: Ya50 },
+  { src: Ya51 },
+  { src: Ya52 },
+  { src: Ya53 },
+  { src: Ya54 },
+  { src: Ya55 },
+  { src: Ya56 },
+  { src: Ya57 },
+  { src: Ya58 },
+  { src: Ya59 },
+  { src: Ya60 },
+  { src: Ya61 },
+  { src: Ya62 },
+];
+
+export const canyonGalleryItems = [
+  { src: Canyon01 },
+  { src: Canyon02 },
+  { src: Canyon03 },
+  { src: Canyon04 },
+  { src: Canyon05 },
+  { src: Canyon06 },
+  { src: Canyon07 },
+  { src: Canyon08 },
+  { src: Canyon09 },
+  { src: Canyon10 },
+  { src: Canyon11 },
+  { src: Canyon12 },
+  { src: Canyon13 }
+];
+
+export const wasteGalleryItems = [
+  { src: Waste01 },
+  { src: Waste02 },
+  { src: Waste03 },
+  { src: Waste04 },
+  { src: Waste05 },
+  { src: Waste06 },
+  { src: Waste07 },
+  { src: Waste08 }
+];
+
+export const slasherGalleryItems = [
+  { src: Slasher01 },
+  { src: Slasher02 },
+  { src: Slasher03 },
+  { src: Slasher04 },
+  { src: Slasher05 },
+  { src: Slasher06 },
+  { src: Slasher07 },
+  { src: Slasher08 }
+];
+
+export const evilGalleryItems = [
+  { src: Evil01 },
+  { src: Evil02 },
+  { src: Evil03 },
+  { src: Evil04 },
+  { src: Evil05 }
+];

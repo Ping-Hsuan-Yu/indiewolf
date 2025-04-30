@@ -60,7 +60,7 @@ const NavUl = () => {
       const isActive = href === "/" ? urlPathname === href : urlPathname.startsWith(href);
       return (
         <li key={href}>
-          <a className={isActive ? `border-b` : ""} href={`/indiewolf${href}`}>{label}</a>
+          <a className={`bg-white/80 md:bg-transparent  ${isActive ? "border-b" : ""}`} href={`/indiewolf${href}`}>{label}</a>
         </li>
       )
     })
