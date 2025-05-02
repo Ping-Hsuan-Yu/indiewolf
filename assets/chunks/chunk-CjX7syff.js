@@ -1,1 +1,0 @@
-import{j as e}from"./chunk-D6jm5EFS.js";import{H as o,F as r}from"./chunk-B0a-eiJ3.js";function s({children:t}){return e.jsxs(e.Fragment,{children:[e.jsx(o,{}),t,e.jsx(r,{})]})}const i=Object.freeze(Object.defineProperty({__proto__:null,default:s},Symbol.toStringTag,{value:"Module"}));export{i};
