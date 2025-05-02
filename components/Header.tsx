@@ -50,9 +50,9 @@ const NavUl = () => {
   const { urlPathname } = pageContext;
 
   const menuItems = [
-    { href: "/illustration", label: "illustration" },
+    { href: "/illustration/2025", label: "illustration" },
     { href: "/books-and-zines", label: "books & zines" },
-    { href: "/manga", label: "manga" },
+    { href: "/manga/2023", label: "manga" },
     { href: "/about", label: "about" },
   ];
   return (
@@ -60,14 +60,13 @@ const NavUl = () => {
       const isActive = href === "/" ? urlPathname === href : urlPathname.startsWith(href);
       return (
         <li key={href}>
-          <a className={`bg-white/80 md:bg-transparent  ${isActive ? "border-b" : ""}`} href={`/indiewolf${href}`}>{label}</a>
+          <a className={`bg-white/80 md:bg-transparent  ${isActive ? "border-b" : ""}`} href={`${href}`}>{label}</a>
         </li>
       )
     })
   )
-
 }
 
 const IndieWolf = () => (
-  <div className="uppercase text-2xl font-bold"><a href="/indiewolf">indiewolf</a></div>
+  <div className="uppercase text-2xl font-bold"><a href="/">indiewolf</a></div>
 )

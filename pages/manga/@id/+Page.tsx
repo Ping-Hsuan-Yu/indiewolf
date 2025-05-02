@@ -11,7 +11,13 @@ import CanyonCover from "../../../assets/manga/2019/grand-canyon/grand-canyon-1-
 import WasteCover from "../../../assets/manga/2018/human-waste/human-waste-1-768.webp";
 import SlasherCover from "../../../assets/manga/2018/midlife-slasher/midlife-slasher-1-768.webp";
 import EvilCover from "../../../assets/manga/2018/the-innocence-of-evil/the-innocence-of-evil-1-768.webp";
-import { canyonGalleryItems, evilGalleryItems, slasherGalleryItems, wasteGalleryItems, yaGalleryItems } from "./data";
+import {
+  canyonGalleryItems,
+  evilGalleryItems,
+  slasherGalleryItems,
+  wasteGalleryItems,
+  yaGalleryItems,
+} from "./data";
 
 const manga = [
   {
@@ -131,7 +137,7 @@ export default function Page() {
             className="flex flex-col md:flex-row gap-4 md:items-end"
           >
             <div
-              className="shadow basis-1/2"
+              className="cursor-pointer shadow basis-1/2"
               onClick={() => {
                 setCurrentComic(item.titleEN);
                 setPendingOpen(true);
@@ -153,6 +159,7 @@ export default function Page() {
         ))}
       </div>
       <LightGallery
+        download={false}
         onInit={onInit}
         dynamic
         dynamicEl={galleryItems}

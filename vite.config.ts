@@ -5,7 +5,6 @@ import vike from "vike/plugin";
 
 export default defineConfig({
   plugins: [vike({ prerender: true }), react({}), tailwindcss()],
-  base:"/indiewolf",
   build: {
     target: "es2022",
   },
