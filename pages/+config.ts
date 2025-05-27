@@ -10,7 +10,7 @@ export default {
   Layout,
 
   // https://vike.dev/head-tags
-  title: "IndieWolf",
+  title: "Lin ChaoYu",
   description: "插畫修行。",
 
   extends: vikeReact,

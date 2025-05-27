@@ -12,12 +12,12 @@ const contactLinks = [
 
 export default function Page() {
   return (
-    <main id="page-content" className="my-auto">
+    <main id="page-content" className="m-auto max-w-[500px]">
       <p>
         我是林朝昱Lin Chao
         Yu，可以叫我LCY，從事插畫及漫畫創作已有15年的時間，我喜歡烤披薩，除了畫圖之外，最讓我快樂的就是烤自己做的披薩🍕。
       </p>
-      <p>
+      <p className="mt-2">
         I’m Lin Chao Yu (LCY), an illustrator and comic artist with 15 years of
         experience. Besides drawing, what brings me the greatest joy is baking
         pizzas made by my own hands.

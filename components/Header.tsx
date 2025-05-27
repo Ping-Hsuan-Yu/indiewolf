@@ -10,7 +10,7 @@ export default function Header() {
     <> 
       {/* mobile */}
       <header className="pt-16 sticky -top-10 md:hidden">
-        <IndieWolf />
+        <HeaderTitle />
       </header>
       <nav className="md:hidden">
         {(!notIndex || !menuOpen) &&
@@ -33,7 +33,7 @@ export default function Header() {
       {notIndex && <div className="uppercase text-xl text-end sticky top-7 md:hidden">{notIndex}</div>}
       <div className="hidden md:flex justify-between items-end pt-16 pb-8 sticky -top-10">
         <header>
-          <IndieWolf />
+          <HeaderTitle />
         </header>
         <nav>
           <ul className="flex flex-row gap-4 text-end text-xl uppercase text-nowrap">
@@ -57,7 +57,8 @@ const NavUl = () => {
   ];
   return (
     menuItems.map(({ href, label }) => {
-      const isActive = href === "/" ? urlPathname === href : urlPathname.startsWith(href);
+      const url = `/${href.split("/")[1]}`;
+      const isActive = href === "/" ? urlPathname === url : urlPathname.startsWith(url);
       return (
         <li key={href}>
           <a className={`bg-white/80 md:bg-transparent  ${isActive ? "border-b" : ""}`} href={`${href}`}>{label}</a>
@@ -67,6 +68,6 @@ const NavUl = () => {
   )
 }
 
-const IndieWolf = () => (
-  <div className="uppercase text-2xl font-bold"><a href="/">indiewolf</a></div>
+const HeaderTitle = () => (
+  <div className="uppercase text-2xl font-bold"><a href="/">lin chaoyu</a></div>
 )
