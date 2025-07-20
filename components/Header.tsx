@@ -53,6 +53,7 @@ const NavUl = () => {
     { href: "/illustration/2025", label: "illustration" },
     { href: "/books-and-zines", label: "books & zines" },
     { href: "/manga/2023", label: "manga" },
+    // { href: "/collaboration", label: "collaboration" },
     { href: "/about", label: "about" },
   ];
   return (
