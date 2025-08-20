@@ -7,11 +7,12 @@ import SonOfSeal from "../../assets/zine/2017/zine_2017_son-of-seal.webp";
 import SonOfSealThumb from "../../assets/zine/2017/zine_2017_son-of-seal-768.webp";
 import Ya from "../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-00.webp";
 import YaThumb from "../../assets/manga/2023/the-curious-notebook-of-ya/the-curious-notebook-of-ya-00-768.webp";
+import Main from "../../components/Main";
 
 
 export default function Page() {
   return (
-    <main id="page-content" className="flex flex-col gap-8">
+    <Main className="flex flex-col gap-8">
       <LightGallery
         download={false}
         elementClassNames="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4"
@@ -40,7 +41,7 @@ export default function Page() {
                     <p>This was my first full-length comic. At the time, I was fascinated by the sea. The protagonist is a seal-human hybrid.</p>"
         />
       </LightGallery>
-    </main>
+    </Main>
   );
 }
 

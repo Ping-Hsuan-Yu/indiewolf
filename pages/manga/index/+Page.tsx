@@ -1,3 +1,5 @@
+import { navigate } from "vike/client/router";
+
 export default function Page() {
-  // 此頁面不會被渲染，因為會立即重導
+  navigate("/manga/2023");
 }

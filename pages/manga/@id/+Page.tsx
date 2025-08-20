@@ -18,6 +18,7 @@ import {
   wasteGalleryItems,
   yaGalleryItems,
 } from "./data";
+import Main from "../../../components/Main";
 
 const manga = [
   {
@@ -114,16 +115,13 @@ export default function Page() {
     }
   }, [galleryItems, pendingOpen]);
   return (
-    <main id="page-content" className="flex flex-col gap-4">
+    <Main className="flex flex-col gap-4">
       <ul className="text-lg flex gap-4">
         {years.map((year) => (
           <li key={year}>
             <a
               className={`${routeParams === year ? "border-b" : ""}`}
-              href={`${pageContext.urlOriginal
-                .split("/")
-                .slice(0, -1)
-                .join("/")}/${year}`}
+              href={`${year}`}
             >
               {year}
             </a>
@@ -167,6 +165,6 @@ export default function Page() {
           setPendingOpen(false);
         }}
       />
-    </main>
+    </Main>
   );
 }

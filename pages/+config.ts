@@ -14,4 +14,8 @@ export default {
   description: "插畫修行。",
 
   extends: vikeReact,
+  redirects:{
+    "/manga":"/manga/2023",
+    "/illustration":"/illustration/2025"
+  }
 } satisfies Config;

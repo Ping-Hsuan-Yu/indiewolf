@@ -3,6 +3,7 @@ import IgLogo from "../../assets/ig.svg";
 import XLogo from "../../assets/x.svg";
 import BlueSkyLogo from "../../assets/bluesky.svg";
 import Avatar from "../../assets/about.jpg";
+import Main from "../../components/Main";
 
 const contactLinks = [
   { logo: EmailLogo, url: "mailto:hangedindigo@gmail.com" },
@@ -13,7 +14,7 @@ const contactLinks = [
 
 export default function Page() {
   return (
-    <main id="page-content" className="m-auto">
+    <Main className="m-auto">
       <div>
         <div className="flex flex-col-reverse md:flex-row items-center gap-4">
           <div>
@@ -48,6 +49,6 @@ export default function Page() {
           ))}
         </div>
       </div>
-    </main>
+    </Main>
   );
 }

@@ -9,10 +9,10 @@ export default function Header() {
   return (
     <> 
       {/* mobile */}
-      <header className="pt-16 sticky -top-10 md:hidden">
+      <header className="pt-16 sticky -top-10 md:hidden z-10 bg-white opacity-80">
         <HeaderTitle />
       </header>
-      <nav className="md:hidden">
+      <nav className="md:hidden z-10">
         {(!notIndex || !menuOpen) &&
           <ul className={`flex flex-col gap-2 text-end fixed text-xl uppercase text-nowrap ${notIndex ? "right-8 bottom-22" : "right-4 bottom-32"}`}>
             <NavUl />
@@ -30,8 +30,8 @@ export default function Header() {
       </nav>
 
       {/* tablet & desktop */}
-      {notIndex && <div className="uppercase text-xl text-end sticky top-7 md:hidden">{notIndex}</div>}
-      <div className="hidden md:flex justify-between items-end pt-16 pb-8 sticky -top-10">
+      {notIndex && <a className="uppercase text-xl text-end sticky top-7 md:hidden z-10" href={`/${notIndex}`}>{notIndex}</a>}
+      <div className="z-10 bg-white opacity-80 hidden md:flex justify-between items-end pt-16 pb-8 sticky -top-10">
         <header>
           <HeaderTitle />
         </header>
@@ -53,7 +53,7 @@ const NavUl = () => {
     { href: "/illustration/2025", label: "illustration" },
     { href: "/books-and-zines", label: "books & zines" },
     { href: "/manga/2023", label: "manga" },
-    // { href: "/collaboration", label: "collaboration" },
+    { href: "/project", label: "project" },
     { href: "/about", label: "about" },
   ];
   return (

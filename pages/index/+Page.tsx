@@ -10,6 +10,7 @@ import Frame6 from "../../assets/index/frame-6.webp";
 import Frame7 from "../../assets/index/frame-7.webp";
 import Frame8 from "../../assets/index/frame-8.webp";
 import { useEffect, useRef, useState } from "react";
+import Main from "../../components/Main";
 
 const frames = [Frame1, Frame2, Frame3, Frame4, Frame5, Frame6, Frame7, Frame8];
 
@@ -47,7 +48,7 @@ export default function Page() {
   return (
     <div className="h-dvh flex flex-col justify-between">
       <Header />
-      <main id="page-content" className="flex m-auto">
+      <Main className="flex m-auto">
         <div className="m-auto max-w-lg">
           <img
             src={frames[currentFrame]}
@@ -57,7 +58,7 @@ export default function Page() {
             onMouseLeave={startAnimation}
           />
         </div>
-      </main>
+      </Main>
       <Footer />
     </div>
   );
