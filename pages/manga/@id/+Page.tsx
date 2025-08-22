@@ -121,7 +121,7 @@ export default function Page() {
           <li key={year}>
             <a
               className={`${routeParams === year ? "border-b" : ""}`}
-              href={`${year}`}
+              href={`/manga/${year}`}
             >
               {year}
             </a>

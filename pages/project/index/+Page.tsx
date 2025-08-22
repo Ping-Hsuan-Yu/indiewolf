@@ -9,7 +9,7 @@ export default function Page() {
       {data.project.map((project) => (
         <div key={project.id} className="flex flex-col md:flex-row gap-4">
           <div className="cursor-pointer basis-1/2">
-            <a href={`project/${project.url}`}>
+            <a href={`/project/${project.url}`}>
               <img
                 src={`https://drive.google.com/thumbnail?id=${project.id}&sz=w768-h768`}
               />
