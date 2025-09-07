@@ -1,11 +1,3 @@
-/**
- * NavbarHoverDropdown
- * - Tailwind-only hover/focus second-level menus on desktop
- * - Click-to-expand on mobile
- * - Accessible-ish (aria-expanded, focus-within keeps menus open)
- * - Edit NAV data to customize
- */
-
 import { useState } from "react";
 import HeaderTitle from "./HeaderTitle";
 
@@ -25,8 +17,9 @@ const NAV: NavItem[] = [
     label: "illustration",
     children: [
       { label: "2025", href: "/illustration/2025" },
-      { label: "2024", href: "/illustration/2024" },
-      { label: "2023", href: "/illustration/2023" },
+      { label: "2023-2024", href: "/illustration/2023-2024" },
+      { label: "2020-2022", href: "/illustration/2020-2022" },
+      { label: "2017-2019", href: "/illustration/2017-2019" },
     ],
   },
   { label: "books & zines", href: "/books-and-zines" },
@@ -38,7 +31,15 @@ const NAV: NavItem[] = [
       { label: "2018", href: "/manga/2018" },
     ],
   },
-  { label: "project", href: "/project" },
+  {
+    label: "project",
+    href: "/project",
+    children: [
+      { label: "金豬", href: "/project/golden-pig" },
+      { label: "《A Spiritual Journey》專輯封面", href: "/project/a-spiritual-journey" },
+      { label: "61 NOTE 臺北中山商圈地圖", href: "/project/61-note" },
+    ],
+  },
   { label: "about", href: "/about" },
 ];
 
@@ -47,8 +48,8 @@ export default function NavbarHoverDropdown() {
   const [openIdx, setOpenIdx] = useState<number | null>(null); // mobile section expand
 
   return (
-    <header className="sticky -top-10 z-50 bg-white opacity-80">
-      <nav className="pt-4 md:pt-16 pb-6">
+    <header className="sticky top-0 md:-top-10 z-50 bg-white opacity-80">
+      <nav className="pt-4 md:pt-16 md:pb-6">
         <div className="flex items-center justify-between">
           {/* Brand */}
           <HeaderTitle />
@@ -74,18 +75,15 @@ export default function NavbarHoverDropdown() {
                     className="pointer-events-none absolute top-full opacity-0 transition duration-150 ease-out group-hover:pointer-events-auto group-hover:opacity-100"
                   >
                     <div className="relative bg-white mt-2 ps-4 pb-4 pe-4 -ms-4">
-
                       <ul className="grid grid-cols-1 gap-2">
                         {item.children.map((c) => (
                           <li key={c.label}>
                             <a
                               role="menuitem"
                               href={c.href}
-                              className="block text-lg"
+                              className="block"
                             >
-                              <span
-                                className="relative inline-block after:absolute after:left-0 after:-bottom-0.5 after:h-0.25 after:w-full after:origin-left after:scale-x-0 after:rounded-full after:bg-black after:transition-transform after:duration-300 hover:after:scale-x-100"
-                              >
+                              <span className="text-nowrap relative inline-block after:absolute after:left-0 after:-bottom-0.25 after:h-0.25 after:w-full after:origin-left after:scale-x-0 after:rounded-full after:bg-black after:transition-transform after:duration-300 hover:after:scale-x-100">
                                 {c.label}
                               </span>
                             </a>
@@ -102,74 +100,65 @@ export default function NavbarHoverDropdown() {
           {/* Mobile: menu button */}
           <button
             type="button"
-            className="inline-flex items-center justify-center rounded-xl p-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-black/10 md:hidden"
+            className="inline-flex items-center justify-center p-2 md:hidden"
             aria-label="Toggle menu"
             aria-expanded={mobileOpen}
             onClick={() => setMobileOpen((s) => !s)}
           >
-            <svg
-              className="h-6 w-6"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              {mobileOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              )}
-            </svg>
+            {mobileOpen ? (
+              <span className="material-symbols-outlined">close</span>
+            ) : (
+              <span className="material-symbols-outlined">menu</span>
+            )}
           </button>
         </div>
 
-        {/* Mobile: drawer */}
-        <div className={"md:hidden " + (mobileOpen ? "block" : "hidden")}>
-          <div className="border-t border-black/5 py-2">
+        {/* Mobile: drawer (animated like children menus) */}
+        <div
+          className={
+            "md:hidden overflow-hidden transition-[grid-template-rows] duration-200 " +
+            (mobileOpen ? "grid grid-rows-[1fr]" : "grid grid-rows-[0fr]")
+          }
+          aria-hidden={!mobileOpen}
+        >
+          <div className="min-h-0 py-2">
             <ul className="flex flex-col">
               {NAV.map((item, idx) => {
                 const hasKids = !!item.children?.length;
                 const expanded = openIdx === idx;
                 return (
                   <li key={item.label} className="">
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center">
                       <a
                         href={item.href ?? "#"}
-                        className="flex-1 px-3 py-3 rounded-xl"
+                        className="flex-1 px-3 py-2"
                         onClick={(e) => {
-                          if (hasKids) e.preventDefault();
+                          if (hasKids) {
+                            e.preventDefault();
+                            if (!item.href) {
+                              setOpenIdx(expanded ? null : idx);
+                            }
+                          }
                         }}
                       >
-                        <span
-                          className="relative uppercase text-nowrap text-xl text-gray-800 after:absolute after:left-0 after:bottom-0 after:h-0.25 after:w-full after:origin-left after:scale-x-0 after:rounded-full after:bg-black after:transition-transform after:duration-300 hover:after:scale-x-100"
-                        >
+                        <span className="relative uppercase text-nowrap text-xl after:absolute after:left-0 after:bottom-0 after:h-0.25 after:w-full after:origin-left after:scale-x-0 after:rounded-full after:bg-black after:transition-transform after:duration-300 hover:after:scale-x-100">
                           {item.label}
                         </span>
                       </a>
                       {hasKids && (
                         <button
-                          className="mx-2 inline-grid h-8 w-8 place-items-center rounded-lg"
+                          className="mx-2 inline-grid h-8 w-8 place-items-center rounded-lg cursor-pointer"
                           aria-expanded={expanded}
                           onClick={() => setOpenIdx(expanded ? null : idx)}
                         >
-                          <svg
+                          <span
                             className={
-                              "h-4 w-4 transition " +
+                              "material-symbols-outlined leading-none transition-transform duration-200 " +
                               (expanded ? "rotate-180" : "")
                             }
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
                           >
-                            <path d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.21 8.29a.75.75 0 0 1 .02-1.08z" />
-                          </svg>
+                            expand_more
+                          </span>
                         </button>
                       )}
                     </div>
@@ -177,22 +166,22 @@ export default function NavbarHoverDropdown() {
                     {hasKids && (
                       <div
                         className={
-                          "overflow-hidden transition-[grid-template-rows] duration-200 " +
+                          "overflow-hidden transition-all duration-200 " +
                           (expanded
                             ? "grid grid-rows-[1fr]"
                             : "grid grid-rows-[0fr]")
                         }
                       >
-                        <ul className="min-h-0 space-y-1 px-3 pb-2 pt-0">
+                        <ul
+                          className={
+                            "min-h-0 space-y-1 px-3 pt-0 " +
+                            (expanded ? "pb-2" : "pb-0")
+                          }
+                        >
                           {item.children!.map((c) => (
                             <li key={c.label}>
-                              <a
-                                href={c.href}
-                                className="block rounded-xl px-3 py-2 text-sm"
-                              >
-                                <span
-                                  className="relative inline-block text-lg after:absolute after:left-0 after:-bottom-0.5 after:h-0.25 after:w-full after:origin-left after:scale-x-0 after:rounded-full after:bg-black after:transition-transform after:duration-300 hover:after:scale-x-100"
-                                >
+                              <a href={c.href} className="block px-3 py-2">
+                                <span className="relative inline-block after:absolute after:left-0 after:-bottom-0.25 after:h-0.25 after:w-full after:origin-left after:scale-x-0 after:rounded-full after:bg-black after:transition-transform after:duration-300 hover:after:scale-x-100">
                                   {c.label}
                                 </span>
                               </a>

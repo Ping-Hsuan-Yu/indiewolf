@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { usePageContext } from "vike-react/usePageContext";
+import HeaderTitle from "./HeaderTitle";
 
 export default function Header() {
   const pageContext = usePageContext();
@@ -68,7 +69,3 @@ const NavUl = () => {
     })
   )
 }
-
-const HeaderTitle = () => (
-  <div className="uppercase text-2xl font-bold"><a href="/">lin chaoyu</a></div>
-)

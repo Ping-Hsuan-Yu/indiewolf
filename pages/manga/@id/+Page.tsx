@@ -116,7 +116,7 @@ export default function Page() {
   }, [galleryItems, pendingOpen]);
   return (
     <Main className="flex flex-col gap-4">
-      <ul className="text-lg flex gap-4">
+      {/* <ul className="text-lg flex gap-4">
         {years.map((year) => (
           <li key={year}>
             <a
@@ -127,7 +127,7 @@ export default function Page() {
             </a>
           </li>
         ))}
-      </ul>
+      </ul> */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {currentPage?.comics.map((item) => (
           <div

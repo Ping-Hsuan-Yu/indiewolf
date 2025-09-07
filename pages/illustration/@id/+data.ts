@@ -10,7 +10,7 @@ type GalleryItem = {
 };
 
 export type GalleryGroup = {
-  year: number;
+  year: string;
   items: GalleryItem[];
 };
 

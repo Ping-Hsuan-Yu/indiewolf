@@ -16,18 +16,18 @@ export default function Page() {
   const data = useData<Data>();
 
   const currentGroup = useMemo(() => {
-    return data.find((group) => String(group.year) === routeParams);
+    return data.find((group) => group.year === routeParams);
   }, [data, routeParams]);
 
-  const years = useMemo(
-    () => data.map((group) => String(group.year)),
-    [data]
-  );
+  // const years = useMemo(
+  //   () => data.map((group) => String(group.year)),
+  //   [data]
+  // );
 
   return (
     <Main className="flex flex-col gap-4">
       <>
-        <ul className="text-lg flex gap-4">
+        {/* <ul className="text-lg flex gap-4">
           {years.map((year) => (
             <li key={year}>
               <a
@@ -38,7 +38,7 @@ export default function Page() {
               </a>
             </li>
           ))}
-        </ul>
+        </ul> */}
         <LightGallery
           download={false}
           elementClassNames="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4"

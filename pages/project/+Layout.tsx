@@ -8,6 +8,7 @@ import { usePageContext } from "vike-react/usePageContext";
 
 import { Data } from "./index/+data";
 import { useData } from "vike-react/useData";
+import NavbarHoverDropdown from "../../components/Navbar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { routeParams } = usePageContext();
@@ -16,9 +17,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <Header />
+      <NavbarHoverDropdown />
       <Main className="flex flex-col gap-8">
-        <ul className="flex flex-col md:flex-row gap-1 md:gap-3 transition-all duration-500 md:hover:gap-4 md:items-center group">
+        {/* <ul className="flex flex-col md:flex-row gap-1 md:gap-3 transition-all duration-500 md:hover:gap-4 md:items-center group">
           {data.projectTitle.map((title, index) => (
             <React.Fragment key={title.url}>
               <li>
@@ -39,7 +40,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               )}
             </React.Fragment>
           ))}
-        </ul>
+        </ul> */}
         {children}
       </Main>
       <Footer />
