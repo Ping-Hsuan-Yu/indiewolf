@@ -1,19 +1,23 @@
+import type { ReactNode } from 'react';
+
 export default function Main({
   children,
-  className,
+  className
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
 }) {
+  const composedClassName = ['relative', className].filter(Boolean).join(' ');
+
   return (
-    <main id="page-content" className={`relative ${className}`}>
+    <main id="page-content" className={composedClassName}>
       <div
         id="loading-bg"
-        className="absolute bg-gray-200 rounded w-full h-full hidden"
+        className="absolute hidden h-full w-full rounded bg-gray-200"
       ></div>
       <div
         id="loading-indicator"
-        className="absolute animate-pulse bg-white rounded w-full h-full hidden"
+        className="absolute hidden h-full w-full rounded animate-pulse bg-white"
       ></div>
       {children}
     </main>
