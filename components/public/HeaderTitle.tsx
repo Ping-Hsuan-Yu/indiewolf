@@ -1,0 +1,11 @@
+'use client';
+
+import Link from "next/link";
+
+export default function HeaderTitle() {
+  return (
+    <div className="uppercase text-2xl font-bold">
+      <Link href="/">lin chaoyu</Link>
+    </div>
+  );
+}

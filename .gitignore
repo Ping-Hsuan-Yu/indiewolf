@@ -147,3 +147,6 @@ cdk.out
 ## Panda
 styled-system
 styled-system-studio
+
+# Docker volumes
+docker/postgres/data/

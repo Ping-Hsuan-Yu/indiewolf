@@ -9,8 +9,8 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: [
-          'Abhaya Libre',
+        serif: [
+          'Gambetta',
           'Noto Serif TC',
           'ui-sans-serif',
           'system-ui',
