@@ -35,7 +35,7 @@ export const AboutService = {
 
     return {
       bio: profile?.bio || '',
-      profileImage: profile?.profile_image_url || '/assets/about.jpg',
+      profileImage: profile?.profile_image_url,
       contactLinks: (links || []).map(link => ({
         id: link.id,
         label: link.label,
