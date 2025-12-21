@@ -3,6 +3,7 @@ import PublicNavbar from '@/components/public/PublicNavbar'
 import Footer from '@/components/public/Footer'
 import { normalizeLocale } from '@/lib/i18n/config'
 import { AboutService } from '@/lib/services/aboutService'
+import ContactLinks from './ContactLinks'
 
 type AboutPageProps = {
   params: {
@@ -28,13 +29,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
             </div>
           </div>
           <div className='flex gap-4 items-center mt-8'>
-            {contactLinks.map(link => (
-              <div key={link.url} className='w-6'>
-                <a href={link.url} target='_blank' rel='noopener noreferrer'>
-                  <img src={link.logo} alt={link.label ?? link.url} />
-                </a>
-              </div>
-            ))}
+            <ContactLinks links={contactLinks} locale={locale} />
           </div>
         </div>
       </main>

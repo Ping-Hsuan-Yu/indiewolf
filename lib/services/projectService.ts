@@ -27,7 +27,7 @@ export async function getProjects(): Promise<ProjectWork[]> {
     .from('project_works')
     .select('*')
     .eq('is_active', true)
-    .order('order_index', { ascending: true })
+    .order('order_index', { ascending: false })
 
   if (error) {
     console.error('getProjects error:', error)

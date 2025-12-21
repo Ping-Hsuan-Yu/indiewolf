@@ -30,13 +30,11 @@ export default async function ProjectListPage({ params }: ProjectListPageProps) 
           return (
             <div key={project.id} className='flex flex-col gap-4 md:flex-row'>
               <Link href={`/${params.locale}/project/${project.slug}`} className='basis-1/2'>
-                {project.cover_url ? (
-                  <img src={project.cover_url} alt={title || ''} className='w-full object-cover' />
-                ) : (
-                  <div className='flex h-full min-h-[280px] w-full items-center justify-center bg-gray-100 text-gray-400'>
-                    圖片準備中
-                  </div>
-                )}
+                <img
+                  src={project.cover_url || ''}
+                  alt={title || ''}
+                  className='w-full object-cover'
+                />
               </Link>
               <div className='basis-1/2'>
                 <p className='font-bold'>{title}</p>
