@@ -31,7 +31,7 @@
     "typescript": "^5.8.3"
   },
   "engines": {
-    "node": "22.x"
+    "node": "24.x"
   },
   "type": "module",
   "cspell": {
