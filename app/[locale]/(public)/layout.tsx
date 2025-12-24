@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import GlobalImageProtection from '@/components/GlobalImageProtection';
+import GlobalImageProtection from '@/components/public/GlobalImageProtection';
 
 export default function PublicLayout({ children }: { children: ReactNode }) {
   return (

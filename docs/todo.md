@@ -61,6 +61,7 @@ https://drive.google.com/drive/folders/13aV04aGkdnFwmr7aplmSQibRSpPaxXwo
   - [x] 全站內容已資料庫化
   - [ ] 後台系統完成後可由後台上傳／修改內容
   - [ ] 要有排序功能
+  - [ ] Sql function: 根據project slug / illu_year / manga_year 自動更新 nav
 
 - [ ] 環境區分
   - [ ] 建立測試站（可顯示未完整內容）
@@ -86,6 +87,8 @@ https://drive.google.com/drive/folders/13aV04aGkdnFwmr7aplmSQibRSpPaxXwo
 ## 七、漫畫連載
 
 - [ ] 直接抄jump
+
+
 
 ## 參考
 * [Jump](https://shonenjumpplus.com/series)
