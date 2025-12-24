@@ -1,4 +1,4 @@
-import MangaGallery from '@/components/public/gallery/MangaGallery'
+import MangaGallery from '@/app/[locale]/(public)/manga/[year]/MangaGallery'
 import { normalizeLocale } from '@/lib/i18n/config'
 import { getMangaYears, getMangaWorks } from '@/lib/services/mangaService'
 

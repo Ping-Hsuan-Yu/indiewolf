@@ -1,4 +1,4 @@
-import IllustrationGallery from '@/components/public/gallery/IllustrationGallery'
+import IllustrationGallery from '@/app/[locale]/(public)/illustration/[year]/IllustrationGallery'
 import { normalizeLocale } from '@/lib/i18n/config'
 import { getIllustrationYears, getIllustrationWorks } from '@/lib/services/illustrationService'
 

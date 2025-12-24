@@ -3,13 +3,15 @@
 import { useMemo, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import HeaderTitle from './HeaderTitle'
 import Link from 'next/link'
 import Image from 'next/image'
-import type { MouseEvent } from 'react'
-import { DEFAULT_APP_LOCALE, isAppLocale } from '@/lib/i18n/config'
 
+import ToEn from '@/public/assets/toEn.svg'
+import ToZh from '@/public/assets/toZh.svg'
+import { DEFAULT_APP_LOCALE, isAppLocale } from '@/lib/i18n/config'
 import type { NavItem as NavItemType } from '@/lib/services/navService'
+
+import HeaderTitle from './HeaderTitle'
 
 type NavbarProps = {
   navItems: NavItemType[]
@@ -58,13 +60,13 @@ export default function Navbar({ navItems }: NavbarProps) {
   }
 
   return (
-    <header className='sticky top-0 md:-top-10 z-50 bg-white opacity-80'>
+    <header className='sticky top-0 md:-top-10 z-50 bg-white opacity-80 font-abhaya'>
       <nav className='pt-4 md:pt-16 md:pb-6'>
         <div className='flex items-center justify-between'>
           <HeaderTitle />
 
           <ul className='hidden items-center gap-4 md:flex'>
-            {navItems.map((item, idx) => (
+            {navItems.map(item => (
               <li key={item.key} className='group relative'>
                 {item.href ? (
                   <Link
@@ -111,10 +113,8 @@ export default function Navbar({ navItems }: NavbarProps) {
                 className='hover:opacity-70 transition-opacity cursor-pointer flex items-center'
                 aria-label={locale === 'zh' ? 'Switch to English' : '切換到中文'}>
                 <Image
-                  src={locale === 'zh' ? '/assets/toEn.svg' : '/assets/toZh.svg'}
+                  src={locale === 'zh' ? ToEn : ToZh}
                   alt={locale === 'zh' ? 'Switch to English' : '切換到中文'}
-                  width={24}
-                  height={24}
                   className='w-6 h-6'
                 />
               </a>
@@ -132,10 +132,9 @@ export default function Navbar({ navItems }: NavbarProps) {
         </div>
 
         <div
-          className={
-            'md:hidden overflow-hidden transition-[grid-template-rows] duration-200 ' +
-            (mobileOpen ? 'grid grid-rows-[1fr]' : 'grid grid-rows-[0fr]')
-          }
+          className={`md:hidden overflow-hidden transition-[grid-template-rows] duration-200 ${
+            mobileOpen ? 'grid grid-rows-[1fr]' : 'grid grid-rows-[0fr]'
+          }`}
           aria-hidden={!mobileOpen}>
           <div className='min-h-0 py-2'>
             <ul className='flex flex-col'>
@@ -186,12 +185,10 @@ export default function Navbar({ navItems }: NavbarProps) {
 
                     {hasChildren && (
                       <div
-                        className={
-                          'overflow-hidden transition-all duration-200 ' +
-                          (expanded ? 'grid grid-rows-[1fr]' : 'grid grid-rows-[0fr]')
-                        }>
-                        <ul
-                          className={'min-h-0 space-y-1 px-3 pt-0 ' + (expanded ? 'pb-2' : 'pb-0')}>
+                        className={`overflow-hidden transition-all duration-200 ${
+                          expanded ? 'grid grid-rows-[1fr]' : 'grid grid-rows-[0fr]'
+                        }`}>
+                        <ul className={`min-h-0 space-y-1 px-3 pt-0 ${expanded ? 'pb-2' : 'pb-0'}`}>
                           {item.children!.map(child => (
                             <li key={child.key}>
                               <Link
@@ -218,15 +215,10 @@ export default function Navbar({ navItems }: NavbarProps) {
                   href={switchLocale()}
                   className='text-2xl hover:opacity-70 transition-opacity inline-flex items-center gap-2 cursor-pointer'
                   aria-label={locale === 'zh' ? 'Switch to English' : '切換到中文'}
-                  onClick={event => {
-                    setMobileOpen(false)
-                    // handleLocaleSwitch(event);
-                  }}>
+                  onClick={() => setMobileOpen(false)}>
                   <Image
-                    src={locale === 'zh' ? '/assets/toEn.svg' : '/assets/toZh.svg'}
+                    src={locale === 'zh' ? ToEn : ToZh}
                     alt={locale === 'zh' ? 'Switch to English' : '切換到中文'}
-                    width={24}
-                    height={24}
                     className='w-6 h-6'
                   />
                   <span className='text-base'>{locale === 'zh' ? 'English' : '中文'}</span>

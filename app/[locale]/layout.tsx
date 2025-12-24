@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { notFound } from 'next/navigation';
 import { ReactNode } from 'react';
+import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Lin ChaoYu',

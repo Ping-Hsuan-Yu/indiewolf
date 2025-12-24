@@ -1,5 +1,5 @@
 import Footer from '@/components/public/Footer'
-import HomeKV from '@/components/public/HomeKV'
+import HomeKV from './HomeKV'
 import PublicNavbar from '@/components/public/PublicNavbar'
 import { supabase } from '@/lib/supabase'
 

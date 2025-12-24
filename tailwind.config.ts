@@ -19,7 +19,8 @@ const config: Config = {
           'Segoe UI Emoji',
           'Segoe UI Symbol',
           'Noto Color Emoji'
-        ]
+        ],
+        abhaya: ['"Abhaya Libre"', 'serif']
       }
     }
   },
