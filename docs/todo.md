@@ -90,3 +90,10 @@ https://drive.google.com/drive/folders/13aV04aGkdnFwmr7aplmSQibRSpPaxXwo
 ## 參考
 * [Jump](https://shonenjumpplus.com/series)
 * [一拳超人](http://galaxyheavyblow.web.fc2.com/)
+
+---
+
+## 八、其他優化
+
+- [ ] 設定網頁分享縮圖 (Open Graph Image)
+  - [ ] 方法一：將 `opengraph-image.png` (1200x630) 放入 `app/[locale]/` 資料夾
