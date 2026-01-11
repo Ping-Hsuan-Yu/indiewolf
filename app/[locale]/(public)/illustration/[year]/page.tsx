@@ -1,5 +1,5 @@
 import IllustrationGallery from '@/app/[locale]/(public)/illustration/[year]/IllustrationGallery'
-import {  getIllustrationWorks } from '@/lib/services/illustrationService'
+import { getIllustrationWorks } from '@/lib/services/illustrationService'
 
 type IllustrationYearPageProps = {
   params: {
@@ -15,7 +15,9 @@ export default async function IllustrationYearPage({ params }: IllustrationYearP
     items: works.map(work => ({
       id: work.id,
       img: work.url,
-      imgThumb: work.url 
+      imgThumb: work.url,
+      width: work.width,
+      height: work.height
     }))
   }
 

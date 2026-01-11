@@ -1,88 +1,93 @@
-'use client';
+'use client'
 
-import { useState, useRef, useEffect, useCallback } from 'react';
-import 'lightgallery/css/lightgallery.css';
-import 'lightgallery/css/lg-thumbnail.css';
+import NextJsImage from '@/components/public/NextJsImage'
+import Image from 'next/image'
+import { useState } from 'react'
+import Lightbox from 'yet-another-react-lightbox'
+import 'yet-another-react-lightbox/styles.css'
 
 type MangaEntry = {
-  id: string;
-  title: string;
-  description?: string | null;
-  primaryImage?: string | null;
+  id: string
+  title: string
+  description?: string | null
+  primaryImage: string
   gallery: Array<{
-    src: string;
-    alt?: string | null;
-  }>;
-};
+    src: string
+    width: number
+    height: number
+    alt?: string | null
+  }>
+}
 
 type MangaGalleryProps = {
-  entries: MangaEntry[];
-  locale: string;
-};
+  entries: MangaEntry[]
+  locale: string
+}
 
 export default function MangaGallery({ entries, locale }: MangaGalleryProps) {
-  const lightboxRootRef = useRef<HTMLDivElement | null>(null);
-  const instanceRef = useRef<any>(null);
+  const [index, setIndex] = useState(-1)
+  const [currentEntry, setCurrentEntry] = useState<MangaEntry | null>(null)
 
-  const openEntryGallery = useCallback(
-    async (entryId: string) => {
-      const entry = entries.find((item) => item.id === entryId);
-      if (!entry || entry.gallery.length === 0) return;
-      if (!lightboxRootRef.current) return;
+  const openGallery = (entry: MangaEntry) => {
+    setCurrentEntry(entry)
+    setIndex(0)
+  }
 
-      const [{ default: lightGallery }] = await Promise.all([import('lightgallery')]);
-      instanceRef.current?.destroy(true);
-      instanceRef.current = lightGallery(lightboxRootRef.current, {
-        dynamic: true,
-        dynamicEl: entry.gallery.map((item) => ({
-          src: item.src,
-          subHtml: item.alt ?? '',
-        })),
-        download: false,
-      });
-      instanceRef.current.openGallery(0);
-    },
-    [entries],
-  );
-
-  useEffect(() => {
-    return () => {
-      instanceRef.current?.destroy(true);
-    };
-  }, []);
+  const closeGallery = () => {
+    setIndex(-1)
+    setTimeout(() => setCurrentEntry(null), 300) // Delay cleanup to avoid flickering during close animation
+  }
 
   if (entries.length === 0) {
-    return <p className="text-center text-sm text-gray-500">漫畫內容整理中。</p>;
+    return <p className='text-center text-sm text-gray-500'>漫畫內容整理中。</p>
   }
+
+  const slides = currentEntry
+    ? currentEntry.gallery.map(item => ({
+        src: item.src,
+        width: item.width,
+        height: item.height,
+        alt: item.alt || undefined
+      }))
+    : []
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        {entries.map((item) => (
-          <div key={item.id} className="flex flex-col gap-4 md:flex-row md:items-end">
+      <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
+        {entries.map(item => (
+          <div key={item.id} className='flex flex-col gap-4 md:flex-row md:items-end'>
             <button
-              type="button"
-              className="basis-1/2 cursor-pointer overflow-hidden rounded shadow focus:outline-none"
-              onClick={() => openEntryGallery(item.id)}
-            >
-              {item.primaryImage ? (
-                <img src={item.primaryImage} alt={item.title} className="h-full w-full object-cover" />
-              ) : (
-                <div className="flex h-full min-h-[280px] w-full items-center justify-center bg-gray-100 text-gray-400">
-                  圖片準備中
-                </div>
-              )}
+              type='button'
+              className='basis-1/2 cursor-pointer overflow-hidden rounded shadow focus:outline-none relative aspect-[3/4] group'
+              onClick={() => openGallery(item)}>
+              <Image
+                src={item.primaryImage}
+                alt={item.title}
+                fill
+                className='object-cover transition-transform duration-300 group-hover:scale-105'
+                sizes='(max-width: 768px) 100vw, 50vw'
+              />
             </button>
-            <div className="basis-1/2">
-              <p className={`text-center md:text-start font-bold${locale === 'zh' ? ' text-sm' : ''}`}>
+            <div className='basis-1/2'>
+              <p
+                className={`text-center md:text-start font-bold${
+                  locale === 'zh' ? ' text-sm' : ''
+                }`}>
                 {item.title}
               </p>
-              {item.description && <p className="text-sm">{item.description}</p>}
+              {item.description && <p className='text-sm'>{item.description}</p>}
             </div>
           </div>
         ))}
       </div>
-      <div ref={lightboxRootRef} className="hidden" aria-hidden />
+
+      <Lightbox
+        index={index}
+        open={index >= 0}
+        close={closeGallery}
+        slides={slides}
+        render={{ slide: NextJsImage }}
+      />
     </>
-  );
+  )
 }

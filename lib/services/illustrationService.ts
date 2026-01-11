@@ -6,6 +6,8 @@ export type IllustrationWork = {
   alt: string | null
   year: string
   order_index: number
+  width: number
+  height: number
 }
 
 // 可能沒用

@@ -1,61 +1,53 @@
-import Image from "next/image";
+import Image from 'next/image'
 import {
   isImageFitCover,
   isImageSlide,
   useLightboxProps,
-  useLightboxState,
-} from "yet-another-react-lightbox";
+  useLightboxState
+} from 'yet-another-react-lightbox'
 
 function isNextJsImage(slide) {
-  return (
-    isImageSlide(slide) &&
-    typeof slide.width === "number" &&
-    typeof slide.height === "number"
-  );
+  return isImageSlide(slide) && typeof slide.width === 'number' && typeof slide.height === 'number'
 }
+
+// TODO: 新增影像長寬才能使用該元件
 
 export default function NextJsImage({ slide, offset, rect }) {
   const {
     on: { click },
-    carousel: { imageFit },
-  } = useLightboxProps();
+    carousel: { imageFit }
+  } = useLightboxProps()
 
-  const { currentIndex } = useLightboxState();
+  const { currentIndex } = useLightboxState()
 
-  const cover = isImageSlide(slide) && isImageFitCover(slide, imageFit);
+  const cover = isImageSlide(slide) && isImageFitCover(slide, imageFit)
 
-  if (!isNextJsImage(slide)) return undefined;
+  if (!isNextJsImage(slide)) return undefined
 
   const width = !cover
-    ? Math.round(
-        Math.min(rect.width, (rect.height / slide.height) * slide.width),
-      )
-    : rect.width;
+    ? Math.round(Math.min(rect.width, (rect.height / slide.height) * slide.width))
+    : rect.width
 
   const height = !cover
-    ? Math.round(
-        Math.min(rect.height, (rect.width / slide.width) * slide.height),
-      )
-    : rect.height;
+    ? Math.round(Math.min(rect.height, (rect.width / slide.width) * slide.height))
+    : rect.height
 
   return (
-    <div style={{ position: "relative", width, height }}>
+    <div style={{ position: 'relative', width, height }}>
       <Image
         fill
-        alt=""
+        alt=''
         src={slide}
-        loading="eager"
+        loading='eager'
         draggable={false}
-        placeholder={slide.blurDataURL ? "blur" : undefined}
+        placeholder={slide.blurDataURL ? 'blur' : undefined}
         style={{
-          objectFit: cover ? "cover" : "contain",
-          cursor: click ? "pointer" : undefined,
+          objectFit: cover ? 'cover' : 'contain',
+          cursor: click ? 'pointer' : undefined
         }}
         sizes={`${Math.ceil((width / window.innerWidth) * 100)}vw`}
-        onClick={
-          offset === 0 ? () => click?.({ index: currentIndex }) : undefined
-        }
+        onClick={offset === 0 ? () => click?.({ index: currentIndex }) : undefined}
       />
     </div>
-  );
+  )
 }

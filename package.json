@@ -9,7 +9,6 @@
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.84.0",
     "autoprefixer": "^10.4.20",
-    "lightgallery": "^2.8.3",
     "next": "^14.2.13",
     "next-intl": "^4.3.9",
     "postcss": "^8.4.49",
