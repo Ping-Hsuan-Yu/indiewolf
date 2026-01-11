@@ -5,21 +5,15 @@ export type IllustrationWork = {
   url: string
   alt: string | null
   year: string
-  width: number | null
-  height: number | null
   order_index: number
+  width: number
+  height: number
 }
 
+// 可能沒用
 export async function getIllustrationYears(): Promise<string[]> {
-  const { data } = await supabase
-    .from('illustration_works')
-    .select('year')
-    .eq('is_active', true)
-    .order('year', { ascending: false })
-
-  // Deduplicate years
-  const years = Array.from(new Set((data || []).map(item => item.year)))
-  return years
+  const { data } = await supabase.rpc('get_distinct_years')
+  return (data || []).map((item: { year: string }) => item.year)
 }
 
 export async function getIllustrationWorks(year: string): Promise<IllustrationWork[]> {

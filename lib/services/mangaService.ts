@@ -7,7 +7,7 @@ export type MangaWork = {
   title_en: string | null
   summary_zh: string | null
   summary_en: string | null
-  cover_url: string | null
+  cover_url: string
   order_index: number
   images?: MangaImage[]
 }
@@ -16,6 +16,8 @@ export type MangaImage = {
   id: string
   url: string
   order_index: number
+  width: number
+  height: number
 }
 
 export async function getMangaYears(): Promise<string[]> {
@@ -36,13 +38,12 @@ export async function getMangaWorks(year: string): Promise<MangaWork[]> {
     .select(
       `
       *,
-      images:manga_images(id, url, order_index)
+      images:manga_images(id, url, order_index, width, height)
     `
     )
     .eq('year', year)
     .eq('is_active', true)
     .order('order_index', { ascending: true })
-    .order('order_index', { foreignTable: 'manga_images', ascending: true }) // Ensure images are sorted
 
   return (data || []) as MangaWork[]
 }

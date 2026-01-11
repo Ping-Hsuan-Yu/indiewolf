@@ -49,7 +49,9 @@ export default async function MangaYearPage({ params }: MangaYearPageProps) {
       primaryImage: work.cover_url,
       gallery: sortedImages.map(img => ({
         src: img.url,
-        alt: title || undefined // LightGallery uses this for captions
+        width: img.width,
+        height: img.height,
+        alt: title || undefined
       }))
     }
   })

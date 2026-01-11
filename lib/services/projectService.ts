@@ -20,6 +20,8 @@ export type ProjectImage = {
   id: string
   url: string
   order_index: number
+  width: number
+  height: number
 }
 
 export async function getProjects(): Promise<ProjectWork[]> {
@@ -44,7 +46,7 @@ export async function getProjectBySlug(slug: string): Promise<ProjectWork | null
     .select(
       `
       *,
-      images:project_images(id, url, order_index)
+      images:project_images(id, url, order_index, width, height)
     `
     )
     .eq('slug', slug)
