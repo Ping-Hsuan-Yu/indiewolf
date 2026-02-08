@@ -40,16 +40,6 @@ const navData = [
         icon: FileText
       }
     ]
-  },
-  {
-    title: '會員管理',
-    items: [
-      {
-        title: '帳號管理',
-        url: '/admin/users',
-        icon: Users
-      }
-    ]
   }
 ]
 

@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import cloudinary from '@/lib/cloudinary'
 import { createClient } from '@/utils/supabase/server'
 import { getAuthorizedAdminClient } from '../common'
+import { syncMangaNav } from '@/utils/supabase/sync-nav'
 import type { TablesInsert, TablesUpdate } from '@/types/database.types'
 
 export async function createManga(formData: FormData) {
@@ -51,6 +52,8 @@ export async function createManga(formData: FormData) {
     throw new Error('Failed to create manga')
   }
 
+  await syncMangaNav()
+
   revalidatePath('/admin/manga')
   return { success: true }
 }
@@ -63,6 +66,8 @@ export async function deleteMangaWork(id: string) {
     console.error('Delete Error:', error)
     return { success: false, error: error.message }
   }
+
+  await syncMangaNav()
 
   revalidatePath('/admin/manga')
   return { success: true }
@@ -79,6 +84,8 @@ export async function toggleMangaActive(id: string, isActive: boolean) {
     console.error('Toggle Active Error:', error)
     return { success: false, error: error.message }
   }
+
+  await syncMangaNav()
 
   revalidatePath('/admin/manga')
   return { success: true }
@@ -168,15 +175,14 @@ export async function updateMangaDetail(id: string, formData: FormData) {
     summary_en,
     year
   }
-  const { error } = await supabase
-    .from('manga_works')
-    .update(updateData)
-    .eq('id', id)
+  const { error } = await supabase.from('manga_works').update(updateData).eq('id', id)
 
   if (error) {
     console.error('Update Manga Detail Error:', error)
     return { success: false, error: error.message }
   }
+
+  await syncMangaNav()
 
   revalidatePath(`/admin/manga/${id}`)
   revalidatePath('/admin/manga')
