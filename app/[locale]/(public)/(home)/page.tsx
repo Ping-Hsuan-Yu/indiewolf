@@ -1,14 +1,16 @@
-import Footer from '@/components/public/Footer'
-import HomeKV from './HomeKV'
-import PublicNavbar from '@/components/public/PublicNavbar'
 import { supabase } from '@/lib/supabase'
+
+import Footer from '@/components/public/Footer'
+import PublicNavbar from '@/components/public/PublicNavbar'
+
+import HomeKV from './HomeKV'
 
 export const dynamic = 'force-dynamic'
 
 type HomePageProps = {
-  params: {
+  params: Promise<{
     locale: string
-  }
+  }>
 }
 
 export default async function HomePage({ params }: HomePageProps) {

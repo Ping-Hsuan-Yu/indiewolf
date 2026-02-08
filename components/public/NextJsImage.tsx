@@ -1,16 +1,10 @@
-import Image from 'next/image'
+import { CldImage } from 'next-cloudinary'
 import {
   isImageFitCover,
   isImageSlide,
   useLightboxProps,
   useLightboxState
 } from 'yet-another-react-lightbox'
-
-function isNextJsImage(slide) {
-  return isImageSlide(slide) && typeof slide.width === 'number' && typeof slide.height === 'number'
-}
-
-// TODO: 新增影像長寬才能使用該元件
 
 export default function NextJsImage({ slide, offset, rect }) {
   const {
@@ -22,8 +16,6 @@ export default function NextJsImage({ slide, offset, rect }) {
 
   const cover = isImageSlide(slide) && isImageFitCover(slide, imageFit)
 
-  if (!isNextJsImage(slide)) return undefined
-
   const width = !cover
     ? Math.round(Math.min(rect.width, (rect.height / slide.height) * slide.width))
     : rect.width
@@ -33,21 +25,18 @@ export default function NextJsImage({ slide, offset, rect }) {
     : rect.height
 
   return (
-    <div style={{ position: 'relative', width, height }}>
-      <Image
-        fill
-        alt=''
-        src={slide}
+      <CldImage
+        width={width}
+        height={height}
+        alt={slide.alt}
+        src={slide.src}
         loading='eager'
         draggable={false}
-        placeholder={slide.blurDataURL ? 'blur' : undefined}
         style={{
           objectFit: cover ? 'cover' : 'contain',
           cursor: click ? 'pointer' : undefined
         }}
-        sizes={`${Math.ceil((width / window.innerWidth) * 100)}vw`}
         onClick={offset === 0 ? () => click?.({ index: currentIndex }) : undefined}
       />
-    </div>
   )
 }

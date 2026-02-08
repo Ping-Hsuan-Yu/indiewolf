@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { SocialLink } from '@/lib/services/aboutService'
+
+import { SocialLink } from '@/app/_actions/public/about'
 
 type Props = {
   links: SocialLink[]

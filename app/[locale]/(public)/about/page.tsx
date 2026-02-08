@@ -1,19 +1,23 @@
 export const dynamic = 'force-dynamic'
-import PublicNavbar from '@/components/public/PublicNavbar'
-import Footer from '@/components/public/Footer'
+
+import { getAboutPageData } from '@/app/_actions/public/about'
 import { normalizeLocale } from '@/lib/i18n/config'
-import { AboutService } from '@/lib/services/aboutService'
+
+import Footer from '@/components/public/Footer'
+import PublicNavbar from '@/components/public/PublicNavbar'
+
 import ContactLinks from './ContactLinks'
 
 type AboutPageProps = {
-  params: {
+  params: Promise<{
     locale: string
-  }
+  }>
 }
 
 export default async function AboutPage({ params }: AboutPageProps) {
-  const locale = normalizeLocale(params.locale)
-  const { bio, profileImage, contactLinks } = await AboutService.getPageData(locale)
+  const { locale: rawLocale } = await params
+  const locale = normalizeLocale(rawLocale)
+  const { bio, profileImage, contactLinks } = await getAboutPageData(locale)
 
   return (
     <div className='h-dvh flex flex-col'>

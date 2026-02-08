@@ -1,0 +1,281 @@
+'use server'
+
+import { revalidatePath } from 'next/cache'
+import cloudinary from '@/lib/cloudinary'
+import { createClient } from '@/utils/supabase/server'
+import { getAuthorizedAdminClient } from '../common'
+import { syncMangaNav } from '@/utils/supabase/sync-nav'
+import type { TablesInsert, TablesUpdate } from '@/types/database.types'
+
+export async function createManga(formData: FormData) {
+  const supabase = await getAuthorizedAdminClient()
+  const year = formData.get('year') as string
+  const title_zh = formData.get('title_zh') as string
+  const title_en = formData.get('title_en') as string
+  const summary_zh = formData.get('summary_zh') as string
+  const summary_en = formData.get('summary_en') as string
+  const file = formData.get('cover') as File
+
+  if (!file || !year) {
+    throw new Error('Missing required fields')
+  }
+
+  // Upload to Cloudinary
+  const arrayBuffer = await file.arrayBuffer()
+  const buffer = Buffer.from(arrayBuffer)
+
+  const uploadResult = await new Promise<any>((resolve, reject) => {
+    cloudinary.uploader
+      .upload_stream({ folder: 'manga' }, (error, result) => {
+        if (error) reject(error)
+        else resolve(result)
+      })
+      .end(buffer)
+  })
+
+  // Insert into Supabase
+  const insertData: TablesInsert<'manga_works'> = {
+    cover_url: uploadResult.secure_url,
+    title_zh: title_zh || '',
+    title_en: title_en || '',
+    summary_zh: summary_zh || '',
+    summary_en: summary_en || '',
+    year,
+    width: uploadResult.width,
+    height: uploadResult.height,
+    order_index: 0
+  }
+  const { error } = await supabase.from('manga_works').insert(insertData)
+
+  if (error) {
+    console.error('Database Error:', error)
+    throw new Error('Failed to create manga')
+  }
+
+  await syncMangaNav()
+
+  revalidatePath('/admin/manga')
+  return { success: true }
+}
+
+export async function deleteMangaWork(id: string) {
+  const supabaseAdmin = await getAuthorizedAdminClient()
+  const { error } = await supabaseAdmin.from('manga_works').delete().eq('id', id)
+
+  if (error) {
+    console.error('Delete Error:', error)
+    return { success: false, error: error.message }
+  }
+
+  await syncMangaNav()
+
+  revalidatePath('/admin/manga')
+  return { success: true }
+}
+
+export async function toggleMangaActive(id: string, isActive: boolean) {
+  const supabaseAdmin = await getAuthorizedAdminClient()
+  const { error } = await supabaseAdmin
+    .from('manga_works')
+    .update({ is_active: isActive })
+    .eq('id', id)
+
+  if (error) {
+    console.error('Toggle Active Error:', error)
+    return { success: false, error: error.message }
+  }
+
+  await syncMangaNav()
+
+  revalidatePath('/admin/manga')
+  return { success: true }
+}
+
+export async function updateMangaOrder(items: { id: string; order_index: number }[]) {
+  const supabaseAdmin = await getAuthorizedAdminClient()
+
+  const updates = items.map(item =>
+    supabaseAdmin.from('manga_works').update({ order_index: item.order_index }).eq('id', item.id)
+  )
+
+  const results = await Promise.all(updates)
+  const errors = results.filter(r => r.error)
+
+  if (errors.length > 0) {
+    console.error('Batch Update Errors:', errors)
+    return { success: false, error: 'Some updates failed' }
+  }
+
+  revalidatePath('/admin/manga')
+  return { success: true }
+}
+
+export async function getMangaWorksAction(year: string) {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('manga_works')
+    .select('*')
+    .eq('year', year)
+    .order('order_index', { ascending: true })
+
+  return data || []
+}
+
+export async function getMangaYearsAction() {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('manga_works')
+    .select('year')
+    .order('year', { ascending: false })
+
+  // Deduplicate
+  const years = Array.from(new Set((data || []).map((item: { year: string }) => item.year)))
+  return years.sort((a, b) => parseInt(b) - parseInt(a))
+}
+
+export async function getMangaDetail(id: string) {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('manga_works')
+    .select(
+      `
+      *,
+      images:manga_images(id, url, width, height, order_index, locale)
+    `
+    )
+    .eq('id', id)
+    .single()
+
+  if (error) {
+    console.error('Fetch Manga Detail Error:', error)
+    return null
+  }
+
+  // Sort images by order_index
+  if (data.images) {
+    data.images.sort((a: any, b: any) => a.order_index - b.order_index)
+  }
+
+  return data
+}
+
+export async function updateMangaDetail(id: string, formData: FormData) {
+  const supabase = await getAuthorizedAdminClient()
+
+  const title_zh = formData.get('title_zh') as string
+  const title_en = formData.get('title_en') as string
+  const summary_zh = formData.get('summary_zh') as string
+  const summary_en = formData.get('summary_en') as string
+  const year = formData.get('year') as string
+
+  const updateData: TablesUpdate<'manga_works'> = {
+    title_zh,
+    title_en,
+    summary_zh,
+    summary_en,
+    year
+  }
+  const { error } = await supabase.from('manga_works').update(updateData).eq('id', id)
+
+  if (error) {
+    console.error('Update Manga Detail Error:', error)
+    return { success: false, error: error.message }
+  }
+
+  await syncMangaNav()
+
+  revalidatePath(`/admin/manga/${id}`)
+  revalidatePath('/admin/manga')
+  return { success: true }
+}
+
+export async function uploadMangaImages(mangaId: string, formData: FormData) {
+  const supabase = await getAuthorizedAdminClient()
+  const locale = formData.get('locale') as string
+  const files = formData.getAll('images') as File[]
+
+  if (!files || files.length === 0) {
+    return { success: false, error: 'No files provided' }
+  }
+
+  const uploadPromises = files.map(async file => {
+    const arrayBuffer = await file.arrayBuffer()
+    const buffer = Buffer.from(arrayBuffer)
+
+    return new Promise<any>((resolve, reject) => {
+      cloudinary.uploader
+        .upload_stream({ folder: 'manga_pages' }, (error, result) => {
+          if (error) reject(error)
+          else resolve(result)
+        })
+        .end(buffer)
+    })
+  })
+
+  try {
+    const results = await Promise.all(uploadPromises)
+
+    // Get current max order_index
+    const { data: maxOrderData } = await supabase
+      .from('manga_images')
+      .select('order_index')
+      .eq('manga_id', mangaId)
+      .order('order_index', { ascending: false })
+      .limit(1)
+      .single()
+
+    const currentMaxOrder = maxOrderData?.order_index || 0
+
+    // Insert into Supabase
+    const inserts: TablesInsert<'manga_images'>[] = results.map((result, index) => ({
+      manga_id: mangaId,
+      url: result.secure_url,
+      width: result.width,
+      height: result.height,
+      locale: locale || null,
+      order_index: currentMaxOrder + index + 1
+    }))
+
+    const { error } = await supabase.from('manga_images').insert(inserts)
+
+    if (error) {
+      console.error('Batch Insert Error:', error)
+      return { success: false, error: error.message }
+    }
+
+    revalidatePath(`/admin/manga/${mangaId}`)
+    return { success: true }
+  } catch (error) {
+    console.error('Upload Error:', error)
+    return { success: false, error: 'Failed to upload images' }
+  }
+}
+
+export async function deleteMangaImage(id: string) {
+  const supabase = await getAuthorizedAdminClient()
+  const { error } = await supabase.from('manga_images').delete().eq('id', id)
+
+  if (error) {
+    return { success: false, error: error.message }
+  }
+
+  return { success: true }
+}
+
+export async function updateMangaImagesOrder(items: { id: string; order_index: number }[]) {
+  const supabaseAdmin = await getAuthorizedAdminClient()
+
+  const updates = items.map(item =>
+    supabaseAdmin.from('manga_images').update({ order_index: item.order_index }).eq('id', item.id)
+  )
+
+  const results = await Promise.all(updates)
+  const errors = results.filter(r => r.error)
+
+  if (errors.length > 0) {
+    console.error('Batch Update Errors:', errors)
+    return { success: false, error: 'Some updates failed' }
+  }
+
+  return { success: true }
+}

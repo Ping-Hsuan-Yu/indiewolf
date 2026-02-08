@@ -10,6 +10,9 @@ const nextConfig = {
       }
     ]
   },
+  experimental: {
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-dialog', '@radix-ui/react-slot', '@radix-ui/react-label', '@radix-ui/react-separator', '@radix-ui/react-select', '@radix-ui/react-alert-dialog', '@radix-ui/react-scroll-area', '@radix-ui/react-switch', '@radix-ui/react-tooltip', 'class-variance-authority']
+  },
   async redirects() {
     return [
       {

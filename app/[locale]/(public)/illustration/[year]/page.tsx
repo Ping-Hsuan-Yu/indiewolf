@@ -1,24 +1,25 @@
+import { getIllustrationWorks, getIllustrationYears } from '@/app/_actions/public/illustration'
+
 import IllustrationGallery from '@/app/[locale]/(public)/illustration/[year]/IllustrationGallery'
-import { getIllustrationWorks } from '@/lib/services/illustrationService'
+
+export async function generateStaticParams() {
+  const years = await getIllustrationYears()
+  return years.map(year => ({ year }))
+}
 
 type IllustrationYearPageProps = {
-  params: {
+  params: Promise<{
     locale: string
     year: string
-  }
+  }>
 }
 
 export default async function IllustrationYearPage({ params }: IllustrationYearPageProps) {
-  const works = await getIllustrationWorks(params.year)
+  const { year } = await params
+  const works = await getIllustrationWorks(year)
   const group = {
-    year: params.year,
-    items: works.map(work => ({
-      id: work.id,
-      img: work.url,
-      imgThumb: work.url,
-      width: work.width,
-      height: work.height
-    }))
+    year,
+    items: works
   }
 
   return (

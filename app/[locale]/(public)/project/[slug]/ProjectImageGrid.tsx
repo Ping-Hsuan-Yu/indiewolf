@@ -1,11 +1,14 @@
 'use client'
 
-import NextJsImage from '@/components/public/NextJsImage'
-import { ProjectImage } from '@/lib/services/projectService'
-import Image from 'next/image'
 import { useState } from 'react'
+
+import { ProjectImage } from '@/app/_actions/public/project'
+
 import Lightbox from 'yet-another-react-lightbox'
 import 'yet-another-react-lightbox/styles.css'
+
+import NextJsImage from '@/components/public/NextJsImage'
+import OptimizedImage from '@/components/public/OptimizedImage'
 
 type ProjectImageGridProps = {
   images: ProjectImage[]
@@ -30,11 +33,12 @@ export default function ProjectImageGrid({ images, title }: ProjectImageGridProp
             key={asset.id}
             className='cursor-pointer relative group overflow-hidden'
             onClick={() => setIndex(i)}>
-            <Image
+            <OptimizedImage
               src={asset.url}
+              url={asset.url}
               alt={title || ''}
-              width={asset.width || 800} // Fallback if 0, though should have value
-              height={asset.height || 600}
+              width={asset.width}
+              height={asset.height}
               className='w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105'
               sizes='(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw'
             />

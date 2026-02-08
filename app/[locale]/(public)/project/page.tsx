@@ -1,17 +1,19 @@
-import Link from 'next/link'
+import { getProjects } from '@/app/_actions/public/project'
 import { normalizeLocale } from '@/lib/i18n/config'
-import { getProjects } from '@/lib/services/projectService'
+
+import Link from 'next/link'
 
 type ProjectListPageProps = {
-  params: {
+  params: Promise<{
     locale: string
-  }
+  }>
 }
 
 export const dynamic = 'force-dynamic'
 
 export default async function ProjectListPage({ params }: ProjectListPageProps) {
-  const locale = normalizeLocale(params.locale)
+  const { locale: rawLocale } = await params
+  const locale = normalizeLocale(rawLocale)
   const items = await getProjects()
   const isZh = locale === 'zh'
 
@@ -29,7 +31,7 @@ export default async function ProjectListPage({ params }: ProjectListPageProps) 
 
           return (
             <div key={project.id} className='flex flex-col gap-4 md:flex-row'>
-              <Link href={`/${params.locale}/project/${project.slug}`} className='basis-1/2'>
+              <Link href={`/${locale}/project/${project.slug}`} className='basis-1/2'>
                 <img
                   src={project.cover_url || ''}
                   alt={title || ''}

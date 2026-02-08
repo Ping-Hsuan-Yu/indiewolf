@@ -1,61 +1,40 @@
 # IndieWolf 官網調整事項 Checklist 20260110
 
-## 一、網站功能與結構調整
+## 網站功能與結構調整
 
-- [ ] Project 分頁圖片可點擊放大（桌機）
-  - [ ] 點擊圖片開啟大圖（lightbox / modal / gallery）
-
-- [ ] 官網的聯繫用email需要改成：alchemy17th@gmail.com 
-
----
-
-## 三、內容更新（進行中）
-
-- [ ] 漫畫的斜槓中年中文版有順序顛倒的問題（這是我的鍋）已經有將正確順序更新在尚未更新的資料夾裡
-- [ ] 漫畫《鴉的奇形筆記》中文版，呈現希望跟英文版一樣是分三話另外第一話的前面兩頁空白頁可以砍掉（我確認過砍掉那兩頁空白每話頁數也都會是偶數，可以在電腦上呈現兩兩一組）
----
-
-## 四、漫畫雙語內容調整
-
-- [x] 漫畫內容支援中 / 英切換
-  - [x] 中文版本漫畫圖片
-  - [ ] 英文台詞版本漫畫圖片
-  - [ ] 語言切換時同步切換對應圖片
+- [x] Project 分頁圖片可點擊放大（桌機）
+  - [x] 點擊圖片開啟大圖（lightbox / modal / gallery）
+- [x] 官網的聯繫用email需要改成：alchemy17th@gmail.com 
 
 ---
 
-## 五、系統與後續規劃
+## 漫畫雙語內容調整
 
-- [ ] 資料庫內容管理
-  - [x] 全站內容已資料庫化
-  - [ ] 後台系統完成後可由後台上傳／修改內容
-  - [ ] 要有排序功能
-  - [ ] Sql function: 根據project slug / illu_year / manga_year 自動更新 nav
-
-- [ ] 環境區分
-  - [ ] 建立測試站（可顯示未完整內容）
-  - [ ] 建立正式站（僅顯示確認完成內容）
-
-- [ ] 會員制服務（待討論）
-  - [ ] 規劃會員制功能範圍
-  - [ ] 第一階段：Email 帳密註冊 / 登入
-  - [ ] 參考既有會員制網站案例（elephant）
+- [ ] 漫畫內容支援中 / 英切換
+- [ ] 半雙頁瀏覽模式
 
 ---
 
-## 七、漫畫連載
+## 後台管理
 
-- [ ] 直接抄jump
+- [x] 測試與正式資料庫
+- [x] 後台編輯前台資料
+- [x] Sql function: 根據project slug / illu_year / manga_year 自動更新 nav
+- [x] 統一三種管理頁面在同一個邏輯下
+- [x] https://nextjs.org/docs/app/guides/incremental-static-regeneration
 
-
-
-## 參考
-* [Jump](https://shonenjumpplus.com/series)
-* [一拳超人](http://galaxyheavyblow.web.fc2.com/)
+- [x] 環境區分
+  - [x] 建立測試站（可顯示未完整內容）
+  - [x] 建立正式站（僅顯示確認完成內容）
 
 ---
 
-## 八、其他優化
+## 六、效能優化
 
-- [ ] 設定網頁分享縮圖 (Open Graph Image)
-  - [ ] 方法一：將 `opengraph-image.png` (1200x630) 放入 `app/[locale]/` 資料夾
+- [x] Next Cloudinary
+  - [x] not src but public_id
+  - [x] 資料表資料型態設定
+  - [x] 使用 cldimage 改寫 型別重新設定
+- [ ] TanStack Query
+- [ ] Zustand
+- [x] service?? actions??
