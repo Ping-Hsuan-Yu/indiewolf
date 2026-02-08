@@ -5,11 +5,12 @@ import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import Image from 'next/image'
+import { Menu, X, ChevronDown } from 'lucide-react'
 
 import ToEn from '@/public/assets/toEn.svg'
 import ToZh from '@/public/assets/toZh.svg'
 import { DEFAULT_APP_LOCALE, isAppLocale } from '@/lib/i18n/config'
-import type { NavItem as NavItemType } from '@/lib/services/navService'
+import type { NavItem as NavItemType } from '@/app/_actions/public/nav'
 
 import HeaderTitle from './HeaderTitle'
 
@@ -60,7 +61,7 @@ export default function Navbar({ navItems }: NavbarProps) {
   }
 
   return (
-    <header className='sticky top-0 md:-top-10 z-50 bg-white opacity-80 font-abhaya'>
+    <header className='sticky top-0 md:-top-10 z-50 bg-white opacity-80 font-abhaya-extended'>
       <nav className='pt-4 md:pt-16 md:pb-6'>
         <div className='flex items-center justify-between'>
           <HeaderTitle />
@@ -127,7 +128,7 @@ export default function Navbar({ navItems }: NavbarProps) {
             aria-label='Toggle menu'
             aria-expanded={mobileOpen}
             onClick={() => setMobileOpen(s => !s)}>
-            <span className='material-symbols-outlined'>{mobileOpen ? 'close' : 'menu'}</span>
+            {mobileOpen ? <X className='h-6 w-6' /> : <Menu className='h-6 w-6' />}
           </button>
         </div>
 
@@ -172,13 +173,11 @@ export default function Navbar({ navItems }: NavbarProps) {
                           className='mx-2 inline-grid h-8 w-8 place-items-center rounded-lg'
                           aria-expanded={expanded}
                           onClick={() => setOpenIdx(expanded ? null : idx)}>
-                          <span
-                            className={
-                              'material-symbols-outlined leading-none transition-transform duration-200 ' +
-                              (expanded ? 'rotate-180' : '')
-                            }>
-                            expand_more
-                          </span>
+                          <ChevronDown
+                            className={`h-5 w-5 transition-transform duration-200 ${
+                              expanded ? 'rotate-180' : ''
+                            }`}
+                          />
                         </button>
                       )}
                     </div>

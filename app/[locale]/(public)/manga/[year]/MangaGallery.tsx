@@ -1,22 +1,18 @@
 'use client'
 
-import NextJsImage from '@/components/public/NextJsImage'
-import Image from 'next/image'
 import { useState } from 'react'
+
+import { MangaWork } from '@/app/_actions/public/manga'
+
 import Lightbox from 'yet-another-react-lightbox'
 import 'yet-another-react-lightbox/styles.css'
 
-type MangaEntry = {
-  id: string
+import NextJsImage from '@/components/public/NextJsImage'
+import OptimizedImage from '@/components/public/OptimizedImage'
+
+type MangaEntry = MangaWork & {
   title: string
-  description?: string | null
-  primaryImage: string
-  gallery: Array<{
-    src: string
-    width: number
-    height: number
-    alt?: string | null
-  }>
+  description?: string
 }
 
 type MangaGalleryProps = {
@@ -43,11 +39,10 @@ export default function MangaGallery({ entries, locale }: MangaGalleryProps) {
   }
 
   const slides = currentEntry
-    ? currentEntry.gallery.map(item => ({
+    ? currentEntry.images.map(item => ({
         src: item.src,
         width: item.width,
-        height: item.height,
-        alt: item.alt || undefined
+        height: item.height
       }))
     : []
 
@@ -58,12 +53,14 @@ export default function MangaGallery({ entries, locale }: MangaGalleryProps) {
           <div key={item.id} className='flex flex-col gap-4 md:flex-row md:items-end'>
             <button
               type='button'
-              className='basis-1/2 cursor-pointer overflow-hidden rounded shadow focus:outline-none relative aspect-[3/4] group'
+              className='basis-1/2 cursor-pointer overflow-hidden rounded shadow focus:outline-none relative aspect-3/4 group'
               onClick={() => openGallery(item)}>
-              <Image
-                src={item.primaryImage}
+              <OptimizedImage
+                src={item.cover_url}
+                url={item.cover_url}
                 alt={item.title}
-                fill
+                width={item.width}
+                height={item.height}
                 className='object-cover transition-transform duration-300 group-hover:scale-105'
                 sizes='(max-width: 768px) 100vw, 50vw'
               />

@@ -1,7 +1,9 @@
-import ProjectImageGrid from '@/app/[locale]/(public)/project/[slug]/ProjectImageGrid'
+import { getProjectBySlug, getProjects } from '@/app/_actions/public/project'
 import { normalizeLocale } from '@/lib/i18n/config'
-import { getProjectBySlug, getProjects } from '@/lib/services/projectService'
+
 import Image from 'next/image'
+
+import ProjectImageGrid from '@/app/[locale]/(public)/project/[slug]/ProjectImageGrid'
 
 export const dynamic = 'force-dynamic'
 
@@ -16,15 +18,16 @@ export async function generateStaticParams() {
 }
 
 type ProjectDetailPageProps = {
-  params: {
+  params: Promise<{
     locale: string
     slug: string
-  }
+  }>
 }
 
 export default async function ProjectDetailPage({ params }: ProjectDetailPageProps) {
-  const locale = normalizeLocale(params.locale)
-  const project = await getProjectBySlug(params.slug)
+  const { locale: rawLocale, slug } = await params
+  const locale = normalizeLocale(rawLocale)
+  const project = await getProjectBySlug(slug)
 
   if (!project) {
     return <section className='py-12 text-center text-gray-500'>Not Found</section>

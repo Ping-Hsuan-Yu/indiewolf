@@ -1,22 +1,18 @@
 'use client'
 
-import NextJsImage from '@/components/public/NextJsImage'
-import Image from 'next/image'
 import { useState } from 'react'
+
+import { IllustrationWork } from '@/app/_actions/public/illustration'
+
 import Lightbox from 'yet-another-react-lightbox'
 import 'yet-another-react-lightbox/styles.css'
 
-type GalleryItem = {
-  id: string
-  img: string
-  imgThumb: string
-  width: number
-  height: number
-}
+import NextJsImage from '@/components/public/NextJsImage'
+import OptimizedImage from '@/components/public/OptimizedImage'
 
 type GalleryGroup = {
   year: string
-  items: GalleryItem[]
+  items: IllustrationWork[]
 }
 
 type IllustrationGalleryProps = {
@@ -27,9 +23,10 @@ export default function IllustrationGallery({ group }: IllustrationGalleryProps)
   const [index, setIndex] = useState(-1)
 
   const slides = group.items.map(item => ({
-    src: item.img,
-    width: item.width,
-    height: item.height
+    src: item.src,
+    alt: item.alt ?? '',
+    width: item.width ?? 0,
+    height: item.height ?? 0
   }))
 
   return (
@@ -41,14 +38,14 @@ export default function IllustrationGallery({ group }: IllustrationGalleryProps)
               key={item.id}
               className='gallery-item shadow flex items-center justify-center cursor-pointer relative overflow-hidden group'
               onClick={() => setIndex(i)}>
-              <Image
-                src={item.imgThumb}
-                alt={group.year}
+              <OptimizedImage
+                src={item.src}
+                url={item.url}
+                alt={item.alt}
                 width={item.width}
                 height={item.height}
                 className='w-full h-auto transition-transform duration-300 group-hover:scale-105'
                 sizes='(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw'
-                style={{ objectFit: 'cover' }}
               />
             </div>
           )
