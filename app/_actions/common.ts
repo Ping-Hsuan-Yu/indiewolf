@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/utils/supabase/server'
+import { createAdminClient } from '@/utils/supabase/admin'
 import { redirect } from 'next/navigation'
 
 export async function logout() {
@@ -10,7 +11,13 @@ export async function logout() {
   redirect('/admin/login')
 }
 
+/**
+ * Returns an admin Supabase client after verifying the user is authenticated.
+ * This client bypasses RLS using the service role key.
+ * ⚠️ Only use for admin operations!
+ */
 export async function getAuthorizedAdminClient() {
+  // First verify the user is authenticated
   const supabase = await createClient()
   const {
     data: { user },
@@ -21,5 +28,6 @@ export async function getAuthorizedAdminClient() {
     throw new Error('Unauthorized')
   }
 
-  return supabase
+  // Return admin client with service role key
+  return createAdminClient()
 }

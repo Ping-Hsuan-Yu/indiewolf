@@ -81,7 +81,7 @@ export function AddMangaSheet({ years, onUploadSuccess }: AddMangaSheetProps) {
           <Plus className='mr-2 h-4 w-4' /> 新增漫畫
         </Button>
       </SheetTrigger>
-      <SheetContent className='w-[400px] sm:w-[540px] overflow-y-auto'>
+      <SheetContent className='w-100 sm:w-135 overflow-y-auto'>
         <SheetHeader>
           <SheetTitle>新增漫畫</SheetTitle>
           <SheetDescription>上傳新的漫畫作品。</SheetDescription>

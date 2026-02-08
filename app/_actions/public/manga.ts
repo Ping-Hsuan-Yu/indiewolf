@@ -5,12 +5,9 @@ import type { Tables } from '@/types/database.types'
 
 export type MangaWork = Tables<'manga_works'> & {
   images: MangaImage[]
-  src: string
 }
 
-export type MangaImage = Tables<'manga_images'> & {
-  src: string
-}
+export type MangaImage = Tables<'manga_images'>
 
 export async function getMangaYears(): Promise<string[]> {
   const { data } = await supabase
@@ -31,7 +28,7 @@ export async function getMangaWorks(year: string): Promise<MangaWork[]> {
       `
       *,
       src:public_id,
-      images:manga_images(id, url, order_index, width, height, src:public_id)
+      images:manga_images(id, url, locale, order_index, width, height, src:public_id)
     `
     )
     .eq('year', year)

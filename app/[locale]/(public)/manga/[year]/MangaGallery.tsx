@@ -34,16 +34,20 @@ export default function MangaGallery({ entries, locale }: MangaGalleryProps) {
     setTimeout(() => setCurrentEntry(null), 300) // Delay cleanup to avoid flickering during close animation
   }
 
-  if (entries.length === 0) {
-    return <p className='text-center text-sm text-gray-500'>漫畫內容整理中。</p>
-  }
-
   const slides = currentEntry
-    ? currentEntry.images.map(item => ({
-        src: item.src,
-        width: item.width,
-        height: item.height
-      }))
+    ? (() => {
+        // Filter images by locale, fallback to 'zh' if no images match current locale
+        let filteredImages = currentEntry.images.filter(img => img.locale === locale)
+        if (filteredImages.length === 0) {
+          filteredImages = currentEntry.images.filter(img => img.locale === 'zh')
+        }
+
+        return filteredImages.map(item => ({
+          src: item.url,
+          width: item.width,
+          height: item.height
+        }))
+      })()
     : []
 
   return (
