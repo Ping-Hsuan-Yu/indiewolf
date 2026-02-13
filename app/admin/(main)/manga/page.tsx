@@ -1,7 +1,10 @@
 import { Suspense } from 'react'
+
 import { getMangaYearsAction, getMangaWorksAction } from '@/app/_actions/admin/manga'
-import { ClientPage } from './ClientPage'
+
 import { Separator } from '@/components/admin/ui/separator'
+
+import { ClientPage } from './ClientPage'
 import { MangaGridSkeleton } from './MangaGridSkeleton'
 
 export const dynamic = 'force-dynamic'

@@ -1,8 +1,9 @@
 'use server'
 
-import { createClient } from '@/utils/supabase/server'
-import { createAdminClient } from '@/utils/supabase/admin'
 import { redirect } from 'next/navigation'
+
+import { createAdminClient } from '@/utils/supabase/admin'
+import { createClient } from '@/utils/supabase/server'
 
 export async function logout() {
   const supabase = await createClient()

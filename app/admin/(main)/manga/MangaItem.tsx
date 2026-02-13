@@ -1,14 +1,17 @@
 'use client'
 
-import { useState } from 'react'
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 import Image from 'next/image'
 import Link from 'next/link'
-import { deleteMangaWork, toggleMangaActive } from '@/app/_actions/admin/manga'
-import { Spinner } from '@/components/admin/ui/spinner'
-import { Switch } from '@/components/admin/ui/switch'
+import { useState } from 'react'
 import { toast } from 'sonner'
+
+import { deleteMangaWork, toggleMangaActive } from '@/app/_actions/admin/manga'
+import { Tables } from '@/types/database.types'
+
 import { Trash2 } from 'lucide-react'
-import { Button } from '@/components/admin/ui/button'
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,10 +21,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle
 } from '@/components/admin/ui/alert-dialog'
-import { useSortable } from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
-
-import { Tables } from '@/types/database.types'
+import { Button } from '@/components/admin/ui/button'
+import { Spinner } from '@/components/admin/ui/spinner'
+import { Switch } from '@/components/admin/ui/switch'
 
 interface MangaItemProps {
   work: Tables<'manga_works'>

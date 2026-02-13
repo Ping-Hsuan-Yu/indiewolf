@@ -1,8 +1,11 @@
 'use client'
 
-import { LogOut } from 'lucide-react'
-import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
+
+import { createClient } from '@/utils/supabase/client'
+
+import { LogOut } from 'lucide-react'
+
 import { SidebarMenuButton } from '@/components/admin/ui/sidebar'
 
 export function LogoutButton() {

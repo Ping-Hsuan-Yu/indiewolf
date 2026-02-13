@@ -1,7 +1,9 @@
-import { Suspense } from 'react'
-import { getProjectDetail } from '@/app/_actions/admin/project'
-import { ProjectDetailForm } from '@/app/admin/(main)/project/ProjectDetailForm'
 import { notFound } from 'next/navigation'
+import { Suspense } from 'react'
+
+import { getProjectDetail } from '@/app/_actions/admin/project'
+
+import { ProjectDetailForm } from '@/app/admin/(main)/project/ProjectDetailForm'
 
 export const dynamic = 'force-dynamic'
 

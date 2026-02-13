@@ -1,7 +1,7 @@
+import Link from 'next/link'
+
 import { getProjects } from '@/app/_actions/public/project'
 import { normalizeLocale } from '@/lib/i18n/config'
-
-import Link from 'next/link'
 
 type ProjectListPageProps = {
   params: Promise<{

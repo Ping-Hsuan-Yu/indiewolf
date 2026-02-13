@@ -1,9 +1,12 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+
 import cloudinary from '@/lib/cloudinary'
 import { AppLocale, toDatabaseLocale } from '@/lib/i18n/config'
+
 import { getAuthorizedAdminClient } from '../common'
+
 import type { Tables, TablesInsert, TablesUpdate } from '@/types/database.types'
 
 // -- Types --

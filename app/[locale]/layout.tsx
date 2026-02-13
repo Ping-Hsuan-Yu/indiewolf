@@ -1,9 +1,12 @@
-import type { Metadata } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
 import { notFound } from 'next/navigation'
 import { ReactNode } from 'react'
+
 import { gambetta, notoSerifTC, abhayaLibre } from '@/app/font'
+
 import './globals.css'
+
+import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Lin ChaoYu',

@@ -1,11 +1,11 @@
 'use client'
 
-import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+
 import { createClient } from '@/utils/supabase/client'
+
 import { Button } from '@/components/admin/ui/button'
-import { Spinner } from '@/components/admin/ui/spinner'
-import { Input } from '@/components/admin/ui/input'
 import {
   Card,
   CardHeader,
@@ -14,6 +14,8 @@ import {
   CardContent,
   CardFooter
 } from '@/components/admin/ui/card'
+import { Input } from '@/components/admin/ui/input'
+import { Spinner } from '@/components/admin/ui/spinner'
 
 export default function LoginPage() {
   const router = useRouter()

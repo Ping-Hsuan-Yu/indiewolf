@@ -1,11 +1,11 @@
 'use client'
 
 import { useState } from 'react'
+import { toast } from 'sonner'
 
 import { createSocialLink } from '@/app/_actions/admin/about'
 
 import { Loader2, Plus } from 'lucide-react'
-import { toast } from 'sonner'
 
 import { Button } from '@/components/admin/ui/button'
 import { Input } from '@/components/admin/ui/input'

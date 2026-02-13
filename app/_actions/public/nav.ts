@@ -1,6 +1,7 @@
 'use server'
 
 import { supabase } from '@/lib/supabase'
+
 import type { Tables } from '@/types/database.types'
 
 export type NavItem = Omit<Tables<'nav_items'>, 'parent_id' | 'is_active' | 'created_at' | 'updated_at'> & {

@@ -1,14 +1,14 @@
 'use client'
 
 import { useState } from 'react'
+import Lightbox from 'yet-another-react-lightbox'
 
 import { ProjectImage } from '@/app/_actions/public/project'
 
-import Lightbox from 'yet-another-react-lightbox'
 import 'yet-another-react-lightbox/styles.css'
 
-import OptimizedImage4Lightbox from '@/components/public/OptimizedImage4Lightbox'
 import OptimizedImage from '@/components/public/OptimizedImage'
+import OptimizedImage4Lightbox from '@/components/public/OptimizedImage4Lightbox'
 
 type ProjectImageGridProps = {
   images: ProjectImage[]

@@ -2,14 +2,15 @@
 
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { Card, CardContent } from '@/components/admin/ui/card'
-import { Button } from '@/components/admin/ui/button'
-import { GripVertical, Pencil, Trash2, Eye, EyeOff } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
-import { deleteProject, toggleProjectActive } from '@/app/_actions/admin/project'
 import { toast } from 'sonner'
+
+import { deleteProject, toggleProjectActive } from '@/app/_actions/admin/project'
+
+import { GripVertical, Pencil, Trash2, Eye, EyeOff } from 'lucide-react'
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,6 +22,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger
 } from '@/components/admin/ui/alert-dialog'
+import { Button } from '@/components/admin/ui/button'
+import { Card, CardContent } from '@/components/admin/ui/card'
 import { Switch } from '@/components/admin/ui/switch'
 
 interface ProjectItemProps {
