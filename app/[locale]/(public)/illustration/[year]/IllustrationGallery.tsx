@@ -7,7 +7,7 @@ import { IllustrationWork } from '@/app/_actions/public/illustration'
 import Lightbox from 'yet-another-react-lightbox'
 import 'yet-another-react-lightbox/styles.css'
 
-import NextJsImage from '@/components/public/NextJsImage'
+import OptimizedImage4Lightbox from '@/components/public/OptimizedImage4Lightbox'
 import OptimizedImage from '@/components/public/OptimizedImage'
 
 type GalleryGroup = {
@@ -23,7 +23,7 @@ export default function IllustrationGallery({ group }: IllustrationGalleryProps)
   const [index, setIndex] = useState(-1)
 
   const slides = group.items.map(item => ({
-    src: item.src,
+    src: item.url,
     alt: item.alt ?? '',
     width: item.width ?? 0,
     height: item.height ?? 0
@@ -39,7 +39,6 @@ export default function IllustrationGallery({ group }: IllustrationGalleryProps)
               className='gallery-item shadow flex items-center justify-center cursor-pointer relative overflow-hidden group'
               onClick={() => setIndex(i)}>
               <OptimizedImage
-                src={item.src}
                 url={item.url}
                 alt={item.alt}
                 width={item.width}
@@ -57,7 +56,7 @@ export default function IllustrationGallery({ group }: IllustrationGalleryProps)
         open={index >= 0}
         close={() => setIndex(-1)}
         slides={slides}
-        render={{ slide: NextJsImage }}
+        render={{ slide: OptimizedImage4Lightbox }}
       />
     </>
   )

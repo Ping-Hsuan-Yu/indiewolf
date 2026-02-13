@@ -1,8 +1,9 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import { Database } from '@/types/database.types'
 
 export async function updateSession(request: NextRequest, response: NextResponse) {
-  const supabase = createServerClient(
+  const supabase = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
@@ -20,12 +21,9 @@ export async function updateSession(request: NextRequest, response: NextResponse
           )
         }
       }
-      // Note: we're using a specific cookie name prefix if needed, but default is fine usually
     }
   )
 
-  // Do not run Supabase code in before user is authenticated if you want to save resources
-  // but here we need to know the user
   const {
     data: { user }
   } = await supabase.auth.getUser()

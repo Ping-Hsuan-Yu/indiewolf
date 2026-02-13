@@ -78,7 +78,7 @@ export function AddProjectSheet() {
           <Plus className='mr-2 h-4 w-4' /> 新增專案
         </Button>
       </SheetTrigger>
-      <SheetContent className='w-[400px] sm:w-[540px] overflow-y-auto'>
+      <SheetContent className='w-100 sm:w-135 overflow-y-auto'>
         <SheetHeader>
           <SheetTitle>新增專案</SheetTitle>
           <SheetDescription>建立新的專案並設定初始內容。建立後可再上傳更多圖片。</SheetDescription>

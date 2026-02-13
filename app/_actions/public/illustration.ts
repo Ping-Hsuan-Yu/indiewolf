@@ -3,9 +3,7 @@
 import { supabase } from '@/lib/supabase'
 import type { Tables } from '@/types/database.types'
 
-export type IllustrationWork = Tables<'illustration_works'> & {
-  src: string
-}
+export type IllustrationWork = Tables<'illustration_works'>
 
 export async function getIllustrationYears(): Promise<string[]> {
   const { data } = await supabase.rpc('get_distinct_years')

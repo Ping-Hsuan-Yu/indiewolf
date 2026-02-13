@@ -298,7 +298,7 @@ export function ProjectDetailForm({ project }: ProjectDetailFormProps) {
                 <Textarea 
                   value={descriptionZh} 
                   onChange={e => setDescriptionZh(e.target.value)} 
-                  className='min-h-[100px]' 
+                  className='min-h-25' 
                 />
               </div>
 
@@ -307,7 +307,7 @@ export function ProjectDetailForm({ project }: ProjectDetailFormProps) {
                 <Textarea 
                   value={descriptionEn} 
                   onChange={e => setDescriptionEn(e.target.value)} 
-                  className='min-h-[100px]' 
+                  className='min-h-25' 
                 />
               </div>
 

@@ -17,13 +17,13 @@ import { updateMangaOrder } from '@/app/_actions/admin/manga'
 import { MangaItem } from './MangaItem'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
-import { MangaWork } from '@/app/_actions/public/manga'
+import { Tables } from '@/types/database.types'
 
 interface MangaGridProps {
-  works: MangaWork[]
+  works: Tables<'manga_works'>[]
   onDelete: (id: string) => void
   isReorderMode?: boolean
-  onReorder?: (newWorks: MangaWork[]) => void
+  onReorder?: (newWorks: Tables<'manga_works'>[]) => void
 }
 
 export function MangaGrid({ works, onDelete, isReorderMode = false, onReorder }: MangaGridProps) {

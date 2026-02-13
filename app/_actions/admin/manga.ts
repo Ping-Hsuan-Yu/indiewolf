@@ -4,8 +4,8 @@ import { revalidatePath } from 'next/cache'
 import cloudinary from '@/lib/cloudinary'
 import { createClient } from '@/utils/supabase/server'
 import { getAuthorizedAdminClient } from '../common'
-import { syncMangaNav } from '@/utils/supabase/sync-nav'
-import type { TablesInsert, TablesUpdate } from '@/types/database.types'
+
+import type { Tables, TablesInsert, TablesUpdate } from '@/types/database.types'
 
 export async function createManga(formData: FormData) {
   const supabase = await getAuthorizedAdminClient()
@@ -52,7 +52,7 @@ export async function createManga(formData: FormData) {
     throw new Error('Failed to create manga')
   }
 
-  await syncMangaNav()
+
 
   revalidatePath('/admin/manga')
   return { success: true }
@@ -67,7 +67,7 @@ export async function deleteMangaWork(id: string) {
     return { success: false, error: error.message }
   }
 
-  await syncMangaNav()
+
 
   revalidatePath('/admin/manga')
   return { success: true }
@@ -85,7 +85,7 @@ export async function toggleMangaActive(id: string, isActive: boolean) {
     return { success: false, error: error.message }
   }
 
-  await syncMangaNav()
+
 
   revalidatePath('/admin/manga')
   return { success: true }
@@ -110,7 +110,7 @@ export async function updateMangaOrder(items: { id: string; order_index: number 
   return { success: true }
 }
 
-export async function getMangaWorksAction(year: string) {
+export async function getMangaWorksAction(year: string): Promise<Tables<'manga_works'>[]> {
   const supabase = await createClient()
   const { data } = await supabase
     .from('manga_works')
@@ -118,7 +118,7 @@ export async function getMangaWorksAction(year: string) {
     .eq('year', year)
     .order('order_index', { ascending: true })
 
-  return data || []
+  return (data || []) as Tables<'manga_works'>[]
 }
 
 export async function getMangaYearsAction() {
@@ -133,7 +133,12 @@ export async function getMangaYearsAction() {
   return years.sort((a, b) => parseInt(b) - parseInt(a))
 }
 
-export async function getMangaDetail(id: string) {
+export async function getMangaDetail(id: string): Promise<
+  | (Tables<'manga_works'> & {
+      images: Tables<'manga_images'>[]
+    })
+  | null
+> {
   const supabase = await createClient()
   const { data, error } = await supabase
     .from('manga_works')
@@ -156,7 +161,9 @@ export async function getMangaDetail(id: string) {
     data.images.sort((a: any, b: any) => a.order_index - b.order_index)
   }
 
-  return data
+  return data as Tables<'manga_works'> & {
+    images: Tables<'manga_images'>[]
+  }
 }
 
 export async function updateMangaDetail(id: string, formData: FormData) {
@@ -182,7 +189,7 @@ export async function updateMangaDetail(id: string, formData: FormData) {
     return { success: false, error: error.message }
   }
 
-  await syncMangaNav()
+
 
   revalidatePath(`/admin/manga/${id}`)
   revalidatePath('/admin/manga')

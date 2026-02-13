@@ -47,25 +47,10 @@ import {
   AlertDialogTitle
 } from '@/components/admin/ui/alert-dialog'
 
-// Types
-type MangaImage = {
-  id: string
-  url: string
-  width: number
-  height: number
-  order_index: number
-  locale?: 'zh' | 'en' | null
-}
+import { Tables } from '@/types/database.types'
 
-type MangaDetail = {
-  id: string
-  title_zh: string
-  title_en: string
-  summary_zh: string
-  summary_en: string
-  year: string
-  cover_url: string
-  images: MangaImage[]
+type MangaDetail = Tables<'manga_works'> & {
+  images: Tables<'manga_images'>[]
 }
 
 interface MangaDetailFormProps {
@@ -78,7 +63,7 @@ function SortableImageItem({
   image,
   onDelete
 }: {
-  image: MangaImage
+  image: Tables<'manga_images'>
   onDelete: (id: string) => void
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
@@ -173,7 +158,7 @@ function ImageGrid({
   mangaId,
   onUpdate
 }: {
-  images: MangaImage[]
+  images: Tables<'manga_images'>[]
   locale: 'zh' | 'en'
   mangaId: string
   onUpdate: () => void

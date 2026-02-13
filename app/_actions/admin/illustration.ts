@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache'
 import cloudinary from '@/lib/cloudinary'
 import { createClient } from '@/utils/supabase/server'
 import { getAuthorizedAdminClient } from '../common'
-import { syncIllustrationNav } from '@/utils/supabase/sync-nav'
+
 import type { TablesInsert, TablesUpdate } from '@/types/database.types'
 
 export async function createIllustration(formData: FormData) {
@@ -46,8 +46,7 @@ export async function createIllustration(formData: FormData) {
     throw new Error('Failed to create illustration')
   }
 
-  // 同步 nav items
-  await syncIllustrationNav()
+
 
   revalidatePath('/admin/illustration')
   revalidatePath('/[locale]/illustration/[year]', 'page')
@@ -88,8 +87,7 @@ export async function deleteIllustrationWork(id: string) {
     return { success: false, error: error.message }
   }
 
-  // 同步 nav items（因為刪除可能影響年份列表）
-  await syncIllustrationNav()
+
 
   revalidatePath('/admin/illustration')
   revalidatePath('/[locale]/illustration/[year]', 'page')
@@ -108,8 +106,7 @@ export async function toggleIllustrationActive(id: string, isActive: boolean) {
     return { success: false, error: error.message }
   }
 
-  // 同步 nav items（切換 active 可能影響年份列表）
-  await syncIllustrationNav()
+
 
   revalidatePath('/admin/illustration')
   revalidatePath('/[locale]/illustration/[year]', 'page')

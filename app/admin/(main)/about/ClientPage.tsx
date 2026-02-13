@@ -18,7 +18,7 @@ export function ClientPage({ initialData }: ClientPageProps) {
   return (
     <div className='grid gap-6 space-y-0'>
       <Tabs defaultValue='profile' className='w-full'>
-        <TabsList className='grid w-full grid-cols-2 lg:w-[400px]'>
+        <TabsList className='grid w-full grid-cols-2 lg:w-100'>
           <TabsTrigger value='profile'>個人檔案</TabsTrigger>
           <TabsTrigger value='social'>社群連結</TabsTrigger>
         </TabsList>

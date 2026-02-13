@@ -6,7 +6,7 @@ import {
   useLightboxState
 } from 'yet-another-react-lightbox'
 
-export default function NextJsImage({ slide, offset, rect }) {
+export default function OptimizedImage4Lightbox({ slide, offset, rect }) {
   const {
     on: { click },
     carousel: { imageFit }

@@ -7,7 +7,7 @@ import { ProjectImage } from '@/app/_actions/public/project'
 import Lightbox from 'yet-another-react-lightbox'
 import 'yet-another-react-lightbox/styles.css'
 
-import NextJsImage from '@/components/public/NextJsImage'
+import OptimizedImage4Lightbox from '@/components/public/OptimizedImage4Lightbox'
 import OptimizedImage from '@/components/public/OptimizedImage'
 
 type ProjectImageGridProps = {
@@ -34,7 +34,6 @@ export default function ProjectImageGrid({ images, title }: ProjectImageGridProp
             className='cursor-pointer relative group overflow-hidden'
             onClick={() => setIndex(i)}>
             <OptimizedImage
-              src={asset.url}
               url={asset.url}
               alt={title || ''}
               width={asset.width}
@@ -51,7 +50,7 @@ export default function ProjectImageGrid({ images, title }: ProjectImageGridProp
         open={index >= 0}
         close={() => setIndex(-1)}
         slides={slides}
-        render={{ slide: NextJsImage }}
+        render={{ slide: OptimizedImage4Lightbox }}
       />
     </>
   )

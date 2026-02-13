@@ -21,14 +21,10 @@ import {
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
+import { Tables } from '@/types/database.types'
+
 interface MangaItemProps {
-  work: {
-    id: string
-    cover_url: string
-    title_zh: string | null
-    title_en: string | null
-    is_active: boolean
-  }
+  work: Tables<'manga_works'>
   onDelete: (id: string) => void
   isReorderMode?: boolean
 }
@@ -47,7 +43,7 @@ export function MangaItem({ work, onDelete, isReorderMode }: MangaItemProps) {
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
-  const [isActive, setIsActive] = useState(work.is_active)
+  const [isActive, setIsActive] = useState(work.is_active ?? false)
   const [isUpdatingActive, setIsUpdatingActive] = useState(false)
 
   const handleToggleActive = async (checked: boolean) => {

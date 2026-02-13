@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache'
 import cloudinary from '@/lib/cloudinary'
 import { createClient } from '@/utils/supabase/server'
 import { getAuthorizedAdminClient } from '../common'
-import { syncProjectNav } from '@/utils/supabase/sync-nav'
+
 import type { TablesInsert, TablesUpdate } from '@/types/database.types'
 
 export async function getProjectsAction() {
@@ -80,7 +80,7 @@ export async function createProject(formData: FormData) {
     throw new Error('Failed to create project: ' + error.message)
   }
 
-  await syncProjectNav()
+
 
   revalidatePath('/admin/project')
   return { success: true }
@@ -113,7 +113,7 @@ export async function updateProject(id: string, formData: FormData) {
     return { success: false, error: error.message }
   }
 
-  await syncProjectNav()
+
 
   revalidatePath(`/admin/project/${id}`)
   revalidatePath('/admin/project')
@@ -133,7 +133,7 @@ export async function deleteProject(id: string) {
     return { success: false, error: error.message }
   }
 
-  await syncProjectNav()
+
 
   revalidatePath('/admin/project')
   return { success: true }
@@ -314,7 +314,7 @@ export async function toggleProjectActive(id: string, isActive: boolean) {
     return { success: false, error: '更新失敗：沒有權限或找不到該項目' }
   }
 
-  await syncProjectNav()
+
 
   revalidatePath('/admin/project')
   return { success: true }
