@@ -48,8 +48,6 @@ export async function createIllustration(formData: FormData) {
     throw new Error('Failed to create illustration')
   }
 
-
-
   revalidatePath('/admin/illustration')
   revalidatePath('/[locale]/illustration/[year]', 'page')
   return { success: true }

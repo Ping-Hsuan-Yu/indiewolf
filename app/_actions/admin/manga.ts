@@ -22,7 +22,6 @@ export async function createManga(formData: FormData) {
     throw new Error('Missing required fields')
   }
 
-  // Upload to Cloudinary
   const arrayBuffer = await file.arrayBuffer()
   const buffer = Buffer.from(arrayBuffer)
 
@@ -35,7 +34,6 @@ export async function createManga(formData: FormData) {
       .end(buffer)
   })
 
-  // Insert into Supabase
   const insertData: TablesInsert<'manga_works'> = {
     cover_url: uploadResult.secure_url,
     title_zh: title_zh || '',
@@ -54,8 +52,6 @@ export async function createManga(formData: FormData) {
     throw new Error('Failed to create manga')
   }
 
-
-
   revalidatePath('/admin/manga')
   return { success: true }
 }
@@ -68,8 +64,6 @@ export async function deleteMangaWork(id: string) {
     console.error('Delete Error:', error)
     return { success: false, error: error.message }
   }
-
-
 
   revalidatePath('/admin/manga')
   return { success: true }
@@ -86,8 +80,6 @@ export async function toggleMangaActive(id: string, isActive: boolean) {
     console.error('Toggle Active Error:', error)
     return { success: false, error: error.message }
   }
-
-
 
   revalidatePath('/admin/manga')
   return { success: true }
@@ -130,7 +122,6 @@ export async function getMangaYearsAction() {
     .select('year')
     .order('year', { ascending: false })
 
-  // Deduplicate
   const years = Array.from(new Set((data || []).map((item: { year: string }) => item.year)))
   return years.sort((a, b) => parseInt(b) - parseInt(a))
 }
@@ -158,7 +149,6 @@ export async function getMangaDetail(id: string): Promise<
     return null
   }
 
-  // Sort images by order_index
   if (data.images) {
     data.images.sort((a: any, b: any) => a.order_index - b.order_index)
   }
@@ -190,8 +180,6 @@ export async function updateMangaDetail(id: string, formData: FormData) {
     console.error('Update Manga Detail Error:', error)
     return { success: false, error: error.message }
   }
-
-
 
   revalidatePath(`/admin/manga/${id}`)
   revalidatePath('/admin/manga')
@@ -235,7 +223,6 @@ export async function uploadMangaImages(mangaId: string, formData: FormData) {
 
     const currentMaxOrder = maxOrderData?.order_index || 0
 
-    // Insert into Supabase
     const inserts: TablesInsert<'manga_images'>[] = results.map((result, index) => ({
       manga_id: mangaId,
       url: result.secure_url,
