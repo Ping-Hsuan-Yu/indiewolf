@@ -1,10 +1,12 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+
 import cloudinary from '@/lib/cloudinary'
 import { createClient } from '@/utils/supabase/server'
+
 import { getAuthorizedAdminClient } from '../common'
-import { syncProjectNav } from '@/utils/supabase/sync-nav'
+
 import type { TablesInsert, TablesUpdate } from '@/types/database.types'
 
 export async function getProjectsAction() {
@@ -80,7 +82,7 @@ export async function createProject(formData: FormData) {
     throw new Error('Failed to create project: ' + error.message)
   }
 
-  await syncProjectNav()
+
 
   revalidatePath('/admin/project')
   return { success: true }
@@ -113,8 +115,6 @@ export async function updateProject(id: string, formData: FormData) {
     return { success: false, error: error.message }
   }
 
-  await syncProjectNav()
-
   revalidatePath(`/admin/project/${id}`)
   revalidatePath('/admin/project')
   return { success: true }
@@ -123,17 +123,12 @@ export async function updateProject(id: string, formData: FormData) {
 export async function deleteProject(id: string) {
   const supabase = await getAuthorizedAdminClient()
 
-  // Delete project (cascade should handle images if configured, but let's be safe later if needed. For now assuming cascade or manual cleanup not strictly required by user prompt but good practice.)
-  // Actually, Cloudinary images won't auto-delete. We might want to handle that, but typically we implement soft delete or just DB delete for MVP unless specified.)
-
   const { error } = await supabase.from('project_works').delete().eq('id', id)
 
   if (error) {
     console.error('Delete Project Error:', error)
     return { success: false, error: error.message }
   }
-
-  await syncProjectNav()
 
   revalidatePath('/admin/project')
   return { success: true }
@@ -230,11 +225,6 @@ export async function deleteProjectImage(id: string) {
   if (error) {
     return { success: false, error: error.message }
   }
-  // We can't easily revalidate the specific project path without the project ID here,
-  // but usually the UI handles optimistic updates or we pass project ID.
-  // Actually, let's try to fetch project_id before delete if we need precise revalidation,
-  // or just rely on generic revalidation strategies or return success and let client refresh.
-  // For simplicity:
   return { success: true }
 }
 
@@ -278,7 +268,6 @@ export async function updateProjectOrder(items: { id: string; order_index: numbe
   const missing = results.filter(r => !r.data || r.data.length === 0)
   if (missing.length > 0) {
     console.error('Update Order Missing: Some items not updated.', missing)
-    // Not returning error here to avoid blocking partial success, but logging it.
   }
 
   revalidatePath('/admin/project')
@@ -313,8 +302,6 @@ export async function toggleProjectActive(id: string, isActive: boolean) {
     console.error('Toggle Active Failed: No rows updated. Possible RLS issue or invalid ID.', id)
     return { success: false, error: '更新失敗：沒有權限或找不到該項目' }
   }
-
-  await syncProjectNav()
 
   revalidatePath('/admin/project')
   return { success: true }

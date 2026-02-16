@@ -1,7 +1,8 @@
 'use server'
 
-import { supabase } from '@/lib/supabase'
 import { toDatabaseLocale, AppLocale } from '@/lib/i18n/config'
+import { supabase } from '@/lib/supabase'
+
 import type { Tables } from '@/types/database.types'
 
 export type SocialLink = {

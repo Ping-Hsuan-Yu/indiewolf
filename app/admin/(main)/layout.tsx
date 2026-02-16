@@ -1,10 +1,11 @@
-import '../globals.css'
-import type { Metadata } from 'next'
-import { SidebarProvider, SidebarTrigger } from '@/components/admin/ui/sidebar'
 import { AppSidebar } from '@/app/admin/(main)/AppSidebar'
-import { Toaster } from '@/components/admin/ui/sonner'
 import { notoSans, chocolateClassicalSans } from '@/app/font'
+import { SidebarProvider, SidebarTrigger } from '@/components/admin/ui/sidebar'
+import { Toaster } from '@/components/admin/ui/sonner'
 
+import '../globals.css'
+
+import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Admin Dashboard',

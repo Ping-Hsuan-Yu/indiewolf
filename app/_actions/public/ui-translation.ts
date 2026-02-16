@@ -1,6 +1,7 @@
 'use server'
 
 import { supabase } from '@/lib/supabase'
+
 import type { Tables } from '@/types/database.types'
 
 type UiTranslationRecord = Pick<Tables<'ui_translations'>, 'namespace' | 'key' | 'value'>

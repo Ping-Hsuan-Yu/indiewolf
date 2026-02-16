@@ -1,7 +1,7 @@
+import Image from 'next/image'
+
 import { getProjectBySlug, getProjects } from '@/app/_actions/public/project'
 import { normalizeLocale } from '@/lib/i18n/config'
-
-import Image from 'next/image'
 
 import ProjectImageGrid from '@/app/[locale]/(public)/project/[slug]/ProjectImageGrid'
 

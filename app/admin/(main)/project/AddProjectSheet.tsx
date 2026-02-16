@@ -1,14 +1,16 @@
 'use client'
 
-import { useState } from 'react'
-import { Plus, Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { createProject } from '@/app/_actions/admin/project'
+import { useState } from 'react'
 import { toast } from 'sonner'
+
+import { createProject } from '@/app/_actions/admin/project'
+
+import { Plus, Loader2 } from 'lucide-react'
+
 import { Button } from '@/components/admin/ui/button'
 import { Input } from '@/components/admin/ui/input'
 import { Label } from '@/components/admin/ui/label'
-import { Textarea } from '@/components/admin/ui/textarea'
 import {
   Sheet,
   SheetContent,
@@ -18,6 +20,7 @@ import {
   SheetTrigger,
   SheetFooter
 } from '@/components/admin/ui/sheet'
+import { Textarea } from '@/components/admin/ui/textarea'
 
 export function AddProjectSheet() {
   const router = useRouter()
@@ -78,7 +81,7 @@ export function AddProjectSheet() {
           <Plus className='mr-2 h-4 w-4' /> 新增專案
         </Button>
       </SheetTrigger>
-      <SheetContent className='w-[400px] sm:w-[540px] overflow-y-auto'>
+      <SheetContent className='w-100 sm:w-135 overflow-y-auto'>
         <SheetHeader>
           <SheetTitle>新增專案</SheetTitle>
           <SheetDescription>建立新的專案並設定初始內容。建立後可再上傳更多圖片。</SheetDescription>

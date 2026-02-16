@@ -1,11 +1,13 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+
 import cloudinary from '@/lib/cloudinary'
 import { createClient } from '@/utils/supabase/server'
+
 import { getAuthorizedAdminClient } from '../common'
-import { syncMangaNav } from '@/utils/supabase/sync-nav'
-import type { TablesInsert, TablesUpdate } from '@/types/database.types'
+
+import type { Tables, TablesInsert, TablesUpdate } from '@/types/database.types'
 
 export async function createManga(formData: FormData) {
   const supabase = await getAuthorizedAdminClient()
@@ -20,7 +22,6 @@ export async function createManga(formData: FormData) {
     throw new Error('Missing required fields')
   }
 
-  // Upload to Cloudinary
   const arrayBuffer = await file.arrayBuffer()
   const buffer = Buffer.from(arrayBuffer)
 
@@ -33,7 +34,6 @@ export async function createManga(formData: FormData) {
       .end(buffer)
   })
 
-  // Insert into Supabase
   const insertData: TablesInsert<'manga_works'> = {
     cover_url: uploadResult.secure_url,
     title_zh: title_zh || '',
@@ -52,8 +52,6 @@ export async function createManga(formData: FormData) {
     throw new Error('Failed to create manga')
   }
 
-  await syncMangaNav()
-
   revalidatePath('/admin/manga')
   return { success: true }
 }
@@ -66,8 +64,6 @@ export async function deleteMangaWork(id: string) {
     console.error('Delete Error:', error)
     return { success: false, error: error.message }
   }
-
-  await syncMangaNav()
 
   revalidatePath('/admin/manga')
   return { success: true }
@@ -84,8 +80,6 @@ export async function toggleMangaActive(id: string, isActive: boolean) {
     console.error('Toggle Active Error:', error)
     return { success: false, error: error.message }
   }
-
-  await syncMangaNav()
 
   revalidatePath('/admin/manga')
   return { success: true }
@@ -110,7 +104,7 @@ export async function updateMangaOrder(items: { id: string; order_index: number 
   return { success: true }
 }
 
-export async function getMangaWorksAction(year: string) {
+export async function getMangaWorksAction(year: string): Promise<Tables<'manga_works'>[]> {
   const supabase = await createClient()
   const { data } = await supabase
     .from('manga_works')
@@ -118,7 +112,7 @@ export async function getMangaWorksAction(year: string) {
     .eq('year', year)
     .order('order_index', { ascending: true })
 
-  return data || []
+  return (data || []) as Tables<'manga_works'>[]
 }
 
 export async function getMangaYearsAction() {
@@ -128,12 +122,16 @@ export async function getMangaYearsAction() {
     .select('year')
     .order('year', { ascending: false })
 
-  // Deduplicate
   const years = Array.from(new Set((data || []).map((item: { year: string }) => item.year)))
   return years.sort((a, b) => parseInt(b) - parseInt(a))
 }
 
-export async function getMangaDetail(id: string) {
+export async function getMangaDetail(id: string): Promise<
+  | (Tables<'manga_works'> & {
+      images: Tables<'manga_images'>[]
+    })
+  | null
+> {
   const supabase = await createClient()
   const { data, error } = await supabase
     .from('manga_works')
@@ -151,12 +149,13 @@ export async function getMangaDetail(id: string) {
     return null
   }
 
-  // Sort images by order_index
   if (data.images) {
     data.images.sort((a: any, b: any) => a.order_index - b.order_index)
   }
 
-  return data
+  return data as Tables<'manga_works'> & {
+    images: Tables<'manga_images'>[]
+  }
 }
 
 export async function updateMangaDetail(id: string, formData: FormData) {
@@ -181,8 +180,6 @@ export async function updateMangaDetail(id: string, formData: FormData) {
     console.error('Update Manga Detail Error:', error)
     return { success: false, error: error.message }
   }
-
-  await syncMangaNav()
 
   revalidatePath(`/admin/manga/${id}`)
   revalidatePath('/admin/manga')
@@ -226,7 +223,6 @@ export async function uploadMangaImages(mangaId: string, formData: FormData) {
 
     const currentMaxOrder = maxOrderData?.order_index || 0
 
-    // Insert into Supabase
     const inserts: TablesInsert<'manga_images'>[] = results.map((result, index) => ({
       manga_id: mangaId,
       url: result.secure_url,

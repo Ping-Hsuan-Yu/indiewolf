@@ -1,6 +1,11 @@
 'use client'
 
 import * as React from 'react'
+
+import { Plus, X } from 'lucide-react'
+
+import { Button } from '@/components/admin/ui/button'
+import { Input } from '@/components/admin/ui/input'
 import {
   Select,
   SelectContent,
@@ -8,9 +13,6 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/admin/ui/select'
-import { Input } from '@/components/admin/ui/input'
-import { Button } from '@/components/admin/ui/button'
-import { Plus, X } from 'lucide-react'
 
 interface CreatableSelectProps {
   options: string[]

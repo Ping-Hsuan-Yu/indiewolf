@@ -1,7 +1,10 @@
 import { Suspense } from 'react'
+
 import { getProjectsAction } from '@/app/_actions/admin/project'
-import { ClientProjectPage } from './ClientProjectPage'
+
 import { Separator } from '@/components/admin/ui/separator'
+
+import { ClientProjectPage } from './ClientProjectPage'
 
 export const dynamic = 'force-dynamic'
 

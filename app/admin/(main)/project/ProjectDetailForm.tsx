@@ -1,9 +1,5 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Image from 'next/image'
-import { toast } from 'sonner'
 import { 
   DndContext, 
   closestCenter,
@@ -21,14 +17,10 @@ import {
   useSortable
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { Loader2, ArrowLeft, Upload, GripVertical, Trash2, CheckCircle2, Star } from 'lucide-react'
-
-import { Button } from '@/components/admin/ui/button'
-import { Input } from '@/components/admin/ui/input'
-import { Label } from '@/components/admin/ui/label'
-import { Textarea } from '@/components/admin/ui/textarea'
-import { Card, CardContent } from '@/components/admin/ui/card'
-import { Badge } from '@/components/admin/ui/badge'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { toast } from 'sonner'
 
 import { 
   updateProject, 
@@ -37,6 +29,15 @@ import {
   updateProjectImagesOrder,
   deleteProjectImage
 } from '@/app/_actions/admin/project'
+
+import { Loader2, ArrowLeft, Upload, GripVertical, Trash2, CheckCircle2, Star } from 'lucide-react'
+
+import { Badge } from '@/components/admin/ui/badge'
+import { Button } from '@/components/admin/ui/button'
+import { Card, CardContent } from '@/components/admin/ui/card'
+import { Input } from '@/components/admin/ui/input'
+import { Label } from '@/components/admin/ui/label'
+import { Textarea } from '@/components/admin/ui/textarea'
 
 interface ProjectDetailFormProps {
   project: any
@@ -298,7 +299,7 @@ export function ProjectDetailForm({ project }: ProjectDetailFormProps) {
                 <Textarea 
                   value={descriptionZh} 
                   onChange={e => setDescriptionZh(e.target.value)} 
-                  className='min-h-[100px]' 
+                  className='min-h-25' 
                 />
               </div>
 
@@ -307,7 +308,7 @@ export function ProjectDetailForm({ project }: ProjectDetailFormProps) {
                 <Textarea 
                   value={descriptionEn} 
                   onChange={e => setDescriptionEn(e.target.value)} 
-                  className='min-h-[100px]' 
+                  className='min-h-25' 
                 />
               </div>
 

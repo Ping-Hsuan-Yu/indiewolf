@@ -1,12 +1,12 @@
 'use client'
 
+import Image from 'next/image'
 import { useState } from 'react'
+import { toast } from 'sonner'
 
 import { SocialLink, updateSocialLink } from '@/app/_actions/admin/about'
 
 import { Loader2, Pencil } from 'lucide-react'
-import Image from 'next/image'
-import { toast } from 'sonner'
 
 import { Button } from '@/components/admin/ui/button'
 import {

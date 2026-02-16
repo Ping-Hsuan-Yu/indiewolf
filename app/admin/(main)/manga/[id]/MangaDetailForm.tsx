@@ -1,8 +1,5 @@
 'use client'
 
-import { useState } from 'react'
-import Image from 'next/image'
-import { useRouter } from 'next/navigation'
 import {
   DndContext,
   closestCenter,
@@ -20,6 +17,10 @@ import {
   useSortable
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { toast } from 'sonner'
 
 import {
   updateMangaDetail,
@@ -27,15 +28,10 @@ import {
   deleteMangaImage,
   updateMangaImagesOrder
 } from '@/app/_actions/admin/manga'
+import { Tables } from '@/types/database.types'
 
-import { Button } from '@/components/admin/ui/button'
-import { Input } from '@/components/admin/ui/input'
-import { Label } from '@/components/admin/ui/label'
-import { Textarea } from '@/components/admin/ui/textarea'
-import { CreatableSelect } from '../CreatableSelect'
-import { toast } from 'sonner'
 import { Loader2, Plus, Trash2, ChevronLeft } from 'lucide-react'
-import { Separator } from '@/components/admin/ui/separator'
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -46,26 +42,16 @@ import {
   AlertDialogHeader,
   AlertDialogTitle
 } from '@/components/admin/ui/alert-dialog'
+import { Button } from '@/components/admin/ui/button'
+import { Input } from '@/components/admin/ui/input'
+import { Label } from '@/components/admin/ui/label'
+import { Separator } from '@/components/admin/ui/separator'
+import { Textarea } from '@/components/admin/ui/textarea'
 
-// Types
-type MangaImage = {
-  id: string
-  url: string
-  width: number
-  height: number
-  order_index: number
-  locale?: 'zh' | 'en' | null
-}
+import { CreatableSelect } from '../CreatableSelect'
 
-type MangaDetail = {
-  id: string
-  title_zh: string
-  title_en: string
-  summary_zh: string
-  summary_en: string
-  year: string
-  cover_url: string
-  images: MangaImage[]
+type MangaDetail = Tables<'manga_works'> & {
+  images: Tables<'manga_images'>[]
 }
 
 interface MangaDetailFormProps {
@@ -78,7 +64,7 @@ function SortableImageItem({
   image,
   onDelete
 }: {
-  image: MangaImage
+  image: Tables<'manga_images'>
   onDelete: (id: string) => void
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
@@ -173,7 +159,7 @@ function ImageGrid({
   mangaId,
   onUpdate
 }: {
-  images: MangaImage[]
+  images: Tables<'manga_images'>[]
   locale: 'zh' | 'en'
   mangaId: string
   onUpdate: () => void

@@ -1,13 +1,13 @@
 'use client'
 
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 import { AboutProfile, updateAboutProfile } from '@/app/_actions/admin/about'
 import { APP_LOCALES, AppLocale } from '@/lib/i18n/config'
 
 import { Loader2 } from 'lucide-react'
-import Image from 'next/image'
-import { toast } from 'sonner'
 
 import { Button } from '@/components/admin/ui/button'
 import { Input } from '@/components/admin/ui/input'

@@ -3,7 +3,6 @@
 import { CldImage } from 'next-cloudinary'
 
 type OptimizedImageProps = {
-  src: string,
   url: string,
   alt: string | null
   width: number
@@ -19,7 +18,6 @@ type OptimizedImageProps = {
  */
 
 export default function OptimizedImage({
-  src,
   url,
   alt,
   className = '',
@@ -30,7 +28,7 @@ export default function OptimizedImage({
 }: OptimizedImageProps) {
   return (
     <CldImage
-      src={src}
+      src={url}
       alt={alt ?? ''}
       className={className}
       sizes={sizes}

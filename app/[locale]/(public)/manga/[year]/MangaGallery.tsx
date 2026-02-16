@@ -1,14 +1,14 @@
 'use client'
 
 import { useState } from 'react'
+import Lightbox from 'yet-another-react-lightbox'
 
 import { MangaWork } from '@/app/_actions/public/manga'
 
-import Lightbox from 'yet-another-react-lightbox'
 import 'yet-another-react-lightbox/styles.css'
 
-import NextJsImage from '@/components/public/NextJsImage'
 import OptimizedImage from '@/components/public/OptimizedImage'
+import OptimizedImage4Lightbox from '@/components/public/OptimizedImage4Lightbox'
 
 type MangaEntry = MangaWork & {
   title: string
@@ -60,7 +60,6 @@ export default function MangaGallery({ entries, locale }: MangaGalleryProps) {
               className='basis-1/2 cursor-pointer overflow-hidden rounded shadow focus:outline-none relative aspect-3/4 group'
               onClick={() => openGallery(item)}>
               <OptimizedImage
-                src={item.cover_url}
                 url={item.cover_url}
                 alt={item.title}
                 width={item.width}
@@ -87,7 +86,7 @@ export default function MangaGallery({ entries, locale }: MangaGalleryProps) {
         open={index >= 0}
         close={closeGallery}
         slides={slides}
-        render={{ slide: NextJsImage }}
+        render={{ slide: OptimizedImage4Lightbox }}
       />
     </>
   )

@@ -1,7 +1,9 @@
-import { Suspense } from 'react'
-import { getMangaDetail, getMangaYearsAction } from '@/app/_actions/admin/manga'
-import { MangaDetailForm } from './MangaDetailForm'
 import { notFound } from 'next/navigation'
+import { Suspense } from 'react'
+
+import { getMangaDetail, getMangaYearsAction } from '@/app/_actions/admin/manga'
+
+import { MangaDetailForm } from './MangaDetailForm'
 
 export const dynamic = 'force-dynamic'
 

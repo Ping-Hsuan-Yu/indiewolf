@@ -1,6 +1,5 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import {
   DndContext,
   closestCenter,
@@ -16,12 +15,17 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy
 } from '@dnd-kit/sortable'
-import { updateProjectOrder } from '@/app/_actions/admin/project'
+import { useState, useEffect } from 'react'
 import { toast } from 'sonner'
-import { ProjectItem } from './ProjectItem'
-import { AddProjectSheet } from './AddProjectSheet'
-import { Button } from '@/components/admin/ui/button'
+
+import { updateProjectOrder } from '@/app/_actions/admin/project'
+
 import { ArrowUpDown } from 'lucide-react'
+
+import { Button } from '@/components/admin/ui/button'
+
+import { AddProjectSheet } from './AddProjectSheet'
+import { ProjectItem } from './ProjectItem'
 
 interface ClientProjectPageProps {
   initialProjects: any[]

@@ -1,24 +1,27 @@
 'use client'
 
 import { useState } from 'react'
+
 import { getMangaWorksAction } from '@/app/_actions/admin/manga'
+import { Tables } from '@/types/database.types'
+
 import { Button } from '@/components/admin/ui/button'
-import { AddMangaSheet } from './AddMangaSheet'
-import { Switch } from '@/components/admin/ui/switch'
 import { Label } from '@/components/admin/ui/label'
+import { Switch } from '@/components/admin/ui/switch'
+
+import { AddMangaSheet } from './AddMangaSheet'
 import { MangaGrid } from './MangaGrid'
-import { MangaWork } from '@/app/_actions/public/manga'
 import { MangaGridSkeleton } from './MangaGridSkeleton'
 
 interface ClientPageProps {
   years: string[]
-  initialWorks: MangaWork[]
+  initialWorks: Tables<'manga_works'>[]
   initialYear: string
 }
 
 export function ClientPage({ years, initialWorks, initialYear }: ClientPageProps) {
   const [selectedYear, setSelectedYear] = useState(initialYear)
-  const [works, setWorks] = useState<MangaWork[]>(initialWorks)
+  const [works, setWorks] = useState<Tables<'manga_works'>[]>(initialWorks)
   const [loading, setLoading] = useState(false)
   const [isReorderMode, setIsReorderMode] = useState(false)
 
