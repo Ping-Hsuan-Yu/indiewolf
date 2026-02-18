@@ -60,7 +60,7 @@
 }
 
 /* Dark mode - 如果需要 */
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   @theme {
     --color-background: hsl(20 14.3% 4.1%);
     --color-foreground: hsl(60 9.1% 97.8%);
@@ -115,7 +115,7 @@
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
-}
+} */
 
 @layer base {
   * {
