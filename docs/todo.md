@@ -38,3 +38,5 @@
 - [ ] TanStack Query
 - [ ] Zustand
 - [x] service?? actions??
+
+- [ ] 排序時關閉啟用與刪除功能
