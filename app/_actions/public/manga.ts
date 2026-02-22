@@ -40,3 +40,22 @@ export async function getMangaWorks(year: string): Promise<MangaWork[]> {
 
   return (data || []) as MangaWork[]
 }
+
+export async function getMangaWorksByStatus(status: 'ongoing' | 'completed'): Promise<MangaWork[]> {
+  const isCompleted = status === 'completed'
+
+  const { data } = await supabase
+    .from('manga_works')
+    .select(
+      `
+      *,
+      src:public_id,
+      images:manga_images(id, url, locale, order_index, width, height, src:public_id)
+    `
+    )
+    .eq('is_completed', isCompleted)
+    .eq('is_active', true)
+    .order('order_index', { ascending: true })
+
+  return (data || []) as MangaWork[]
+}

@@ -1,7 +1,7 @@
 'use client'
 
-import { 
-  DndContext, 
+import {
+  DndContext,
   closestCenter,
   KeyboardSensor,
   PointerSensor,
@@ -22,10 +22,10 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
-import { 
-  updateProject, 
-  uploadProjectImages, 
-  setProjectCover, 
+import {
+  updateProject,
+  uploadProjectImages,
+  setProjectCover,
   updateProjectImagesOrder,
   deleteProjectImage
 } from '@/app/_actions/admin/project'
@@ -43,21 +43,22 @@ interface ProjectDetailFormProps {
   project: any
 }
 
-function SortableImageItem({ id, url, isMain, onSetMain, onDelete }: { 
-  id: string, 
-  url: string, 
-  isMain: boolean, 
-  onSetMain: () => void,
+function SortableImageItem({
+  id,
+  url,
+  isMain,
+  onSetMain,
+  onDelete
+}: {
+  id: string
+  url: string
+  isMain: boolean
+  onSetMain: () => void
   onDelete: () => void
 }) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging
-  } = useSortable({ id })
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id
+  })
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -68,13 +69,8 @@ function SortableImageItem({ id, url, isMain, onSetMain, onDelete }: {
   return (
     <Card ref={setNodeRef} style={style} className='overflow-hidden group relative'>
       <CardContent className='p-0 aspect-square relative'>
-        <Image 
-          src={url} 
-          alt="Project Image" 
-          fill 
-          className='object-cover'
-        />
-        
+        <Image src={url} alt='Project Image' fill className='object-cover' />
+
         {/* Is Main Indicator */}
         {isMain && (
           <div className='absolute top-2 left-2 z-10'>
@@ -86,31 +82,20 @@ function SortableImageItem({ id, url, isMain, onSetMain, onDelete }: {
 
         {/* Hover Overlay */}
         <div className='absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-2'>
-          <button 
-            {...attributes} 
-            {...listeners} 
-            className='absolute top-2 right-2 p-1 bg-white/10 rounded hover:bg-white/20 cursor-grab active:cursor-grabbing text-white'
-          >
+          <button
+            {...attributes}
+            {...listeners}
+            className='absolute top-2 right-2 p-1 bg-white/10 rounded hover:bg-white/20 cursor-grab active:cursor-grabbing text-white'>
             <GripVertical className='w-5 h-5' />
           </button>
 
           {!isMain && (
-            <Button 
-              size='sm' 
-              variant='secondary' 
-              className='w-full text-xs'
-              onClick={onSetMain}
-            >
+            <Button size='sm' variant='secondary' className='w-full text-xs' onClick={onSetMain}>
               設為主圖
             </Button>
           )}
 
-          <Button 
-            size='sm' 
-            destructive
-            className='w-full text-xs'
-            onClick={onDelete}
-          >
+          <Button size='sm' destructive className='w-full text-xs' onClick={onDelete}>
             <Trash2 className='w-3 h-3 mr-1' /> 刪除
           </Button>
         </div>
@@ -124,7 +109,7 @@ export function ProjectDetailForm({ project }: ProjectDetailFormProps) {
   const [loading, setLoading] = useState(false)
   const [images, setImages] = useState(project.images || [])
   const [coverUrl, setCoverUrl] = useState(project.cover_url)
-  
+
   // Form State
   const [slug, setSlug] = useState(project.slug || '')
   const [titleZh, setTitleZh] = useState(project.title_zh || '')
@@ -137,7 +122,7 @@ export function ProjectDetailForm({ project }: ProjectDetailFormProps) {
   const handleUpdateText = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    
+
     const formData = new FormData()
     formData.append('slug', slug)
     formData.append('title_zh', titleZh)
@@ -230,8 +215,8 @@ export function ProjectDetailForm({ project }: ProjectDetailFormProps) {
     const { active, over } = event
     if (over && active.id !== over.id) {
       setImages((items: any[]) => {
-        const oldIndex = items.findIndex((item) => item.id === active.id)
-        const newIndex = items.findIndex((item) => item.id === over.id)
+        const oldIndex = items.findIndex(item => item.id === active.id)
+        const newIndex = items.findIndex(item => item.id === over.id)
         return arrayMove(items, oldIndex, newIndex)
       })
 
@@ -239,7 +224,7 @@ export function ProjectDetailForm({ project }: ProjectDetailFormProps) {
       const oldIndex = images.findIndex((item: any) => item.id === active.id)
       const newIndex = images.findIndex((item: any) => item.id === over.id)
       const reordered = arrayMove(images, oldIndex, newIndex)
-      
+
       const updates = reordered.map((item: any, index: number) => ({
         id: item.id,
         order_index: index + 1
@@ -271,7 +256,7 @@ export function ProjectDetailForm({ project }: ProjectDetailFormProps) {
                 <Label htmlFor='slug'>Slug</Label>
                 <Input id='slug' value={slug} onChange={e => setSlug(e.target.value)} required />
               </div>
-              
+
               <div className='grid grid-cols-2 gap-4'>
                 <div className='space-y-2'>
                   <Label>標題 (中文)</Label>
@@ -286,37 +271,37 @@ export function ProjectDetailForm({ project }: ProjectDetailFormProps) {
               <div className='grid grid-cols-2 gap-4'>
                 <div className='space-y-2'>
                   <Label>副標題 (中文)</Label>
-                  <Input value={subtitleZh} onChange={e => setSubtitleZh(e.target.value)} />
+                  <Textarea value={subtitleZh} onChange={e => setSubtitleZh(e.target.value)} />
                 </div>
                 <div className='space-y-2'>
                   <Label>Subtitle (English)</Label>
-                  <Input value={subtitleEn} onChange={e => setSubtitleEn(e.target.value)} />
+                  <Textarea value={subtitleEn} onChange={e => setSubtitleEn(e.target.value)} />
                 </div>
               </div>
 
               <div className='space-y-2'>
                 <Label>說明 (中文)</Label>
-                <Textarea 
-                  value={descriptionZh} 
-                  onChange={e => setDescriptionZh(e.target.value)} 
-                  className='min-h-25' 
+                <Textarea
+                  value={descriptionZh}
+                  onChange={e => setDescriptionZh(e.target.value)}
+                  className='min-h-25'
                 />
               </div>
 
               <div className='space-y-2'>
                 <Label>Description (English)</Label>
-                <Textarea 
-                  value={descriptionEn} 
-                  onChange={e => setDescriptionEn(e.target.value)} 
-                  className='min-h-25' 
+                <Textarea
+                  value={descriptionEn}
+                  onChange={e => setDescriptionEn(e.target.value)}
+                  className='min-h-25'
                 />
               </div>
 
               <div className='flex justify-end'>
-                  <Button type='submit' disabled={loading}>
-                    {loading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
-                    儲存變更
-                  </Button>
+                <Button type='submit' disabled={loading}>
+                  {loading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
+                  儲存變更
+                </Button>
               </div>
             </form>
           </CardContent>
@@ -331,12 +316,12 @@ export function ProjectDetailForm({ project }: ProjectDetailFormProps) {
                 <div className='flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors text-sm font-medium'>
                   <Upload className='w-4 h-4' /> 上傳圖片
                 </div>
-                <Input 
-                  id='upload-images' 
-                  type='file' 
-                  multiple 
-                  accept='image/*' 
-                  className='hidden' 
+                <Input
+                  id='upload-images'
+                  type='file'
+                  multiple
+                  accept='image/*'
+                  className='hidden'
                   onChange={handleImageUpload}
                   disabled={loading}
                 />
@@ -344,20 +329,18 @@ export function ProjectDetailForm({ project }: ProjectDetailFormProps) {
             </div>
           </div>
 
-          <DndContext 
-            sensors={sensors} 
-            collisionDetection={closestCenter} 
-            onDragEnd={handleDragEnd}
-          >
-            <SortableContext 
-              items={images.map((img: any) => img.id)} 
-              strategy={rectSortingStrategy}
-            >
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}>
+            <SortableContext
+              items={images.map((img: any) => img.id)}
+              strategy={rectSortingStrategy}>
               <div className='grid grid-cols-3 gap-4'>
                 {images.map((image: any) => (
-                  <SortableImageItem 
-                    key={image.id} 
-                    id={image.id} 
+                  <SortableImageItem
+                    key={image.id}
+                    id={image.id}
                     url={image.url}
                     isMain={image.url === coverUrl}
                     onSetMain={() => handleSetMain(image.url)}

@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 
-import { getMangaYearsAction, getMangaWorksAction } from '@/app/_actions/admin/manga'
+import { getMangaWorksByStatusAction, getMangaYearsAction } from '@/app/_actions/admin/manga'
 
 import { Separator } from '@/components/admin/ui/separator'
 
@@ -11,10 +11,8 @@ export const dynamic = 'force-dynamic'
 
 export default async function MangaPage() {
   const years = await getMangaYearsAction()
-  // Ensure we sort descending as number
   const sortedYears = years.sort((a: string, b: string) => parseInt(b) - parseInt(a))
-  const initialYear = sortedYears[0] || new Date().getFullYear().toString()
-  const works = await getMangaWorksAction(initialYear)
+  const initialWorks = await getMangaWorksByStatusAction(false)
 
   return (
     <div className='space-y-6'>
@@ -24,7 +22,7 @@ export default async function MangaPage() {
       </div>
       <Separator />
       <Suspense fallback={<MangaGridSkeleton />}>
-        <ClientPage years={sortedYears} initialWorks={works} initialYear={initialYear} />
+        <ClientPage years={sortedYears} initialWorks={initialWorks} />
       </Suspense>
     </div>
   )

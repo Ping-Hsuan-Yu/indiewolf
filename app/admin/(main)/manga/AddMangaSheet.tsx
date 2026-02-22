@@ -26,7 +26,7 @@ import { CreatableSelect } from './CreatableSelect'
 
 interface AddMangaSheetProps {
   years: string[]
-  onUploadSuccess?: (year: string) => void
+  onUploadSuccess?: () => void
 }
 
 export function AddMangaSheet({ years, onUploadSuccess }: AddMangaSheetProps) {
@@ -67,7 +67,7 @@ export function AddMangaSheet({ years, onUploadSuccess }: AddMangaSheetProps) {
       setFile(null)
 
       // Call component-level callback first to switch tabs immediately if needed
-      onUploadSuccess?.(year)
+      onUploadSuccess?.()
       // Then refresh route data
       router.refresh()
     } catch (error) {

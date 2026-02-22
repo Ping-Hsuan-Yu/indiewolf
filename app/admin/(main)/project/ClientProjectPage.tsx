@@ -20,10 +20,6 @@ import { toast } from 'sonner'
 
 import { updateProjectOrder } from '@/app/_actions/admin/project'
 
-import { ArrowUpDown } from 'lucide-react'
-
-import { Button } from '@/components/admin/ui/button'
-
 import { AddProjectSheet } from './AddProjectSheet'
 import { ProjectItem } from './ProjectItem'
 
@@ -33,7 +29,7 @@ interface ClientProjectPageProps {
 
 export function ClientProjectPage({ initialProjects }: ClientProjectPageProps) {
   const [projects, setProjects] = useState(initialProjects)
-  
+
   // Sync state with props when data updates
   useEffect(() => {
     setProjects(initialProjects)
@@ -50,22 +46,16 @@ export function ClientProjectPage({ initialProjects }: ClientProjectPageProps) {
     const { active, over } = event
 
     if (over && active.id !== over.id) {
-      setProjects((items) => {
-        const oldIndex = items.findIndex((item) => item.id === active.id)
-        const newIndex = items.findIndex((item) => item.id === over.id)
+      setProjects(items => {
+        const oldIndex = items.findIndex(item => item.id === active.id)
+        const newIndex = items.findIndex(item => item.id === over.id)
         return arrayMove(items, oldIndex, newIndex)
       })
 
-      // We need to calculate the new order for backend
-      // We can optimistically calculate order_index based on new position
-      // For simplicity, we just send reordered list and let backend/action assign indices
-      // Or we assume contiguous indices.
-      
-      // Let's create the updates payload
-      const oldIndex = projects.findIndex((item) => item.id === active.id)
-      const newIndex = projects.findIndex((item) => item.id === over.id)
+      const oldIndex = projects.findIndex(item => item.id === active.id)
+      const newIndex = projects.findIndex(item => item.id === over.id)
       const reordered = arrayMove(projects, oldIndex, newIndex)
-      
+
       const updates = reordered.map((item, index) => ({
         id: item.id,
         order_index: index + 1
@@ -88,26 +78,20 @@ export function ClientProjectPage({ initialProjects }: ClientProjectPageProps) {
   return (
     <div className='space-y-4'>
       <div className='flex items-center justify-between'>
-        <div className='text-sm text-muted-foreground'>
-          共 {projects.length} 個專案
-        </div>
+        <div className='text-sm text-muted-foreground'>共 {projects.length} 個專案</div>
         <AddProjectSheet />
       </div>
 
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-      >
+      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext items={projects.map(p => p.id)} strategy={verticalListSortingStrategy}>
           <div className='space-y-3'>
-            {projects.map((project) => (
+            {projects.map(project => (
               <ProjectItem key={project.id} project={project} />
             ))}
           </div>
         </SortableContext>
       </DndContext>
-      
+
       {projects.length === 0 && (
         <div className='text-center py-12 text-muted-foreground border border-dashed rounded-lg'>
           尚無專案，請新增專案

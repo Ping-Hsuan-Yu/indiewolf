@@ -70,10 +70,13 @@ export default function MangaGallery({ entries, locale }: MangaGalleryProps) {
             </button>
             <div className='basis-1/2'>
               <p
-                className={`text-center md:text-start font-bold${
+                className={`text-center md:text-start flex items-center font-bold${
                   locale === 'zh' ? ' text-sm' : ''
                 }`}>
                 {item.title}
+                <span className='ml-2 text-xs font-normal px-2 py-0.5 rounded-full text-gray-500 bg-gray-100'>
+                  {item.year}
+                </span>
               </p>
               {item.description && <p className='text-sm'>{item.description}</p>}
             </div>

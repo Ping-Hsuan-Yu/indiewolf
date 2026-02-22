@@ -35,7 +35,6 @@ import { Loader2, Plus, Trash2, ChevronLeft } from 'lucide-react'
 import {
   AlertDialog,
   AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -46,6 +45,7 @@ import { Button } from '@/components/admin/ui/button'
 import { Input } from '@/components/admin/ui/input'
 import { Label } from '@/components/admin/ui/label'
 import { Separator } from '@/components/admin/ui/separator'
+import { ToggleGroup, ToggleGroupItem } from '@/components/admin/ui/toggle-group'
 import { Textarea } from '@/components/admin/ui/textarea'
 
 import { CreatableSelect } from '../CreatableSelect'
@@ -282,7 +282,8 @@ export function MangaDetailForm({ manga, years }: MangaDetailFormProps) {
     title_zh: manga.title_zh || '',
     title_en: manga.title_en || '',
     summary_zh: manga.summary_zh || '',
-    summary_en: manga.summary_en || ''
+    summary_en: manga.summary_en || '',
+    is_completed: manga.is_completed ?? false
   })
 
   // Filter images by locale
@@ -297,7 +298,7 @@ export function MangaDetailForm({ manga, years }: MangaDetailFormProps) {
     setLoading(true)
     const data = new FormData()
     Object.entries(formData).forEach(([key, value]) => {
-      data.append(key, value)
+      data.append(key, value.toString())
     })
 
     const res = await updateMangaDetail(manga.id, data)
@@ -344,6 +345,24 @@ export function MangaDetailForm({ manga, years }: MangaDetailFormProps) {
                 value={formData.year}
                 onChange={val => setFormData(prev => ({ ...prev, year: val }))}
               />
+            </div>
+            <div className='space-y-2'>
+              <Label>連載狀態</Label>
+              <ToggleGroup
+                type='single'
+                value={formData.is_completed ? 'completed' : 'ongoing'}
+                onValueChange={val => {
+                  if (val) setFormData(prev => ({ ...prev, is_completed: val === 'completed' }))
+                }}
+                variant='outline'
+                className='justify-start gap-0'>
+                <ToggleGroupItem value='ongoing' className='rounded-r-none border-r-0'>
+                  連載中
+                </ToggleGroupItem>
+                <ToggleGroupItem value='completed' className='rounded-l-none'>
+                  連載結束
+                </ToggleGroupItem>
+              </ToggleGroup>
             </div>
             <div className='space-y-2'>
               <Label>標題 (中文)</Label>

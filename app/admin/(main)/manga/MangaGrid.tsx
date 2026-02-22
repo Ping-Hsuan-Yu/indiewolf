@@ -71,7 +71,7 @@ export function MangaGrid({ works, onDelete, isReorderMode = false, onReorder }:
   if (works.length === 0) {
     return (
       <div className='flex h-40 items-center justify-center rounded-lg border border-dashed text-muted-foreground'>
-        No manga found for this year.
+        No manga found for this category.
       </div>
     )
   }

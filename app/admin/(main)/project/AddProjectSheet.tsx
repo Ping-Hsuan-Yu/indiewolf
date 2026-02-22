@@ -97,7 +97,7 @@ export function AddProjectSheet() {
               required
             />
           </div>
-          
+
           <div className='grid gap-2'>
             <Label htmlFor='cover'>專案封面 (Main Cover)</Label>
             <Input
@@ -130,7 +130,7 @@ export function AddProjectSheet() {
 
           <div className='grid gap-2'>
             <Label htmlFor='subtitle_zh'>副標題 (中文)</Label>
-            <Input
+            <Textarea
               id='subtitle_zh'
               value={subtitleZh}
               onChange={e => setSubtitleZh(e.target.value)}
@@ -139,7 +139,7 @@ export function AddProjectSheet() {
           </div>
           <div className='grid gap-2'>
             <Label htmlFor='subtitle_en'>Subtitle (English)</Label>
-            <Input
+            <Textarea
               id='subtitle_en'
               value={subtitleEn}
               onChange={e => setSubtitleEn(e.target.value)}

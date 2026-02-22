@@ -31,13 +31,8 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: '/manga',
-        destination: '/manga/2023',
-        permanent: false
-      },
-      {
-        source: '/illustration',
-        destination: '/illustration/2025',
+        source: '/:locale(zh|en)/manga',
+        destination: '/:locale/manga/completed',
         permanent: false
       }
     ]
