@@ -51,8 +51,8 @@ export default function LoginPage() {
     <div className='flex min-h-screen items-center justify-center bg-background px-4'>
       <Card className='w-full max-w-sm'>
         <CardHeader>
-          <CardTitle className='text-2xl'>Admin Login</CardTitle>
-          <CardDescription>🩷❤️🧡💛💚🩵💙💜🖤🩶🤍🤎</CardDescription>
+          <CardTitle className='text-2xl'>管理員登入</CardTitle>
+          <CardDescription>v1.0</CardDescription>
         </CardHeader>
         <form onSubmit={handleLogin}>
           <CardContent className='grid gap-4'>
@@ -60,7 +60,7 @@ export default function LoginPage() {
               <label
                 htmlFor='email'
                 className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-                ✉️
+                ✉️ 帳號
               </label>
               <Input
                 id='email'
@@ -75,7 +75,7 @@ export default function LoginPage() {
               <label
                 htmlFor='password'
                 className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-                🤫
+                🤫 密碼
               </label>
               <Input id='password' name='password' type='password' required disabled={loading} />
             </div>
@@ -85,7 +85,7 @@ export default function LoginPage() {
           </CardContent>
           <CardFooter>
             <Button type='submit' className='w-full' disabled={loading}>
-              {loading ? <Spinner /> : '🚀'}
+              {loading ? <Spinner /> : '🚀 登入'}
             </Button>
           </CardFooter>
         </form>

@@ -18,7 +18,6 @@ export const metadata: Metadata = {
 
 const SUPPORTED_LOCALES = ['zh', 'en'] as const
 
-// https://nextjs.org/docs/app/api-reference/functions/generate-static-params
 export function generateStaticParams() {
   return SUPPORTED_LOCALES.map(locale => ({ locale }))
 }

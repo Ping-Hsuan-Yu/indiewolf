@@ -28,14 +28,33 @@ npm run db:push:dev
 
 5. 驗證 dev 上的變更（在應用程式中測試）
 
-6. Push 到 production：
-```bash
-npx supabase db push --db-url "$PROD_DB_URL"
-```
-
-7. 更新 TypeScript types：
+6. 更新 TypeScript types：
 ```bash
 npm run db:types
+```
+
+## Push 到 Production
+
+確認 dev 測試通過後，再執行以下步驟：
+
+1. 臨時切換到 prod：
+```bash
+npx supabase link --project-ref diwxkpiwnirlvngldcoi
+```
+
+2. Dry run 確認：
+```bash
+npx supabase db push --linked --dry-run
+```
+
+3. 正式 push：
+```bash
+npx supabase db push --linked
+```
+
+4. 切回 dev：
+```bash
+npx supabase link --project-ref yadzgjnsmenwcsonffox
 ```
 
 ## 切換 Link 目標
