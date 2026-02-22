@@ -116,31 +116,35 @@ export function MangaItem({ work, onDelete, isReorderMode }: MangaItemProps) {
       </Link>
 
       {/* Toggle Activate Switch - Top Left (Absolute to Root) */}
-      <div
-        className='absolute left-2 top-4 z-10 opacity-50 transition-opacity group-hover:opacity-100'
-        onPointerDown={e => e.stopPropagation()}>
-        <Switch
-          checked={isActive}
-          onCheckedChange={handleToggleActive}
-          isLoading={isUpdatingActive}
-          withIcon
-        />
-      </div>
+      {!isReorderMode && (
+        <div
+          className='absolute left-2 top-4 z-10 opacity-50 transition-opacity group-hover:opacity-100'
+          onPointerDown={e => e.stopPropagation()}>
+          <Switch
+            checked={isActive}
+            onCheckedChange={handleToggleActive}
+            isLoading={isUpdatingActive}
+            withIcon
+          />
+        </div>
+      )}
 
       {/* Delete Button - Top Right (Absolute to Root) */}
-      <div className='absolute right-2 top-2 opacity-0 transition-opacity group-hover:opacity-100'>
-        <Button
-          size='icon'
-          destructive
-          className='h-8 w-8'
-          onClick={e => {
-            e.stopPropagation()
-            setDeleteDialogOpen(true)
-          }}
-          onPointerDown={e => e.stopPropagation()}>
-          <Trash2 className='h-4 w-4' />
-        </Button>
-      </div>
+      {!isReorderMode && (
+        <div className='absolute right-2 top-2 opacity-0 transition-opacity group-hover:opacity-100'>
+          <Button
+            size='icon'
+            destructive
+            className='h-8 w-8'
+            onClick={e => {
+              e.stopPropagation()
+              setDeleteDialogOpen(true)
+            }}
+            onPointerDown={e => e.stopPropagation()}>
+            <Trash2 className='h-4 w-4' />
+          </Button>
+        </div>
+      )}
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>

@@ -146,6 +146,7 @@ export type Database = {
           height: number
           id: string
           is_active: boolean | null
+          is_completed: boolean
           order_index: number | null
           summary_en: string | null
           summary_zh: string | null
@@ -160,6 +161,7 @@ export type Database = {
           height: number
           id?: string
           is_active?: boolean | null
+          is_completed?: boolean
           order_index?: number | null
           summary_en?: string | null
           summary_zh?: string | null
@@ -174,6 +176,7 @@ export type Database = {
           height?: number
           id?: string
           is_active?: boolean | null
+          is_completed?: boolean
           order_index?: number | null
           summary_en?: string | null
           summary_zh?: string | null
@@ -446,6 +449,10 @@ export type Database = {
               error: true
             } & "Could not choose the best candidate function between: public.public_id(record => about_profiles), public.public_id(record => home_kv_frames), public.public_id(record => illustration_works), public.public_id(record => manga_images), public.public_id(record => manga_works), public.public_id(record => project_images), public.public_id(record => project_works), public.public_id(record => social_links). Try renaming the parameters or the function itself in the database so function overloading can be resolved"
           }
+      sync_all_nav_items: { Args: never; Returns: undefined }
+      sync_illustration_nav: { Args: never; Returns: undefined }
+      sync_manga_nav: { Args: never; Returns: undefined }
+      sync_project_nav: { Args: never; Returns: undefined }
     }
     Enums: {
       ContentAccessLevel: "FREE" | "SUBSCRIBER"

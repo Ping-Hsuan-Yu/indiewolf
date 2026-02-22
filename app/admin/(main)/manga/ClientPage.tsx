@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-import { getMangaWorksAction } from '@/app/_actions/admin/manga'
+import { getMangaWorksByStatusAction } from '@/app/_actions/admin/manga'
 import { Tables } from '@/types/database.types'
 
 import { Button } from '@/components/admin/ui/button'
@@ -13,23 +13,29 @@ import { AddMangaSheet } from './AddMangaSheet'
 import { MangaGrid } from './MangaGrid'
 import { MangaGridSkeleton } from './MangaGridSkeleton'
 
+type MangaStatus = 'ongoing' | 'completed'
+
+const STATUS_OPTIONS: { value: MangaStatus; label: string }[] = [
+  { value: 'ongoing', label: '連載中' },
+  { value: 'completed', label: '連載結束' }
+]
+
 interface ClientPageProps {
   years: string[]
   initialWorks: Tables<'manga_works'>[]
-  initialYear: string
 }
 
-export function ClientPage({ years, initialWorks, initialYear }: ClientPageProps) {
-  const [selectedYear, setSelectedYear] = useState(initialYear)
+export function ClientPage({ years, initialWorks }: ClientPageProps) {
+  const [selectedStatus, setSelectedStatus] = useState<MangaStatus>('ongoing')
   const [works, setWorks] = useState<Tables<'manga_works'>[]>(initialWorks)
   const [loading, setLoading] = useState(false)
   const [isReorderMode, setIsReorderMode] = useState(false)
 
-  const handleYearChange = async (year: string) => {
-    setSelectedYear(year)
+  const handleStatusChange = async (status: MangaStatus) => {
+    setSelectedStatus(status)
     setLoading(true)
     try {
-      const newWorks = await getMangaWorksAction(year)
+      const newWorks = await getMangaWorksByStatusAction(status === 'completed')
       setWorks(newWorks)
     } catch (error) {
       console.error(error)
@@ -39,17 +45,23 @@ export function ClientPage({ years, initialWorks, initialYear }: ClientPageProps
     }
   }
 
+  const handleUploadSuccess = async () => {
+    // Refresh current tab data
+    const refreshed = await getMangaWorksByStatusAction(selectedStatus === 'completed')
+    setWorks(refreshed)
+  }
+
   return (
     <div className='space-y-6'>
       <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
         <div className='flex flex-wrap gap-2'>
-          {years.map(year => (
+          {STATUS_OPTIONS.map(option => (
             <Button
-              key={year}
-              variant={selectedYear === year ? 'default' : 'outline'}
-              onClick={() => handleYearChange(year)}
+              key={option.value}
+              variant={selectedStatus === option.value ? 'default' : 'outline'}
+              onClick={() => handleStatusChange(option.value)}
               className='min-w-16'>
-              {year}
+              {option.label}
             </Button>
           ))}
         </div>
@@ -59,7 +71,7 @@ export function ClientPage({ years, initialWorks, initialYear }: ClientPageProps
             <Switch id='reorder-mode' checked={isReorderMode} onCheckedChange={setIsReorderMode} />
             <Label htmlFor='reorder-mode'>排序模式</Label>
           </div>
-          <AddMangaSheet years={years} onUploadSuccess={year => handleYearChange(year)} />
+          <AddMangaSheet years={years} onUploadSuccess={handleUploadSuccess} />
         </div>
       </div>
 

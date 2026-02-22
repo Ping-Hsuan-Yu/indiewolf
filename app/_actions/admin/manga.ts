@@ -43,7 +43,8 @@ export async function createManga(formData: FormData) {
     year,
     width: uploadResult.width,
     height: uploadResult.height,
-    order_index: 0
+    order_index: 0,
+    is_completed: false
   }
   const { error } = await supabase.from('manga_works').insert(insertData)
 
@@ -115,6 +116,19 @@ export async function getMangaWorksAction(year: string): Promise<Tables<'manga_w
   return (data || []) as Tables<'manga_works'>[]
 }
 
+export async function getMangaWorksByStatusAction(
+  isCompleted: boolean
+): Promise<Tables<'manga_works'>[]> {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('manga_works')
+    .select('*')
+    .eq('is_completed', isCompleted)
+    .order('order_index', { ascending: true })
+
+  return (data || []) as Tables<'manga_works'>[]
+}
+
 export async function getMangaYearsAction() {
   const supabase = await createClient()
   const { data } = await supabase
@@ -166,13 +180,15 @@ export async function updateMangaDetail(id: string, formData: FormData) {
   const summary_zh = formData.get('summary_zh') as string
   const summary_en = formData.get('summary_en') as string
   const year = formData.get('year') as string
+  const is_completed = formData.get('is_completed') === 'true'
 
   const updateData: TablesUpdate<'manga_works'> = {
     title_zh,
     title_en,
     summary_zh,
     summary_en,
-    year
+    year,
+    is_completed
   }
   const { error } = await supabase.from('manga_works').update(updateData).eq('id', id)
 

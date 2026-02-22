@@ -152,31 +152,35 @@ export function IllustrationItem({ work, onDelete, isReorderMode }: Illustration
           className='object-contain transition-all hover:scale-105'
           sizes='(max-width: 768px) 50vw, 33vw'
         />
-        <div
-          className='absolute left-2 top-4 z-10 opacity-50 transition-opacity group-hover:opacity-100'
-          onPointerDown={e => e.stopPropagation()} // Prevent drag
-        >
-          <Switch
-            checked={isActive}
-            onCheckedChange={handleToggleActive}
-            isLoading={isUpdatingActive}
-            withIcon
-          />
-        </div>
-        <div className='absolute right-2 top-2 opacity-0 transition-opacity group-hover:opacity-100'>
-          <Button
-            size='icon'
-            destructive
-            className='h-8 w-8'
-            onClick={e => {
-              e.stopPropagation() // Prevent drag start
-              setDeleteDialogOpen(true)
-            }}
-            onPointerDown={e => e.stopPropagation()} // Prevent drag start on pointer down
+        {!isReorderMode && (
+          <div
+            className='absolute left-2 top-4 z-10 opacity-50 transition-opacity group-hover:opacity-100'
+            onPointerDown={e => e.stopPropagation()} // Prevent drag
           >
-            <Trash2 className='h-4 w-4' />
-          </Button>
-        </div>
+            <Switch
+              checked={isActive}
+              onCheckedChange={handleToggleActive}
+              isLoading={isUpdatingActive}
+              withIcon
+            />
+          </div>
+        )}
+        {!isReorderMode && (
+          <div className='absolute right-2 top-2 opacity-0 transition-opacity group-hover:opacity-100'>
+            <Button
+              size='icon'
+              destructive
+              className='h-8 w-8'
+              onClick={e => {
+                e.stopPropagation() // Prevent drag start
+                setDeleteDialogOpen(true)
+              }}
+              onPointerDown={e => e.stopPropagation()} // Prevent drag start on pointer down
+            >
+              <Trash2 className='h-4 w-4' />
+            </Button>
+          </div>
+        )}
       </div>
       <div className='h-8'>
         {isEditing ? (
