@@ -7,9 +7,12 @@ import '../globals.css'
 
 import type { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: 'Admin Dashboard',
-  description: 'Admin dashboard for Lin ChaoYu'
+export const metadata = {
+  title: 'LinChaoYu 後台管理',
+  description: 'LinChaoYu 後台管理',
+  icons: {
+    icon: '/assets/logo.svg'
+  }
 }
 
 import { createClient } from '@/utils/supabase/server'
