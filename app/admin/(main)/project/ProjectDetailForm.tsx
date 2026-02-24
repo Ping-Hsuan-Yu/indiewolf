@@ -19,7 +19,7 @@ import {
 import { CSS } from '@dnd-kit/utilities'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { toast } from 'sonner'
 
 import {
@@ -32,6 +32,17 @@ import {
 
 import { Loader2, ArrowLeft, Upload, GripVertical, Trash2, CheckCircle2, Star } from 'lucide-react'
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
+} from '@/components/admin/ui/alert-dialog'
 import { Badge } from '@/components/admin/ui/badge'
 import { Button } from '@/components/admin/ui/button'
 import { Card, CardContent } from '@/components/admin/ui/card'
@@ -54,8 +65,10 @@ function SortableImageItem({
   url: string
   isMain: boolean
   onSetMain: () => void
-  onDelete: () => void
+  onDelete: () => Promise<boolean>
 }) {
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id
   })
@@ -95,9 +108,45 @@ function SortableImageItem({
             </Button>
           )}
 
-          <Button size='sm' destructive className='w-full text-xs' onClick={onDelete}>
-            <Trash2 className='w-3 h-3 mr-1' /> 刪除
-          </Button>
+          <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+            <AlertDialogTrigger asChild>
+              <Button size='sm' destructive className='w-full text-xs'>
+                <Trash2 className='w-3 h-3 mr-1' /> 刪除
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>確定要刪除這張圖片嗎？</AlertDialogTitle>
+                <AlertDialogDescription>此動作無法復原。</AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogAction
+                  onClick={e => {
+                    e.preventDefault()
+                    setDeleteDialogOpen(false)
+                  }}
+                  disabled={isDeleting}
+                  className='bg-muted text-muted-foreground hover:bg-muted/80'>
+                  取消
+                </AlertDialogAction>
+                <Button
+                  variant='default'
+                  destructive
+                  onClick={async e => {
+                    e.stopPropagation()
+                    setIsDeleting(true)
+                    const success = await onDelete()
+                    if (!success) {
+                      setIsDeleting(false)
+                    }
+                  }}
+                  disabled={isDeleting}>
+                  {isDeleting ? <Loader2 className='mr-2 h-4 w-4 animate-spin' /> : null}
+                  確認刪除
+                </Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </CardContent>
     </Card>
@@ -109,6 +158,12 @@ export function ProjectDetailForm({ project }: ProjectDetailFormProps) {
   const [loading, setLoading] = useState(false)
   const [images, setImages] = useState(project.images || [])
   const [coverUrl, setCoverUrl] = useState(project.cover_url)
+
+  useEffect(() => {
+    if (project.images) {
+      setImages(project.images)
+    }
+  }, [project.images])
 
   // Form State
   const [slug, setSlug] = useState(project.slug || '')
@@ -151,21 +206,72 @@ export function ProjectDetailForm({ project }: ProjectDetailFormProps) {
     if (!files || files.length === 0) return
 
     setLoading(true)
-    const formData = new FormData()
-    Array.from(files).forEach(file => {
-      formData.append('images', file)
+    const total = files.length
+    let completed = 0
+
+    const getProgressToastContent = (comp: number, tot: number) => (
+      <div className='w-full min-w-50 space-y-2'>
+        <div className='text-sm font-medium'>
+          已完成 {comp} 張，共 {tot} 張
+        </div>
+        <div className='h-2 w-full overflow-hidden rounded-full bg-secondary'>
+          <div
+            className='h-full bg-primary transition-all duration-300'
+            style={{ width: `${(comp / tot) * 100}%` }}
+          />
+        </div>
+      </div>
+    )
+
+    const toastId = toast.loading('上傳進度...', {
+      classNames: { content: 'w-full' },
+      position: 'bottom-right',
+      description: getProgressToastContent(0, total)
     })
 
     try {
-      const result = await uploadProjectImages(project.id, formData)
-      if (result.success) {
-        toast.success('圖片上傳成功')
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i]
+        const formData = new FormData()
+        formData.append('images', file)
+
+        const res = await uploadProjectImages(project.id, formData)
+
+        if (!res.success) {
+          toast.error(`上傳失敗: 檔案 ${file.name} 發生錯誤 (${res.error})`, {
+            id: toastId,
+            position: 'bottom-right',
+            duration: 5000,
+            closeButton: true
+          })
+          setLoading(false)
+          e.target.value = ''
+          return
+        }
+
+        completed++
+
+        toast.loading('上傳進度...', {
+          classNames: { content: 'w-full' },
+          id: toastId,
+          position: 'bottom-right',
+          description: getProgressToastContent(completed, total)
+        })
+
+        // Refresh progressively
         router.refresh()
-      } else {
-        toast.error('上傳失敗')
       }
+
+      toast.success('上傳完成', {
+        id: toastId,
+        position: 'bottom-right',
+        classNames: { content: 'w-full' },
+        duration: 5000,
+        closeButton: true,
+        description: getProgressToastContent(total, total)
+      })
     } catch (error) {
-      toast.error('上傳錯誤')
+      toast.error('上傳錯誤', { id: toastId })
     } finally {
       setLoading(false)
       // Reset input
@@ -188,18 +294,19 @@ export function ProjectDetailForm({ project }: ProjectDetailFormProps) {
   }
 
   const handleDeleteImage = async (id: string) => {
-    if (!confirm('確定要刪除這張圖片嗎？')) return
-
     try {
       const result = await deleteProjectImage(id)
       if (result.success) {
         setImages(images.filter((img: any) => img.id !== id))
         toast.success('圖片已刪除')
+        return true
       } else {
         toast.error('刪除失敗')
+        return false
       }
     } catch (error) {
       toast.error('刪除錯誤')
+      return false
     }
   }
 

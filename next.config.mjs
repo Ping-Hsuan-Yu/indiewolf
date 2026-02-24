@@ -25,7 +25,7 @@ const nextConfig = {
       'class-variance-authority'
     ],
     serverActions: {
-      bodySizeLimit: '1000mb'
+      bodySizeLimit: '500mb'
     }
   },
   async redirects() {

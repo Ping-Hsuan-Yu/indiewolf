@@ -65,7 +65,7 @@ function SortableImageItem({
   onDelete
 }: {
   image: Tables<'manga_images'>
-  onDelete: (id: string) => void
+  onDelete: (id: string) => Promise<boolean>
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: image.id
@@ -82,9 +82,10 @@ function SortableImageItem({
 
   const handleConfirmDelete = async () => {
     setIsDeleting(true)
-    await onDelete(image.id)
-    setIsDeleting(false)
-    setDeleteDialogOpen(false)
+    const success = await onDelete(image.id)
+    if (!success) {
+      setIsDeleting(false)
+    }
   }
 
   return (
@@ -199,23 +200,72 @@ function ImageGrid({
     if (!files || files.length === 0) return
 
     setIsUploading(true)
-    const formData = new FormData()
-    formData.append('locale', locale)
-    Array.from(files).forEach(file => {
-      formData.append('images', file)
+    const total = files.length
+    let completed = 0
+
+    const getProgressToastContent = (comp: number, tot: number) => (
+      <div className='w-full min-w-50 space-y-2'>
+        <div className='text-sm font-medium'>
+          已完成 {comp} 張，共 {tot} 張
+        </div>
+        <div className='h-2 w-full overflow-hidden rounded-full bg-secondary'>
+          <div
+            className='h-full bg-primary transition-all duration-300'
+            style={{ width: `${(comp / tot) * 100}%` }}
+          />
+        </div>
+      </div>
+    )
+
+    const toastId = toast.loading('上傳進度...', {
+      classNames: { content: 'w-full' },
+      position: 'bottom-right',
+      description: getProgressToastContent(0, total)
     })
 
-    const res = await uploadMangaImages(mangaId, formData)
-    setIsUploading(false)
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i]
+      const formData = new FormData()
+      formData.append('locale', locale)
+      formData.append('images', file)
 
-    if (res.success) {
-      toast.success('圖片上傳成功')
+      const res = await uploadMangaImages(mangaId, formData)
+
+      if (!res.success) {
+        toast.error(`上傳失敗: 檔案 ${file.name} 發生錯誤 (${res.error})`, {
+          id: toastId,
+          position: 'bottom-right',
+          duration: 5000,
+          closeButton: true
+        })
+        setIsUploading(false)
+        e.target.value = ''
+        return
+      }
+
+      completed++
+
+      toast.loading('上傳進度...', {
+        classNames: { content: 'w-full' },
+        id: toastId,
+        position: 'bottom-right',
+        description: getProgressToastContent(completed, total)
+      })
+
+      // Update the UI progressively
       onUpdate()
-    } else {
-      toast.error('上傳失敗: ' + res.error)
     }
 
-    // Reset input
+    toast.success('上傳完成', {
+      id: toastId,
+      position: 'bottom-right',
+      classNames: { content: 'w-full' },
+      duration: 180000,
+      closeButton: true,
+      description: getProgressToastContent(total, total)
+    })
+
+    setIsUploading(false)
     e.target.value = ''
   }
 
@@ -224,8 +274,10 @@ function ImageGrid({
     if (res.success) {
       toast.success('刪除成功')
       onUpdate()
+      return true
     } else {
       toast.error('刪除失敗')
+      return false
     }
   }
 

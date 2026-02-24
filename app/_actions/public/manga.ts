@@ -35,6 +35,7 @@ export async function getMangaWorks(year: string): Promise<MangaWork[]> {
     .eq('year', year)
     .eq('is_active', true)
     .order('order_index', { ascending: true })
+    .order('order_index', { referencedTable: 'manga_images', ascending: true })
 
   console.log(data)
 
@@ -56,6 +57,7 @@ export async function getMangaWorksByStatus(status: 'ongoing' | 'completed'): Pr
     .eq('is_completed', isCompleted)
     .eq('is_active', true)
     .order('order_index', { ascending: true })
+    .order('order_index', { referencedTable: 'manga_images', ascending: true })
 
   return (data || []) as MangaWork[]
 }

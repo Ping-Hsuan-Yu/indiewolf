@@ -211,22 +211,29 @@ export async function uploadMangaImages(mangaId: string, formData: FormData) {
     return { success: false, error: 'No files provided' }
   }
 
-  const uploadPromises = files.map(async file => {
-    const arrayBuffer = await file.arrayBuffer()
-    const buffer = Buffer.from(arrayBuffer)
-
-    return new Promise<any>((resolve, reject) => {
-      cloudinary.uploader
-        .upload_stream({ folder: 'manga_pages' }, (error, result) => {
-          if (error) reject(error)
-          else resolve(result)
-        })
-        .end(buffer)
-    })
-  })
-
   try {
-    const results = await Promise.all(uploadPromises)
+    const results: any[] = []
+    const CONCURRENCY = 3
+
+    for (let i = 0; i < files.length; i += CONCURRENCY) {
+      const batch = files.slice(i, i + CONCURRENCY)
+      const batchPromises = batch.map(async file => {
+        const arrayBuffer = await file.arrayBuffer()
+        const buffer = Buffer.from(arrayBuffer)
+
+        return new Promise<any>((resolve, reject) => {
+          cloudinary.uploader
+            .upload_stream({ folder: 'manga_pages' }, (error, result) => {
+              if (error) reject(error)
+              else resolve(result)
+            })
+            .end(buffer)
+        })
+      })
+
+      const batchResults = await Promise.all(batchPromises)
+      results.push(...batchResults)
+    }
 
     // Get current max order_index
     const { data: maxOrderData } = await supabase
