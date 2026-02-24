@@ -31,7 +31,7 @@ export default async function MangaStatusPage({ params }: MangaStatusPageProps) 
 
   const locale = normalizeLocale(rawLocale)
   const works = await getMangaWorksByStatus(status as MangaStatus)
-
+  
   const isZh = locale === 'zh'
 
   const entries = works.map(work => {

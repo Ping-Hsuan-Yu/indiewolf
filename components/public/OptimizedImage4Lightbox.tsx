@@ -28,7 +28,7 @@ export default function OptimizedImage4Lightbox({ slide, offset, rect }) {
       <CldImage
         width={width}
         height={height}
-        alt={slide.alt}
+        alt={slide.alt ?? ""}
         src={slide.src}
         loading='eager'
         draggable={false}

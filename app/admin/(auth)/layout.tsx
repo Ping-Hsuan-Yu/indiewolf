@@ -1,3 +1,5 @@
+import { notoSans, chocolateClassicalSans } from '@/app/font'
+
 import '../globals.css'
 
 export const metadata = {
@@ -10,7 +12,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang='en'>
+    <html lang='zh-TW' className={`${notoSans.variable} ${chocolateClassicalSans.variable}`}>
       <body>{children}</body>
     </html>
   )
