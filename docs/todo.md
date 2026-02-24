@@ -1,10 +1,6 @@
 # TODO
 
-- [x] 排序時關閉啟用與刪除功能
-
-- [x] manga nav 新增 正在連載(先不顯示) / 連載結束
-- [x] 導覽列自動更新
-- [x] 左封面 右名稱 敘述 年份
+- [ ] 刪除圖片cloudinary同時刪除
 
 - [ ] 漫畫寬版雙頁
 - [ ] 半雙頁瀏覽模式
@@ -38,6 +34,12 @@
   - [x] 使用 cldimage 改寫 型別重新設定
 
 - [x] service?? actions??
+
+- [x] 排序時關閉啟用與刪除功能
+
+- [x] manga nav 新增 正在連載(先不顯示) / 連載結束
+- [x] 導覽列自動更新
+- [x] 左封面 右名稱 敘述 年份
 
 npx supabase gen types typescript --project-id "$PROJECT_REF" --schema public > types/database.types.ts
 
