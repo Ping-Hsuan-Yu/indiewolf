@@ -82,9 +82,8 @@ export async function createProject(formData: FormData) {
     throw new Error('Failed to create project: ' + error.message)
   }
 
-
-
   revalidatePath('/admin/project')
+  revalidatePath('/[locale]/project', 'layout')
   return { success: true }
 }
 
@@ -117,6 +116,7 @@ export async function updateProject(id: string, formData: FormData) {
 
   revalidatePath(`/admin/project/${id}`)
   revalidatePath('/admin/project')
+  revalidatePath('/[locale]/project', 'layout')
   return { success: true }
 }
 
@@ -131,6 +131,7 @@ export async function deleteProject(id: string) {
   }
 
   revalidatePath('/admin/project')
+  revalidatePath('/[locale]/project', 'layout')
   return { success: true }
 }
 
@@ -211,6 +212,7 @@ export async function uploadProjectImages(projectId: string, formData: FormData)
     }
 
     revalidatePath(`/admin/project/${projectId}`)
+    revalidatePath('/[locale]/project', 'layout')
     return { success: true }
   } catch (error) {
     console.error('Upload Project Images Error:', error)
@@ -225,6 +227,9 @@ export async function deleteProjectImage(id: string) {
   if (error) {
     return { success: false, error: error.message }
   }
+
+  revalidatePath('/admin/project')
+  revalidatePath('/[locale]/project', 'layout')
   return { success: true }
 }
 
@@ -243,6 +248,7 @@ export async function setProjectCover(projectId: string, imageUrl: string) {
 
   revalidatePath(`/admin/project/${projectId}`)
   revalidatePath('/admin/project')
+  revalidatePath('/[locale]/project', 'layout')
   return { success: true }
 }
 
@@ -271,6 +277,7 @@ export async function updateProjectOrder(items: { id: string; order_index: numbe
   }
 
   revalidatePath('/admin/project')
+  revalidatePath('/[locale]/project', 'layout')
   return { success: true }
 }
 
@@ -282,6 +289,9 @@ export async function updateProjectImagesOrder(items: { id: string; order_index:
   )
 
   await Promise.all(updates)
+
+  revalidatePath('/admin/project')
+  revalidatePath('/[locale]/project', 'layout')
   return { success: true }
 }
 
@@ -304,5 +314,6 @@ export async function toggleProjectActive(id: string, isActive: boolean) {
   }
 
   revalidatePath('/admin/project')
+  revalidatePath('/[locale]/project', 'layout')
   return { success: true }
 }

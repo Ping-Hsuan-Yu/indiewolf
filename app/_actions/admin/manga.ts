@@ -54,6 +54,7 @@ export async function createManga(formData: FormData) {
   }
 
   revalidatePath('/admin/manga')
+  revalidatePath('/[locale]/manga', 'layout')
   return { success: true }
 }
 
@@ -67,6 +68,7 @@ export async function deleteMangaWork(id: string) {
   }
 
   revalidatePath('/admin/manga')
+  revalidatePath('/[locale]/manga', 'layout')
   return { success: true }
 }
 
@@ -83,6 +85,7 @@ export async function toggleMangaActive(id: string, isActive: boolean) {
   }
 
   revalidatePath('/admin/manga')
+  revalidatePath('/[locale]/manga', 'layout')
   return { success: true }
 }
 
@@ -102,6 +105,7 @@ export async function updateMangaOrder(items: { id: string; order_index: number 
   }
 
   revalidatePath('/admin/manga')
+  revalidatePath('/[locale]/manga', 'layout')
   return { success: true }
 }
 
@@ -199,6 +203,7 @@ export async function updateMangaDetail(id: string, formData: FormData) {
 
   revalidatePath(`/admin/manga/${id}`)
   revalidatePath('/admin/manga')
+  revalidatePath('/[locale]/manga', 'layout')
   return { success: true }
 }
 
@@ -263,6 +268,7 @@ export async function uploadMangaImages(mangaId: string, formData: FormData) {
     }
 
     revalidatePath(`/admin/manga/${mangaId}`)
+    revalidatePath('/[locale]/manga', 'layout')
     return { success: true }
   } catch (error) {
     console.error('Upload Error:', error)
@@ -278,6 +284,8 @@ export async function deleteMangaImage(id: string) {
     return { success: false, error: error.message }
   }
 
+  revalidatePath('/admin/manga')
+  revalidatePath('/[locale]/manga', 'layout')
   return { success: true }
 }
 
@@ -296,5 +304,7 @@ export async function updateMangaImagesOrder(items: { id: string; order_index: n
     return { success: false, error: 'Some updates failed' }
   }
 
+  revalidatePath('/admin/manga')
+  revalidatePath('/[locale]/manga', 'layout')
   return { success: true }
 }

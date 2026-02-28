@@ -1,7 +1,8 @@
 import { NextIntlClientProvider } from 'next-intl'
 import { notFound } from 'next/navigation'
 import { ReactNode } from 'react'
-
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import { gambetta, notoSerifTC, abhayaLibre } from '@/app/font'
 
 import './globals.css'
@@ -44,6 +45,8 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
         <NextIntlClientProvider locale={locale} messages={messages}>
           {children}
         </NextIntlClientProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )

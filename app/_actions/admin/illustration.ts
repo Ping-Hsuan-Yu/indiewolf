@@ -49,7 +49,7 @@ export async function createIllustration(formData: FormData) {
   }
 
   revalidatePath('/admin/illustration')
-  revalidatePath('/[locale]/illustration/[year]', 'page')
+  revalidatePath('/[locale]/illustration', 'layout')
   return { success: true }
 }
 
@@ -74,7 +74,7 @@ export async function updateIllustrationAlt(id: string, alt: string) {
   }
 
   revalidatePath('/admin/illustration')
-  revalidatePath('/[locale]/illustration/[year]', 'page')
+  revalidatePath('/[locale]/illustration', 'layout')
   return { success: true }
 }
 
@@ -87,10 +87,8 @@ export async function deleteIllustrationWork(id: string) {
     return { success: false, error: error.message }
   }
 
-
-
   revalidatePath('/admin/illustration')
-  revalidatePath('/[locale]/illustration/[year]', 'page')
+  revalidatePath('/[locale]/illustration', 'layout')
   return { success: true }
 }
 
@@ -106,10 +104,8 @@ export async function toggleIllustrationActive(id: string, isActive: boolean) {
     return { success: false, error: error.message }
   }
 
-
-
   revalidatePath('/admin/illustration')
-  revalidatePath('/[locale]/illustration/[year]', 'page')
+  revalidatePath('/[locale]/illustration', 'layout')
   return { success: true }
 }
 
@@ -132,7 +128,7 @@ export async function updateIllustrationOrder(items: { id: string; order_index: 
   }
 
   revalidatePath('/admin/illustration')
-  revalidatePath('/[locale]/illustration/[year]', 'page')
+  revalidatePath('/[locale]/illustration', 'layout')
   return { success: true }
 }
 

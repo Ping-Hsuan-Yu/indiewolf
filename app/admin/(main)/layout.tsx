@@ -5,6 +5,8 @@ import { Toaster } from '@/components/admin/ui/sonner'
 
 import '../globals.css'
 
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata } from 'next'
 
 export const metadata = {
@@ -45,6 +47,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           </main>
           <Toaster />
         </SidebarProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )

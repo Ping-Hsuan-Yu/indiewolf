@@ -1,5 +1,6 @@
 import { notoSans, chocolateClassicalSans } from '@/app/font'
-
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import '../globals.css'
 
 export const metadata = {
@@ -13,7 +14,11 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang='zh-TW' className={`${notoSans.variable} ${chocolateClassicalSans.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Analytics />
+        <SpeedInsights />
+      </body>
     </html>
   )
 }
