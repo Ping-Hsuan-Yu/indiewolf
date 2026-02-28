@@ -8,6 +8,8 @@
 - [ ] TanStack Query
 - [ ] Zustand
 
+- [ ] UIUX 邏輯統一 (hover / click / shadow / rounded)
+
 # DONE
 
 ## 網站功能與結構調整
