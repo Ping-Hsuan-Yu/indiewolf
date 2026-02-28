@@ -4,7 +4,10 @@ import { supabase } from '@/lib/supabase'
 
 import type { Tables } from '@/types/database.types'
 
-export type NavItem = Omit<Tables<'nav_items'>, 'parent_id' | 'is_active' | 'created_at' | 'updated_at'> & {
+export type NavItem = Omit<
+  Tables<'nav_items'>,
+  'parent_id' | 'is_active' | 'created_at' | 'updated_at'
+> & {
   children?: NavItem[]
 }
 
@@ -28,18 +31,18 @@ function buildTree(items: any[]): NavItem[] {
   const rootItems: NavItem[] = []
 
   // First pass: create all items
-  items.forEach(item => {
+  items.forEach((item) => {
     itemMap.set(item.id, {
       id: item.id,
       key: item.key,
       href: item.href,
       order_index: item.order_index,
-      children: []
+      children: [],
     })
   })
 
   // Second pass: build tree
-  items.forEach(item => {
+  items.forEach((item) => {
     const navItem = itemMap.get(item.id)!
 
     if (item.parent_id) {
@@ -55,7 +58,7 @@ function buildTree(items: any[]): NavItem[] {
   })
 
   // Sort children by order_index
-  rootItems.forEach(item => {
+  rootItems.forEach((item) => {
     if (item.children && item.children.length > 0) {
       item.children.sort((a, b) => a.order_index - b.order_index)
     }

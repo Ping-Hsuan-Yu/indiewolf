@@ -2,8 +2,10 @@
 
 @theme {
   /* 字體家族 */
-  --font-serif: var(--font-gambetta), var(--font-noto-serif-tc), ui-serif, serif;
-  --font-abhaya-extended: var(--font-abhaya), var(--font-noto-serif-tc), ui-serif, serif;
+  --font-serif:
+    var(--font-gambetta), var(--font-noto-serif-tc), ui-serif, serif;
+  --font-abhaya-extended:
+    var(--font-abhaya), var(--font-noto-serif-tc), ui-serif, serif;
 
   /* 圓角 */
   --radius: 0.5rem;
@@ -31,14 +33,14 @@
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
-  
+
   /* Chart colors */
   --color-chart-1: hsl(var(--chart-1));
   --color-chart-2: hsl(var(--chart-2));
   --color-chart-3: hsl(var(--chart-3));
   --color-chart-4: hsl(var(--chart-4));
   --color-chart-5: hsl(var(--chart-5));
-  
+
   /* Sidebar colors */
   --color-sidebar: hsl(var(--sidebar-background));
   --color-sidebar-foreground: hsl(var(--sidebar-foreground));

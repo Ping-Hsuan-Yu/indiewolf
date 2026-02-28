@@ -5,7 +5,11 @@ import { CSS } from '@dnd-kit/utilities'
 import Image from 'next/image'
 import { toast } from 'sonner'
 
-import { deleteSocialLink, SocialLink, toggleSocialLinkActive } from '@/app/_actions/admin/about'
+import {
+  deleteSocialLink,
+  SocialLink,
+  toggleSocialLinkActive,
+} from '@/app/_actions/admin/about'
 
 import { ExternalLink, GripVertical, Trash2 } from 'lucide-react'
 
@@ -19,11 +23,12 @@ interface SocialLinkItemProps {
 }
 
 export function SocialLinkItem({ link }: SocialLinkItemProps) {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: link.id })
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: link.id })
 
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition
+    transition,
   }
 
   const handleDelete = async () => {
@@ -58,46 +63,59 @@ export function SocialLinkItem({ link }: SocialLinkItemProps) {
     <div
       ref={setNodeRef}
       style={style}
-      className='flex items-center gap-4 border p-4 rounded-md bg-white dark:bg-zinc-950'>
+      className="flex items-center gap-4 rounded-md border bg-white p-4 dark:bg-zinc-950"
+    >
       <div
         {...attributes}
         {...listeners}
-        className='cursor-grab text-muted-foreground hover:text-foreground'>
-        <GripVertical className='h-5 w-5' />
+        className="text-muted-foreground hover:text-foreground cursor-grab"
+      >
+        <GripVertical className="h-5 w-5" />
       </div>
 
-      <div className='flex items-center gap-3'>
+      <div className="flex items-center gap-3">
         {link.logo_url && (
-          <div className='relative h-10 w-10 overflow-hidden rounded-md border'>
-            <Image src={link.logo_url} alt={link.label} fill className='object-cover' />
+          <div className="relative h-10 w-10 overflow-hidden rounded-md border">
+            <Image
+              src={link.logo_url}
+              alt={link.label}
+              fill
+              className="object-cover"
+            />
           </div>
         )}
       </div>
 
-      <div className='flex-1 grid gap-1'>
-        <div className='font-medium flex items-center gap-2'>{link.label}</div>
-        <div className='text-sm text-muted-foreground truncate max-w-75'>
+      <div className="grid flex-1 gap-1">
+        <div className="flex items-center gap-2 font-medium">{link.label}</div>
+        <div className="text-muted-foreground max-w-75 truncate text-sm">
           <a
             href={link.url}
-            target='_blank'
-            rel='noopener noreferrer'
-            className='hover:underline flex items-center gap-1'>
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 hover:underline"
+          >
             {link.url}
-            <ExternalLink className='h-3 w-3' />
+            <ExternalLink className="h-3 w-3" />
           </a>
         </div>
       </div>
 
-      <div className='flex items-center gap-4'>
-        <div className='flex items-center gap-2'>
-          <span className='text-sm text-muted-foreground'>{link.is_active ? '啟用' : '停用'}</span>
-          <Switch checked={link.is_active ?? false} onCheckedChange={handleToggle} />
+      <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          <span className="text-muted-foreground text-sm">
+            {link.is_active ? '啟用' : '停用'}
+          </span>
+          <Switch
+            checked={link.is_active ?? false}
+            onCheckedChange={handleToggle}
+          />
         </div>
 
         <EditSocialLinkDialog link={link} />
 
-        <Button size='icon' destructive onClick={handleDelete}>
-          <Trash2 className='h-4 w-4' />
+        <Button size="icon" destructive onClick={handleDelete}>
+          <Trash2 className="h-4 w-4" />
         </Button>
       </div>
     </div>

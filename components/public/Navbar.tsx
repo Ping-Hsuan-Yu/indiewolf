@@ -61,42 +61,45 @@ export default function Navbar({ navItems }: NavbarProps) {
   }
 
   return (
-    <header className='sticky top-0 md:-top-10 z-50 bg-white opacity-80 font-abhaya-extended'>
-      <nav className='pt-4 md:pt-16 md:pb-6'>
-        <div className='flex items-center justify-between'>
+    <header className="font-abhaya-extended sticky top-0 z-50 bg-white opacity-80 md:-top-10">
+      <nav className="pt-4 md:pt-16 md:pb-6">
+        <div className="flex items-center justify-between">
           <HeaderTitle />
 
-          <ul className='hidden items-center gap-4 md:flex'>
-            {navItems.map(item => (
-              <li key={item.key} className='group relative'>
+          <ul className="hidden items-center gap-4 md:flex">
+            {navItems.map((item) => (
+              <li key={item.key} className="group relative">
                 {item.href ? (
                   <Link
                     href={withLocale(item.href)}
-                    className={`relative uppercase text-nowrap text-xl after:absolute after:left-0 after:bottom-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:rounded-full after:bg-black after:transition-transform after:duration-300 hover:after:scale-x-100 ${
+                    className={`relative text-xl text-nowrap uppercase after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:rounded-full after:bg-black after:transition-transform after:duration-300 hover:after:scale-x-100 ${
                       isActive(item.href) ? 'after:scale-x-100' : ''
                     }`}
-                    aria-haspopup={item.children ? 'menu' : undefined}>
+                    aria-haspopup={item.children ? 'menu' : undefined}
+                  >
                     {getLabel(item)}
                   </Link>
                 ) : (
-                  <span className='relative uppercase text-nowrap text-xl after:absolute after:left-0 after:bottom-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:rounded-full after:bg-black after:transition-transform after:duration-300 group-hover:after:scale-x-100'>
+                  <span className="relative text-xl text-nowrap uppercase after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:rounded-full after:bg-black after:transition-transform after:duration-300 group-hover:after:scale-x-100">
                     {getLabel(item)}
                   </span>
                 )}
 
                 {item.children && (
                   <div
-                    role='menu'
-                    className='pointer-events-none absolute top-full opacity-0 transition duration-150 ease-out group-hover:pointer-events-auto group-hover:opacity-100'>
-                    <div className='relative bg-white mt-2 ps-4 pb-4 pe-4 -ms-4 min-w-max'>
-                      <ul className='grid grid-cols-1 gap-2'>
-                        {item.children.map(child => (
+                    role="menu"
+                    className="pointer-events-none absolute top-full opacity-0 transition duration-150 ease-out group-hover:pointer-events-auto group-hover:opacity-100"
+                  >
+                    <div className="relative -ms-4 mt-2 min-w-max bg-white ps-4 pe-4 pb-4">
+                      <ul className="grid grid-cols-1 gap-2">
+                        {item.children.map((child) => (
                           <li key={child.key}>
                             <Link
-                              role='menuitem'
+                              role="menuitem"
                               href={child.href ? withLocale(child.href) : '#'}
-                              className='block'>
-                              <span className='whitespace-nowrap relative inline-block after:absolute after:left-0 after:bottom-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:rounded-full after:bg-black after:transition-transform after:duration-300 hover:after:scale-x-100'>
+                              className="block"
+                            >
+                              <span className="relative inline-block whitespace-nowrap after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:rounded-full after:bg-black after:transition-transform after:duration-300 hover:after:scale-x-100">
                                 {getLabel(child)}
                               </span>
                             </Link>
@@ -111,68 +114,81 @@ export default function Navbar({ navItems }: NavbarProps) {
             <li>
               <a
                 href={switchLocale()}
-                className='hover:opacity-70 transition-opacity cursor-pointer flex items-center'
-                aria-label={locale === 'zh' ? 'Switch to English' : '切換到中文'}>
+                className="flex cursor-pointer items-center transition-opacity hover:opacity-70"
+                aria-label={
+                  locale === 'zh' ? 'Switch to English' : '切換到中文'
+                }
+              >
                 <Image
                   src={locale === 'zh' ? ToEn : ToZh}
                   alt={locale === 'zh' ? 'Switch to English' : '切換到中文'}
-                  className='w-6 h-6'
+                  className="h-6 w-6"
                 />
               </a>
             </li>
           </ul>
 
           <button
-            type='button'
-            className='inline-flex items-center justify-center p-2 md:hidden'
-            aria-label='Toggle menu'
+            type="button"
+            className="inline-flex items-center justify-center p-2 md:hidden"
+            aria-label="Toggle menu"
             aria-expanded={mobileOpen}
-            onClick={() => setMobileOpen(s => !s)}>
-            {mobileOpen ? <X className='h-6 w-6' /> : <Menu className='h-6 w-6' />}
+            onClick={() => setMobileOpen((s) => !s)}
+          >
+            {mobileOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
           </button>
         </div>
 
         <div
-          className={`md:hidden overflow-hidden transition-[grid-template-rows] duration-200 ${
+          className={`overflow-hidden transition-[grid-template-rows] duration-200 md:hidden ${
             mobileOpen ? 'grid grid-rows-[1fr]' : 'grid grid-rows-[0fr]'
           }`}
-          aria-hidden={!mobileOpen}>
-          <div className='min-h-0 py-2'>
-            <ul className='flex flex-col'>
+          aria-hidden={!mobileOpen}
+        >
+          <div className="min-h-0 py-2">
+            <ul className="flex flex-col">
               {navItems.map((item, idx) => {
                 const hasChildren = !!item.children?.length
                 const expanded = openIdx === idx
                 return (
                   <li key={item.key}>
-                    <div className='flex items-center'>
+                    <div className="flex items-center">
                       {item.href ? (
                         <Link
                           href={withLocale(item.href)}
-                          className='flex-1 px-3 py-2'
-                          onClick={() => setMobileOpen(false)}>
+                          className="flex-1 px-3 py-2"
+                          onClick={() => setMobileOpen(false)}
+                        >
                           <span
-                            className={`relative uppercase text-nowrap text-xl after:absolute after:left-0 after:bottom-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:rounded-full after:bg-black after:transition-transform after:duration-300 hover:after:scale-x-100 ${
+                            className={`relative text-xl text-nowrap uppercase after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:rounded-full after:bg-black after:transition-transform after:duration-300 hover:after:scale-x-100 ${
                               isActive(item.href) ? 'after:scale-x-100' : ''
-                            }`}>
+                            }`}
+                          >
                             {getLabel(item)}
                           </span>
                         </Link>
                       ) : (
                         <button
-                          type='button'
-                          className='flex-1 px-3 py-2 text-left'
-                          onClick={() => setOpenIdx(expanded ? null : idx)}>
-                          <span className='relative uppercase text-nowrap text-xl after:absolute after:left-0 after:bottom-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:rounded-full after:bg-black after:transition-transform after:duration-300 hover:after:scale-x-100'>
+                          type="button"
+                          className="flex-1 px-3 py-2 text-left"
+                          onClick={() => setOpenIdx(expanded ? null : idx)}
+                        >
+                          <span className="relative text-xl text-nowrap uppercase after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:rounded-full after:bg-black after:transition-transform after:duration-300 hover:after:scale-x-100">
                             {getLabel(item)}
                           </span>
                         </button>
                       )}
                       {hasChildren && (
                         <button
-                          type='button'
-                          className='mx-2 inline-grid h-8 w-8 place-items-center rounded-lg'
+                          type="button"
+                          className="mx-2 inline-grid h-8 w-8 place-items-center rounded-lg"
                           aria-expanded={expanded}
-                          onClick={() => setOpenIdx(expanded ? null : idx)}>
+                          onClick={() => setOpenIdx(expanded ? null : idx)}
+                        >
                           <ChevronDown
                             className={`h-5 w-5 transition-transform duration-200 ${
                               expanded ? 'rotate-180' : ''
@@ -185,19 +201,25 @@ export default function Navbar({ navItems }: NavbarProps) {
                     {hasChildren && (
                       <div
                         className={`overflow-hidden transition-all duration-200 ${
-                          expanded ? 'grid grid-rows-[1fr]' : 'grid grid-rows-[0fr]'
-                        }`}>
-                        <ul className={`min-h-0 space-y-1 px-3 pt-0 ${expanded ? 'pb-2' : 'pb-0'}`}>
-                          {item.children!.map(child => (
+                          expanded
+                            ? 'grid grid-rows-[1fr]'
+                            : 'grid grid-rows-[0fr]'
+                        }`}
+                      >
+                        <ul
+                          className={`min-h-0 space-y-1 px-3 pt-0 ${expanded ? 'pb-2' : 'pb-0'}`}
+                        >
+                          {item.children!.map((child) => (
                             <li key={child.key}>
                               <Link
                                 href={child.href ? withLocale(child.href) : '#'}
-                                className='block px-3 py-2'
+                                className="block px-3 py-2"
                                 onClick={() => {
                                   setMobileOpen(false)
                                   setOpenIdx(null)
-                                }}>
-                                <span className='relative inline-block after:absolute after:left-0 after:bottom-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:rounded-full after:bg-black after:transition-transform after:duration-300 hover:after:scale-x-100'>
+                                }}
+                              >
+                                <span className="relative inline-block after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:rounded-full after:bg-black after:transition-transform after:duration-300 hover:after:scale-x-100">
                                   {getLabel(child)}
                                 </span>
                               </Link>
@@ -209,18 +231,23 @@ export default function Navbar({ navItems }: NavbarProps) {
                   </li>
                 )
               })}
-              <li className='px-3 py-2'>
+              <li className="px-3 py-2">
                 <a
                   href={switchLocale()}
-                  className='text-2xl hover:opacity-70 transition-opacity inline-flex items-center gap-2 cursor-pointer'
-                  aria-label={locale === 'zh' ? 'Switch to English' : '切換到中文'}
-                  onClick={() => setMobileOpen(false)}>
+                  className="inline-flex cursor-pointer items-center gap-2 text-2xl transition-opacity hover:opacity-70"
+                  aria-label={
+                    locale === 'zh' ? 'Switch to English' : '切換到中文'
+                  }
+                  onClick={() => setMobileOpen(false)}
+                >
                   <Image
                     src={locale === 'zh' ? ToEn : ToZh}
                     alt={locale === 'zh' ? 'Switch to English' : '切換到中文'}
-                    className='w-6 h-6'
+                    className="h-6 w-6"
                   />
-                  <span className='text-base'>{locale === 'zh' ? 'English' : '中文'}</span>
+                  <span className="text-base">
+                    {locale === 'zh' ? 'English' : '中文'}
+                  </span>
                 </a>
               </li>
             </ul>

@@ -10,7 +10,7 @@ import {
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem
+  SidebarMenuItem,
 } from '@/components/admin/ui/sidebar'
 
 import { LogoutButton } from './LogoutButton'
@@ -22,40 +22,40 @@ const navData = [
       {
         title: 'Illustration',
         url: '/admin/illustration',
-        icon: Image
+        icon: Image,
       },
       {
         title: 'Manga',
         url: '/admin/manga',
-        icon: BookOpen
+        icon: BookOpen,
       },
       {
         title: 'Project',
         url: '/admin/project',
-        icon: FolderKanban
+        icon: FolderKanban,
       },
       {
         title: 'About',
         url: '/admin/about',
-        icon: FileText
-      }
-    ]
-  }
+        icon: FileText,
+      },
+    ],
+  },
 ]
 
 export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader>
-        <h2 className='text-xl font-bold p-2'>Lin ChaoYu Admin</h2>
+        <h2 className="p-2 text-xl font-bold">Lin ChaoYu Admin</h2>
       </SidebarHeader>
       <SidebarContent>
-        {navData.map(group => (
+        {navData.map((group) => (
           <SidebarGroup key={group.title}>
             <SidebarGroupLabel>{group.title}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {group.items.map(item => (
+                {group.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
                       <a href={item.url}>

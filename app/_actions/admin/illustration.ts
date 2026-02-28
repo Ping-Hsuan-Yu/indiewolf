@@ -39,7 +39,7 @@ export async function createIllustration(formData: FormData) {
     year,
     width: uploadResult.width,
     height: uploadResult.height,
-    order_index: 0
+    order_index: 0,
   }
   const { error } = await supabase.from('illustration_works').insert(insertData)
 
@@ -80,7 +80,10 @@ export async function updateIllustrationAlt(id: string, alt: string) {
 
 export async function deleteIllustrationWork(id: string) {
   const supabaseAdmin = await getAuthorizedAdminClient()
-  const { error } = await supabaseAdmin.from('illustration_works').delete().eq('id', id)
+  const { error } = await supabaseAdmin
+    .from('illustration_works')
+    .delete()
+    .eq('id', id)
 
   if (error) {
     console.error('Delete Error:', error)
@@ -109,10 +112,12 @@ export async function toggleIllustrationActive(id: string, isActive: boolean) {
   return { success: true }
 }
 
-export async function updateIllustrationOrder(items: { id: string; order_index: number }[]) {
+export async function updateIllustrationOrder(
+  items: { id: string; order_index: number }[]
+) {
   const supabaseAdmin = await getAuthorizedAdminClient()
 
-  const updates = items.map(item =>
+  const updates = items.map((item) =>
     supabaseAdmin
       .from('illustration_works')
       .update({ order_index: item.order_index })
@@ -120,7 +125,7 @@ export async function updateIllustrationOrder(items: { id: string; order_index: 
   )
 
   const results = await Promise.all(updates)
-  const errors = results.filter(r => r.error)
+  const errors = results.filter((r) => r.error)
 
   if (errors.length > 0) {
     console.error('Batch Update Errors:', errors)

@@ -15,14 +15,14 @@ type HomePageProps = {
 
 export default async function HomePage({ params }: HomePageProps) {
   const kvFrames = await getHomeKVFrames()
-  const frames = kvFrames.map(f => f.url)
+  const frames = kvFrames.map((f) => f.url)
   const alt = kvFrames.length > 0 ? kvFrames[0].alt : 'Gallery frame'
 
   return (
-    <div className='min-h-dvh flex flex-col justify-between'>
+    <div className="flex min-h-dvh flex-col justify-between">
       <PublicNavbar />
-      <main className='flex flex-1 items-center justify-center'>
-        <div className='m-auto max-w-lg'>
+      <main className="flex flex-1 items-center justify-center">
+        <div className="m-auto max-w-lg">
           <HomeKV frames={frames} alt={alt || 'Gallery frame'} />
         </div>
       </main>

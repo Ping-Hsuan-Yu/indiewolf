@@ -19,7 +19,11 @@ interface ClientPageProps {
   initialYear: string
 }
 
-export function ClientPage({ years, initialWorks, initialYear }: ClientPageProps) {
+export function ClientPage({
+  years,
+  initialWorks,
+  initialYear,
+}: ClientPageProps) {
   const [selectedYear, setSelectedYear] = useState(initialYear)
   const [works, setWorks] = useState<IllustrationWork[]>(initialWorks)
   const [loading, setLoading] = useState(false)
@@ -40,26 +44,34 @@ export function ClientPage({ years, initialWorks, initialYear }: ClientPageProps
   }
 
   return (
-    <div className='space-y-6'>
-      <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
-        <div className='flex flex-wrap gap-2'>
-          {years.map(year => (
+    <div className="space-y-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-wrap gap-2">
+          {years.map((year) => (
             <Button
               key={year}
               variant={selectedYear === year ? 'default' : 'outline'}
               onClick={() => handleYearChange(year)}
-              className='min-w-16'>
+              className="min-w-16"
+            >
               {year}
             </Button>
           ))}
         </div>
 
-        <div className='flex items-center gap-4'>
-          <div className='flex items-center space-x-2'>
-            <Switch id='reorder-mode' checked={isReorderMode} onCheckedChange={setIsReorderMode} />
-            <Label htmlFor='reorder-mode'>排序模式</Label>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center space-x-2">
+            <Switch
+              id="reorder-mode"
+              checked={isReorderMode}
+              onCheckedChange={setIsReorderMode}
+            />
+            <Label htmlFor="reorder-mode">排序模式</Label>
           </div>
-          <AddIllustrationSheet years={years} onUploadSuccess={year => handleYearChange(year)} />
+          <AddIllustrationSheet
+            years={years}
+            onUploadSuccess={(year) => handleYearChange(year)}
+          />
         </div>
       </div>
 
@@ -68,7 +80,7 @@ export function ClientPage({ years, initialWorks, initialYear }: ClientPageProps
       ) : (
         <IllustrationGrid
           works={works}
-          onDelete={id => setWorks(prev => prev.filter(w => w.id !== id))}
+          onDelete={(id) => setWorks((prev) => prev.filter((w) => w.id !== id))}
           isReorderMode={isReorderMode}
           onReorder={setWorks}
         />

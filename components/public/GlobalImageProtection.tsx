@@ -1,8 +1,8 @@
-'use client';
+'use client'
 
-import { usePreventImageActions } from '@/hooks/usePreventImageActions';
+import { usePreventImageActions } from '@/hooks/usePreventImageActions'
 
 export default function GlobalImageProtection() {
-  usePreventImageActions();
-  return null;
+  usePreventImageActions()
+  return null
 }

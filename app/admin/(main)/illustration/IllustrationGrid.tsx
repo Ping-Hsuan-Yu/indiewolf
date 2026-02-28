@@ -5,13 +5,13 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-  DragEndEvent
+  DragEndEvent,
 } from '@dnd-kit/core'
 import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
-  rectSortingStrategy
+  rectSortingStrategy,
 } from '@dnd-kit/sortable'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
@@ -31,12 +31,12 @@ export function IllustrationGrid({
   works,
   onDelete,
   isReorderMode = false,
-  onReorder
+  onReorder,
 }: IllustrationGridProps) {
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates
+      coordinateGetter: sortableKeyboardCoordinates,
     })
   )
   const router = useRouter()
@@ -47,8 +47,8 @@ export function IllustrationGrid({
     if (over && active.id !== over.id) {
       if (!onReorder) return
 
-      const oldIndex = works.findIndex(item => item.id === active.id)
-      const newIndex = works.findIndex(item => item.id === over.id)
+      const oldIndex = works.findIndex((item) => item.id === active.id)
+      const newIndex = works.findIndex((item) => item.id === over.id)
 
       const newWorks = arrayMove(works, oldIndex, newIndex)
       onReorder(newWorks)
@@ -56,10 +56,10 @@ export function IllustrationGrid({
       // Update server
       const updates = newWorks.map((work, index) => ({
         id: work.id,
-        order_index: index
+        order_index: index,
       }))
 
-      updateIllustrationOrder(updates).then(res => {
+      updateIllustrationOrder(updates).then((res) => {
         if (!res.success) {
           console.error('Failed to update order', res.error)
           toast.error('排序更新失敗')
@@ -74,7 +74,7 @@ export function IllustrationGrid({
 
   if (works.length === 0) {
     return (
-      <div className='flex h-40 items-center justify-center rounded-lg border border-dashed text-muted-foreground'>
+      <div className="text-muted-foreground flex h-40 items-center justify-center rounded-lg border border-dashed">
         No illustrations found for this year.
       </div>
     )
@@ -86,10 +86,14 @@ export function IllustrationGrid({
       collisionDetection={closestCenter}
       onDragEnd={handleDragEnd}
       // Disable drag if not in reorder mode
-      id='illustration-dnd-context'>
-      <SortableContext items={works.map(w => w.id)} strategy={rectSortingStrategy}>
-        <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'>
-          {works.map(work => (
+      id="illustration-dnd-context"
+    >
+      <SortableContext
+        items={works.map((w) => w.id)}
+        strategy={rectSortingStrategy}
+      >
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+          {works.map((work) => (
             <IllustrationItem
               key={work.id}
               work={work}

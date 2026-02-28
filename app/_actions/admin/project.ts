@@ -73,7 +73,7 @@ export async function createProject(formData: FormData) {
     description_en: description_en || '',
     cover_url: uploadResult.secure_url,
     order_index: nextOrderIndex,
-    is_active: false // Default to inactive or active? Mapped to requirement "只需先提供一張主圖以及其他文字說明", active state is usually manual.
+    is_active: false, // Default to inactive or active? Mapped to requirement "只需先提供一張主圖以及其他文字說明", active state is usually manual.
   }
   const { error } = await supabase.from('project_works').insert(insertData)
 
@@ -105,9 +105,12 @@ export async function updateProject(id: string, formData: FormData) {
     subtitle_zh,
     subtitle_en,
     description_zh,
-    description_en
+    description_en,
   }
-  const { error } = await supabase.from('project_works').update(updateData).eq('id', id)
+  const { error } = await supabase
+    .from('project_works')
+    .update(updateData)
+    .eq('id', id)
 
   if (error) {
     console.error('Update Project Error:', error)
@@ -154,13 +157,18 @@ export async function getProjectDetail(id: string) {
   }
 
   if (data.images) {
-    data.images.sort((a: any, b: any) => (a.order_index || 0) - (b.order_index || 0))
+    data.images.sort(
+      (a: any, b: any) => (a.order_index || 0) - (b.order_index || 0)
+    )
   }
 
   return data
 }
 
-export async function uploadProjectImages(projectId: string, formData: FormData) {
+export async function uploadProjectImages(
+  projectId: string,
+  formData: FormData
+) {
   const supabase = await getAuthorizedAdminClient()
   const files = formData.getAll('images') as File[]
 
@@ -168,7 +176,7 @@ export async function uploadProjectImages(projectId: string, formData: FormData)
     return { success: false, error: 'No files provided' }
   }
 
-  const uploadPromises = files.map(async file => {
+  const uploadPromises = files.map(async (file) => {
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
 
@@ -196,13 +204,15 @@ export async function uploadProjectImages(projectId: string, formData: FormData)
 
     const currentMaxOrder = maxOrderData?.order_index || 0
 
-    const inserts: TablesInsert<'project_images'>[] = results.map((result, index) => ({
-      project_id: projectId,
-      url: result.secure_url,
-      width: result.width,
-      height: result.height,
-      order_index: currentMaxOrder + index + 1
-    }))
+    const inserts: TablesInsert<'project_images'>[] = results.map(
+      (result, index) => ({
+        project_id: projectId,
+        url: result.secure_url,
+        width: result.width,
+        height: result.height,
+        order_index: currentMaxOrder + index + 1,
+      })
+    )
 
     const { error } = await supabase.from('project_images').insert(inserts)
 
@@ -252,10 +262,12 @@ export async function setProjectCover(projectId: string, imageUrl: string) {
   return { success: true }
 }
 
-export async function updateProjectOrder(items: { id: string; order_index: number }[]) {
+export async function updateProjectOrder(
+  items: { id: string; order_index: number }[]
+) {
   const supabase = await getAuthorizedAdminClient()
 
-  const updates = items.map(item =>
+  const updates = items.map((item) =>
     supabase
       .from('project_works')
       .update({ order_index: item.order_index })
@@ -265,13 +277,13 @@ export async function updateProjectOrder(items: { id: string; order_index: numbe
 
   const results = await Promise.all(updates)
 
-  const errors = results.filter(r => r.error)
+  const errors = results.filter((r) => r.error)
   if (errors.length > 0) {
     console.error('Update Order Errors:', errors)
     return { success: false, error: '部分更新失敗' }
   }
 
-  const missing = results.filter(r => !r.data || r.data.length === 0)
+  const missing = results.filter((r) => !r.data || r.data.length === 0)
   if (missing.length > 0) {
     console.error('Update Order Missing: Some items not updated.', missing)
   }
@@ -281,11 +293,16 @@ export async function updateProjectOrder(items: { id: string; order_index: numbe
   return { success: true }
 }
 
-export async function updateProjectImagesOrder(items: { id: string; order_index: number }[]) {
+export async function updateProjectImagesOrder(
+  items: { id: string; order_index: number }[]
+) {
   const supabase = await getAuthorizedAdminClient()
 
-  const updates = items.map(item =>
-    supabase.from('project_images').update({ order_index: item.order_index }).eq('id', item.id)
+  const updates = items.map((item) =>
+    supabase
+      .from('project_images')
+      .update({ order_index: item.order_index })
+      .eq('id', item.id)
   )
 
   await Promise.all(updates)
@@ -309,7 +326,10 @@ export async function toggleProjectActive(id: string, isActive: boolean) {
   }
 
   if (!data || data.length === 0) {
-    console.error('Toggle Active Failed: No rows updated. Possible RLS issue or invalid ID.', id)
+    console.error(
+      'Toggle Active Failed: No rows updated. Possible RLS issue or invalid ID.',
+      id
+    )
     return { success: false, error: '更新失敗：沒有權限或找不到該項目' }
   }
 

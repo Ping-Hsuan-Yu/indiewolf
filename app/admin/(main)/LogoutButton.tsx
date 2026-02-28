@@ -21,7 +21,8 @@ export function LogoutButton() {
   return (
     <SidebarMenuButton
       onClick={handleLogout}
-      className='text-destructive hover:text-destructive hover:bg-destructive/10 cursor-pointer'>
+      className="text-destructive hover:text-destructive hover:bg-destructive/10 cursor-pointer"
+    >
       <LogOut />
       <span>Log out</span>
     </SidebarMenuButton>

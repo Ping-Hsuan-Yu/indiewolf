@@ -23,8 +23,8 @@ export default function MangaStatusNav() {
   }, [pathname])
 
   return (
-    <nav className='flex gap-6'>
-      {STATUSES.map(status => {
+    <nav className="flex gap-6">
+      {STATUSES.map((status) => {
         const href = `/${locale}/manga/${status}`
         const isActive = pathname.includes(`/manga/${status}`)
         const label = t(`manga__${status}`)
@@ -33,9 +33,12 @@ export default function MangaStatusNav() {
           <Link
             key={status}
             href={href}
-            className={`relative uppercase after:absolute after:left-0 after:bottom-0 after:h-px after:w-full after:origin-left after:rounded-full after:bg-black after:transition-transform after:duration-300 ${
-              isActive ? 'after:scale-x-100' : 'after:scale-x-0 hover:after:scale-x-100'
-            }`}>
+            className={`relative uppercase after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:origin-left after:rounded-full after:bg-black after:transition-transform after:duration-300 ${
+              isActive
+                ? 'after:scale-x-100'
+                : 'after:scale-x-0 hover:after:scale-x-100'
+            }`}
+          >
             {label}
           </Link>
         )

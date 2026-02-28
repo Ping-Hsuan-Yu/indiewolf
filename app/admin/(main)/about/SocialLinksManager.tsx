@@ -7,13 +7,13 @@ import {
   PointerSensor,
   closestCenter,
   useSensor,
-  useSensors
+  useSensors,
 } from '@dnd-kit/core'
 import {
   SortableContext,
   arrayMove,
   sortableKeyboardCoordinates,
-  verticalListSortingStrategy
+  verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -35,7 +35,7 @@ export function SocialLinksManager({ initialLinks }: SocialLinksManagerProps) {
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates
+      coordinateGetter: sortableKeyboardCoordinates,
     })
   )
 
@@ -47,8 +47,8 @@ export function SocialLinksManager({ initialLinks }: SocialLinksManagerProps) {
     const { active, over } = event
 
     if (over && active.id !== over.id) {
-      const oldIndex = links.findIndex(item => item.id === active.id)
-      const newIndex = links.findIndex(item => item.id === over.id)
+      const oldIndex = links.findIndex((item) => item.id === active.id)
+      const newIndex = links.findIndex((item) => item.id === over.id)
 
       const newLinks = arrayMove(links, oldIndex, newIndex)
       setLinks(newLinks)
@@ -56,7 +56,7 @@ export function SocialLinksManager({ initialLinks }: SocialLinksManagerProps) {
       // Update server
       const updates = newLinks.map((link, index) => ({
         id: link.id,
-        sort_order: index
+        sort_order: index,
       }))
 
       try {
@@ -75,19 +75,26 @@ export function SocialLinksManager({ initialLinks }: SocialLinksManagerProps) {
   }
 
   return (
-    <div className='space-y-4'>
-      <div className='flex justify-end'>
+    <div className="space-y-4">
+      <div className="flex justify-end">
         <AddSocialLinkSheet />
       </div>
 
-      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-        <SortableContext items={links.map(l => l.id)} strategy={verticalListSortingStrategy}>
-          <div className='flex flex-col gap-2'>
-            {links.map(link => (
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext
+          items={links.map((l) => l.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          <div className="flex flex-col gap-2">
+            {links.map((link) => (
               <SocialLinkItem key={link.id} link={link} />
             ))}
             {links.length === 0 && (
-              <div className='text-center py-12 text-muted-foreground border border-dashed rounded-lg'>
+              <div className="text-muted-foreground rounded-lg border border-dashed py-12 text-center">
                 尚未新增任何連結
               </div>
             )}

@@ -37,48 +37,59 @@ export default function MangaGallery({ entries, locale }: MangaGalleryProps) {
   const slides = currentEntry
     ? (() => {
         // Filter images by locale, fallback to 'zh' if no images match current locale
-        let filteredImages = currentEntry.images.filter(img => img.locale === locale)
+        let filteredImages = currentEntry.images.filter(
+          (img) => img.locale === locale
+        )
         if (filteredImages.length === 0) {
-          filteredImages = currentEntry.images.filter(img => img.locale === 'zh')
+          filteredImages = currentEntry.images.filter(
+            (img) => img.locale === 'zh'
+          )
         }
 
-        return filteredImages.map(item => ({
+        return filteredImages.map((item) => ({
           src: item.url,
           width: item.width,
-          height: item.height
+          height: item.height,
         }))
       })()
     : []
 
   return (
     <>
-      <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
-        {entries.map(item => (
-          <div key={item.id} className='flex flex-col gap-4 md:flex-row md:items-end'>
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        {entries.map((item) => (
+          <div
+            key={item.id}
+            className="flex flex-col gap-4 md:flex-row md:items-end"
+          >
             <button
-              type='button'
-              className='basis-1/2 cursor-pointer overflow-hidden rounded shadow focus:outline-none relative aspect-3/4 group'
-              onClick={() => openGallery(item)}>
+              type="button"
+              className="group relative cursor-pointer overflow-hidden shadow focus:outline-none md:basis-1/2"
+              onClick={() => openGallery(item)}
+            >
               <OptimizedImage
                 url={item.cover_url}
                 alt={item.title}
                 width={item.width}
                 height={item.height}
-                className='object-cover transition-transform duration-300 group-hover:scale-105'
-                sizes='(max-width: 768px) 100vw, 50vw'
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
             </button>
-            <div className='basis-1/2'>
+            <div className="md:basis-1/2">
               <p
-                className={`text-center md:text-start flex items-center font-bold${
-                  locale === 'zh' ? ' text-sm' : ''
-                }`}>
+                className={`flex items-center text-center md:text-start font-bold${
+                  locale === 'zh' ? 'text-sm' : ''
+                }`}
+              >
                 {item.title}
-                <span className='ml-2 text-xs font-normal px-2 py-0.5 rounded-full text-gray-500 bg-gray-100'>
+                <span className="ml-2 rounded-full bg-gray-100 px-2 py-0.5 text-xs font-normal text-gray-500">
                   {item.year}
                 </span>
               </p>
-              {item.description && <p className='text-sm'>{item.description}</p>}
+              {item.description && (
+                <p className="text-sm">{item.description}</p>
+              )}
             </div>
           </div>
         ))}

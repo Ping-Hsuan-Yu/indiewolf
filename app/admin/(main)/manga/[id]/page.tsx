@@ -7,9 +7,16 @@ import { MangaDetailForm } from './MangaDetailForm'
 
 export const dynamic = 'force-dynamic'
 
-export default async function MangaDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function MangaDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
   const { id } = await params
-  const [works, years] = await Promise.all([getMangaDetail(id), getMangaYearsAction()])
+  const [works, years] = await Promise.all([
+    getMangaDetail(id),
+    getMangaYearsAction(),
+  ])
 
   if (!works) {
     notFound()

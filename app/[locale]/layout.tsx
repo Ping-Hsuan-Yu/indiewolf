@@ -13,14 +13,14 @@ export const metadata: Metadata = {
   title: 'Lin ChaoYu',
   description: '插畫修行。',
   icons: {
-    icon: '/assets/logo.svg'
-  }
+    icon: '/assets/logo.svg',
+  },
 }
 
 const SUPPORTED_LOCALES = ['zh', 'en'] as const
 
 export function generateStaticParams() {
-  return SUPPORTED_LOCALES.map(locale => ({ locale }))
+  return SUPPORTED_LOCALES.map((locale) => ({ locale }))
 }
 
 type LocaleLayoutProps = {
@@ -30,18 +30,24 @@ type LocaleLayoutProps = {
   }>
 }
 
-export default async function LocaleLayout({ children, params }: LocaleLayoutProps) {
+export default async function LocaleLayout({
+  children,
+  params,
+}: LocaleLayoutProps) {
   const { locale } = await params
   if (!SUPPORTED_LOCALES.includes(locale as any)) {
     notFound()
   }
-  const messages = await loadMessages(locale as (typeof SUPPORTED_LOCALES)[number])
+  const messages = await loadMessages(
+    locale as (typeof SUPPORTED_LOCALES)[number]
+  )
 
   return (
     <html
       lang={locale === 'zh' ? 'zh-Hant' : 'en'}
-      className={`${gambetta.variable} ${notoSerifTC.variable} ${abhayaLibre.variable}`}>
-      <body className='bg-white text-black'>
+      className={`${gambetta.variable} ${notoSerifTC.variable} ${abhayaLibre.variable}`}
+    >
+      <body className="bg-white text-black">
         <NextIntlClientProvider locale={locale} messages={messages}>
           {children}
         </NextIntlClientProvider>

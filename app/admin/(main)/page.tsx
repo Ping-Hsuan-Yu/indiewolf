@@ -1,4 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/admin/ui/card'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/admin/ui/card'
 
 export default function AdminDashboardPage() {
   return (

@@ -19,7 +19,7 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle
+  AlertDialogTitle,
 } from '@/components/admin/ui/alert-dialog'
 import { Button } from '@/components/admin/ui/button'
 import { Spinner } from '@/components/admin/ui/spinner'
@@ -32,15 +32,22 @@ interface MangaItemProps {
 }
 
 export function MangaItem({ work, onDelete, isReorderMode }: MangaItemProps) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
     id: work.id,
-    disabled: !isReorderMode
+    disabled: !isReorderMode,
   })
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    opacity: isDragging ? 0.5 : 1
+    opacity: isDragging ? 0.5 : 1,
   }
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
@@ -93,33 +100,40 @@ export function MangaItem({ work, onDelete, isReorderMode }: MangaItemProps) {
       style={style}
       {...attributes}
       {...listeners}
-      className={`group relative ${isReorderMode ? 'cursor-move touch-none' : ''}`}>
+      className={`group relative ${isReorderMode ? 'cursor-move touch-none' : ''}`}
+    >
       <Link
         href={`/admin/manga/${work.id}`}
-        className='block space-y-2'
-        onClick={e => isReorderMode && e.preventDefault()}>
-        <div className='relative aspect-square overflow-hidden rounded-md border bg-muted'>
+        className="block space-y-2"
+        onClick={(e) => isReorderMode && e.preventDefault()}
+      >
+        <div className="bg-muted relative aspect-square overflow-hidden rounded-md border">
           <Image
             src={work.cover_url}
             alt={work.title_zh || 'Manga Cover'}
             fill
-            className='object-contain transition-all hover:scale-105'
-            sizes='(max-width: 768px) 50vw, 33vw'
+            className="object-contain transition-all hover:scale-105"
+            sizes="(max-width: 768px) 50vw, 33vw"
           />
         </div>
 
         {/* Detail Text */}
-        <div className='h-12 overflow-hidden hover:bg-muted/50 rounded px-1 transition-colors'>
-          <p className='trcate text-sm font-medium'>{work.title_zh || 'Untitled'}</p>
-          <p className='truncate text-xs text-muted-foreground'>{work.title_en || 'Untitled'}</p>
+        <div className="hover:bg-muted/50 h-12 overflow-hidden rounded px-1 transition-colors">
+          <p className="trcate text-sm font-medium">
+            {work.title_zh || 'Untitled'}
+          </p>
+          <p className="text-muted-foreground truncate text-xs">
+            {work.title_en || 'Untitled'}
+          </p>
         </div>
       </Link>
 
       {/* Toggle Activate Switch - Top Left (Absolute to Root) */}
       {!isReorderMode && (
         <div
-          className='absolute left-2 top-4 z-10 opacity-50 transition-opacity group-hover:opacity-100'
-          onPointerDown={e => e.stopPropagation()}>
+          className="absolute top-4 left-2 z-10 opacity-50 transition-opacity group-hover:opacity-100"
+          onPointerDown={(e) => e.stopPropagation()}
+        >
           <Switch
             checked={isActive}
             onCheckedChange={handleToggleActive}
@@ -131,17 +145,18 @@ export function MangaItem({ work, onDelete, isReorderMode }: MangaItemProps) {
 
       {/* Delete Button - Top Right (Absolute to Root) */}
       {!isReorderMode && (
-        <div className='absolute right-2 top-2 opacity-0 transition-opacity group-hover:opacity-100'>
+        <div className="absolute top-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
           <Button
-            size='icon'
+            size="icon"
             destructive
-            className='h-8 w-8'
-            onClick={e => {
+            className="h-8 w-8"
+            onClick={(e) => {
               e.stopPropagation()
               setDeleteDialogOpen(true)
             }}
-            onPointerDown={e => e.stopPropagation()}>
-            <Trash2 className='h-4 w-4' />
+            onPointerDown={(e) => e.stopPropagation()}
+          >
+            <Trash2 className="h-4 w-4" />
           </Button>
         </div>
       )}
@@ -158,11 +173,17 @@ export function MangaItem({ work, onDelete, isReorderMode }: MangaItemProps) {
             <AlertDialogAction
               onClick={() => setDeleteDialogOpen(false)}
               disabled={isDeleting}
-              className='bg-muted text-muted-foreground hover:bg-muted/80'>
+              className="bg-muted text-muted-foreground hover:bg-muted/80"
+            >
               取消
             </AlertDialogAction>
-            <Button variant='default' destructive onClick={handleDelete} disabled={isDeleting}>
-              {isDeleting ? <Spinner className='mr-2' /> : null}
+            <Button
+              variant="default"
+              destructive
+              onClick={handleDelete}
+              disabled={isDeleting}
+            >
+              {isDeleting ? <Spinner className="mr-2" /> : null}
               確認刪除
             </Button>
           </AlertDialogFooter>

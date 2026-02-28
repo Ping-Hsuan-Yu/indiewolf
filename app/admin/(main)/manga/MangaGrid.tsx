@@ -5,13 +5,13 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-  DragEndEvent
+  DragEndEvent,
 } from '@dnd-kit/core'
 import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
-  rectSortingStrategy
+  rectSortingStrategy,
 } from '@dnd-kit/sortable'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
@@ -28,11 +28,16 @@ interface MangaGridProps {
   onReorder?: (newWorks: Tables<'manga_works'>[]) => void
 }
 
-export function MangaGrid({ works, onDelete, isReorderMode = false, onReorder }: MangaGridProps) {
+export function MangaGrid({
+  works,
+  onDelete,
+  isReorderMode = false,
+  onReorder,
+}: MangaGridProps) {
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates
+      coordinateGetter: sortableKeyboardCoordinates,
     })
   )
   const router = useRouter()
@@ -43,8 +48,8 @@ export function MangaGrid({ works, onDelete, isReorderMode = false, onReorder }:
     if (over && active.id !== over.id) {
       if (!onReorder) return
 
-      const oldIndex = works.findIndex(item => item.id === active.id)
-      const newIndex = works.findIndex(item => item.id === over.id)
+      const oldIndex = works.findIndex((item) => item.id === active.id)
+      const newIndex = works.findIndex((item) => item.id === over.id)
 
       const newWorks = arrayMove(works, oldIndex, newIndex)
       onReorder(newWorks)
@@ -52,10 +57,10 @@ export function MangaGrid({ works, onDelete, isReorderMode = false, onReorder }:
       // Update server
       const updates = newWorks.map((work, index) => ({
         id: work.id,
-        order_index: index
+        order_index: index,
       }))
 
-      updateMangaOrder(updates).then(res => {
+      updateMangaOrder(updates).then((res) => {
         if (!res.success) {
           console.error('Failed to update order', res.error)
           toast.error('排序更新失敗')
@@ -70,7 +75,7 @@ export function MangaGrid({ works, onDelete, isReorderMode = false, onReorder }:
 
   if (works.length === 0) {
     return (
-      <div className='flex h-40 items-center justify-center rounded-lg border border-dashed text-muted-foreground'>
+      <div className="text-muted-foreground flex h-40 items-center justify-center rounded-lg border border-dashed">
         No manga found for this category.
       </div>
     )
@@ -81,10 +86,14 @@ export function MangaGrid({ works, onDelete, isReorderMode = false, onReorder }:
       sensors={sensors}
       collisionDetection={closestCenter}
       onDragEnd={handleDragEnd}
-      id='manga-dnd-context'>
-      <SortableContext items={works.map(w => w.id)} strategy={rectSortingStrategy}>
-        <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'>
-          {works.map(work => (
+      id="manga-dnd-context"
+    >
+      <SortableContext
+        items={works.map((w) => w.id)}
+        strategy={rectSortingStrategy}
+      >
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+          {works.map((work) => (
             <MangaItem
               key={work.id}
               work={work as any}

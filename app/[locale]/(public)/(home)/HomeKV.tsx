@@ -13,7 +13,7 @@ export default function HomeKV({
   frames,
   alt = 'Gallery frame',
   intervalMs = 150,
-  pauseOnHover = true
+  pauseOnHover = true,
 }: HomeKVProps) {
   const [currentFrame, setCurrentFrame] = useState(0)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
@@ -29,7 +29,7 @@ export default function HomeKV({
   const startAnimation = useCallback(() => {
     if (intervalRef.current || frames.length === 0) return
     intervalRef.current = setInterval(() => {
-      setCurrentFrame(prev => (prev + 1) % frames.length)
+      setCurrentFrame((prev) => (prev + 1) % frames.length)
     }, frameInterval)
   }, [frames.length, frameInterval])
 
@@ -54,15 +54,16 @@ export default function HomeKV({
 
   return (
     <div
-      className='relative w-full inline-block select-none'
+      className="relative inline-block w-full select-none"
       onMouseEnter={pauseOnHover ? stopAnimation : undefined}
-      onMouseLeave={pauseOnHover ? startAnimation : undefined}>
+      onMouseLeave={pauseOnHover ? startAnimation : undefined}
+    >
       {/* Spacer to reserve height based on aspect ratio of the first image */}
       <img
         src={frames[0]}
         alt={alt}
-        className='invisible opacity-0 w-full h-auto'
-        aria-hidden='true'
+        className="invisible h-auto w-full opacity-0"
+        aria-hidden="true"
       />
 
       {/* Stacked Frames */}
@@ -71,8 +72,8 @@ export default function HomeKV({
           key={`${src}-${index}`}
           src={src}
           alt={index === 0 ? alt : ''}
-          className={`absolute top-0 left-0 w-full h-full object-contain transition-opacity duration-0 ${
-            index === currentFrame ? 'opacity-100 z-10' : 'opacity-0 z-0'
+          className={`absolute top-0 left-0 h-full w-full object-contain transition-opacity duration-0 ${
+            index === currentFrame ? 'z-10 opacity-100' : 'z-0 opacity-0'
           }`}
           loading={index === 0 ? 'eager' : undefined}
         />

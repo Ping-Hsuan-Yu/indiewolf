@@ -17,7 +17,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from '@/components/admin/ui/select'
 import { Textarea } from '@/components/admin/ui/textarea'
 
@@ -50,7 +50,7 @@ export function ProfileEditor({ profiles }: ProfileEditorProps) {
     // en -> en-US
 
     const dbLocaleTarget = selectedLocale === 'zh' ? 'zh-TW' : 'en-US'
-    const profile = profiles.find(p => p.locale === dbLocaleTarget)
+    const profile = profiles.find((p) => p.locale === dbLocaleTarget)
 
     setBio(profile?.bio || '')
     setImageUrl(profile?.profile_image_url || '')
@@ -101,15 +101,18 @@ export function ProfileEditor({ profiles }: ProfileEditorProps) {
   }
 
   return (
-    <div className='space-y-6'>
-      <div className='flex items-center space-x-4'>
+    <div className="space-y-6">
+      <div className="flex items-center space-x-4">
         <Label>選擇語言版本:</Label>
-        <Select value={selectedLocale} onValueChange={v => setSelectedLocale(v as AppLocale)}>
-          <SelectTrigger className='w-45'>
-            <SelectValue placeholder='Language' />
+        <Select
+          value={selectedLocale}
+          onValueChange={(v) => setSelectedLocale(v as AppLocale)}
+        >
+          <SelectTrigger className="w-45">
+            <SelectValue placeholder="Language" />
           </SelectTrigger>
           <SelectContent>
-            {APP_LOCALES.map(locale => (
+            {APP_LOCALES.map((locale) => (
               <SelectItem key={locale} value={locale}>
                 {locale === 'zh' ? '繁體中文 (zh)' : 'English (en)'}
               </SelectItem>
@@ -118,35 +121,46 @@ export function ProfileEditor({ profiles }: ProfileEditorProps) {
         </Select>
       </div>
 
-      <form onSubmit={handleSubmit} className='space-y-6 border p-4 rounded-md'>
-        <div className='grid gap-3'>
-          <Label htmlFor='bio'>個人簡介 ({selectedLocale})</Label>
+      <form onSubmit={handleSubmit} className="space-y-6 rounded-md border p-4">
+        <div className="grid gap-3">
+          <Label htmlFor="bio">個人簡介 ({selectedLocale})</Label>
           <Textarea
-            id='bio'
+            id="bio"
             rows={6}
             value={bio}
-            onChange={e => setBio(e.target.value)}
-            placeholder='輸入個人簡介...'
+            onChange={(e) => setBio(e.target.value)}
+            placeholder="輸入個人簡介..."
           />
         </div>
 
-        <div className='grid gap-3'>
+        <div className="grid gap-3">
           <Label>大頭貼照</Label>
-          <div className='flex items-start gap-4'>
+          <div className="flex items-start gap-4">
             {currentImageUrl && (
-              <div className='relative w-32 h-32 overflow-hidden rounded-full border'>
-                <Image src={currentImageUrl} alt='Profile' fill className='object-cover' />
+              <div className="relative h-32 w-32 overflow-hidden rounded-full border">
+                <Image
+                  src={currentImageUrl}
+                  alt="Profile"
+                  fill
+                  className="object-cover"
+                />
               </div>
             )}
-            <div className='space-y-2'>
-              <Input type='file' accept='image/*' onChange={handleImageChange} />
-              <p className='text-xs text-muted-foreground'>支援 JPG, PNG, WEBP</p>
+            <div className="space-y-2">
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+              />
+              <p className="text-muted-foreground text-xs">
+                支援 JPG, PNG, WEBP
+              </p>
             </div>
           </div>
         </div>
 
-        <Button type='submit' disabled={loading}>
-          {loading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
+        <Button type="submit" disabled={loading}>
+          {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           儲存變更
         </Button>
       </form>

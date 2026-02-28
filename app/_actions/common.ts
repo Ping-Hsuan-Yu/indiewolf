@@ -22,7 +22,7 @@ export async function getAuthorizedAdminClient() {
   const supabase = await createClient()
   const {
     data: { user },
-    error: authError
+    error: authError,
   } = await supabase.auth.getUser()
 
   if (authError || !user) {

@@ -18,7 +18,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-  SheetFooter
+  SheetFooter,
 } from '@/components/admin/ui/sheet'
 import { Textarea } from '@/components/admin/ui/textarea'
 
@@ -33,7 +33,9 @@ export function AddMangaSheet({ years, onUploadSuccess }: AddMangaSheetProps) {
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [year, setYear] = useState(years[0] || new Date().getFullYear().toString())
+  const [year, setYear] = useState(
+    years[0] || new Date().getFullYear().toString()
+  )
 
   // Fields based on screenshot and schema
   const [titleZh, setTitleZh] = useState('')
@@ -82,75 +84,75 @@ export function AddMangaSheet({ years, onUploadSuccess }: AddMangaSheetProps) {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button>
-          <Plus className='mr-2 h-4 w-4' /> 新增漫畫
+          <Plus className="mr-2 h-4 w-4" /> 新增漫畫
         </Button>
       </SheetTrigger>
-      <SheetContent className='w-100 sm:w-135 overflow-y-auto'>
+      <SheetContent className="w-100 overflow-y-auto sm:w-135">
         <SheetHeader>
           <SheetTitle>新增漫畫</SheetTitle>
           <SheetDescription>上傳新的漫畫作品。</SheetDescription>
         </SheetHeader>
-        <form onSubmit={handleSubmit} className='grid gap-4 py-4'>
-          <div className='grid gap-2'>
-            <Label htmlFor='year'>年份</Label>
+        <form onSubmit={handleSubmit} className="grid gap-4 py-4">
+          <div className="grid gap-2">
+            <Label htmlFor="year">年份</Label>
             <CreatableSelect
               options={years}
               value={year}
               onChange={setYear}
-              placeholder='選擇或輸入年份'
+              placeholder="選擇或輸入年份"
             />
           </div>
-          <div className='grid gap-2'>
-            <Label htmlFor='title_zh'>標題 (中文)</Label>
+          <div className="grid gap-2">
+            <Label htmlFor="title_zh">標題 (中文)</Label>
             <Input
-              id='title_zh'
+              id="title_zh"
               value={titleZh}
-              onChange={e => setTitleZh(e.target.value)}
-              placeholder='輸入中文標題'
+              onChange={(e) => setTitleZh(e.target.value)}
+              placeholder="輸入中文標題"
             />
           </div>
-          <div className='grid gap-2'>
-            <Label htmlFor='title_en'>Title (English)</Label>
+          <div className="grid gap-2">
+            <Label htmlFor="title_en">Title (English)</Label>
             <Input
-              id='title_en'
+              id="title_en"
               value={titleEn}
-              onChange={e => setTitleEn(e.target.value)}
-              placeholder='Enter English Title'
+              onChange={(e) => setTitleEn(e.target.value)}
+              placeholder="Enter English Title"
             />
           </div>
-          <div className='grid gap-2'>
-            <Label htmlFor='summary_zh'>簡介 (中文)</Label>
+          <div className="grid gap-2">
+            <Label htmlFor="summary_zh">簡介 (中文)</Label>
             <Textarea
-              id='summary_zh'
+              id="summary_zh"
               value={summaryZh}
-              onChange={e => setSummaryZh(e.target.value)}
-              placeholder='輸入中文簡介'
+              onChange={(e) => setSummaryZh(e.target.value)}
+              placeholder="輸入中文簡介"
             />
           </div>
-          <div className='grid gap-2'>
-            <Label htmlFor='summary_en'>Summary (English)</Label>
+          <div className="grid gap-2">
+            <Label htmlFor="summary_en">Summary (English)</Label>
             <Textarea
-              id='summary_en'
+              id="summary_en"
               value={summaryEn}
-              onChange={e => setSummaryEn(e.target.value)}
-              placeholder='Enter English Summary'
+              onChange={(e) => setSummaryEn(e.target.value)}
+              placeholder="Enter English Summary"
             />
           </div>
-          <div className='grid gap-2'>
-            <Label htmlFor='cover'>首圖 (Cover)</Label>
+          <div className="grid gap-2">
+            <Label htmlFor="cover">首圖 (Cover)</Label>
             <Input
-              id='cover'
-              type='file'
-              accept='image/*'
-              onChange={e => setFile(e.target.files?.[0] || null)}
+              id="cover"
+              type="file"
+              accept="image/*"
+              onChange={(e) => setFile(e.target.files?.[0] || null)}
               required
             />
           </div>
           <SheetFooter>
-            <Button type='submit' disabled={loading || !file}>
+            <Button type="submit" disabled={loading || !file}>
               {loading ? (
                 <>
-                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   上傳中
                 </>
               ) : (

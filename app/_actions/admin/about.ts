@@ -47,21 +47,24 @@ export async function getAdminAboutPageData(): Promise<AdminAboutPageData> {
 
   return {
     profiles: profiles || [],
-    socialLinks: socialLinks || []
+    socialLinks: socialLinks || [],
   }
 }
 
 // -- About Profile Actions --
 
-export async function updateAboutProfile(locale: AppLocale, formData: FormData) {
+export async function updateAboutProfile(
+  locale: AppLocale,
+  formData: FormData
+) {
   const supabase = await getAuthorizedAdminClient()
   const bio = formData.get('bio') as string
   const imageFile = formData.get('profile_image') as File | null
-  
+
   const dbLocale = toDatabaseLocale(locale)
 
   let profileImageUrl = formData.get('existing_profile_image_url') as string
-  
+
   // Handle Image Upload if provided
   if (imageFile && imageFile.size > 0) {
     try {
@@ -69,13 +72,12 @@ export async function updateAboutProfile(locale: AppLocale, formData: FormData) 
       const buffer = Buffer.from(arrayBuffer)
 
       const uploadResult: any = await new Promise((resolve, reject) => {
-        cloudinary.uploader.upload_stream(
-          { folder: 'about_profile' },
-          (error, result) => {
+        cloudinary.uploader
+          .upload_stream({ folder: 'about_profile' }, (error, result) => {
             if (error) reject(error)
             else resolve(result)
-          }
-        ).end(buffer)
+          })
+          .end(buffer)
       })
 
       profileImageUrl = uploadResult.secure_url
@@ -90,7 +92,7 @@ export async function updateAboutProfile(locale: AppLocale, formData: FormData) 
     locale: dbLocale,
     bio,
     profile_image_url: profileImageUrl,
-    updated_at: new Date().toISOString()
+    updated_at: new Date().toISOString(),
   }
   const { error } = await supabase
     .from('about_profiles')
@@ -123,17 +125,16 @@ export async function createSocialLink(formData: FormData) {
   try {
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
-    
+
     const uploadResult: any = await new Promise((resolve, reject) => {
-      cloudinary.uploader.upload_stream(
-        { folder: 'social_icons' },
-        (error, result) => {
+      cloudinary.uploader
+        .upload_stream({ folder: 'social_icons' }, (error, result) => {
           if (error) reject(error)
           else resolve(result)
-        }
-      ).end(buffer)
+        })
+        .end(buffer)
     })
-    
+
     logoUrl = uploadResult.secure_url
   } catch (error) {
     console.error('Logo upload failed:', error)
@@ -155,11 +156,9 @@ export async function createSocialLink(formData: FormData) {
     url,
     logo_url: logoUrl,
     sort_order: nextOrder,
-    is_active: true
+    is_active: true,
   }
-  const { error } = await supabase
-    .from('social_links')
-    .insert(insertData)
+  const { error } = await supabase.from('social_links').insert(insertData)
 
   if (error) {
     console.error('Create social link failed:', error)
@@ -176,24 +175,23 @@ export async function updateSocialLink(id: string, formData: FormData) {
   const label = formData.get('label') as string
   const url = formData.get('url') as string
   const file = formData.get('logo') as File | null
-  
+
   const updates: TablesUpdate<'social_links'> = { label, url }
 
   if (file && file.size > 0) {
     try {
       const arrayBuffer = await file.arrayBuffer()
       const buffer = Buffer.from(arrayBuffer)
-      
+
       const uploadResult: any = await new Promise((resolve, reject) => {
-        cloudinary.uploader.upload_stream(
-          { folder: 'social_icons' },
-          (error, result) => {
+        cloudinary.uploader
+          .upload_stream({ folder: 'social_icons' }, (error, result) => {
             if (error) reject(error)
             else resolve(result)
-          }
-        ).end(buffer)
+          })
+          .end(buffer)
       })
-      
+
       updates.logo_url = uploadResult.secure_url
     } catch (error) {
       return { success: false, error: 'Failed to upload logo' }
@@ -216,10 +214,7 @@ export async function updateSocialLink(id: string, formData: FormData) {
 
 export async function deleteSocialLink(id: string) {
   const supabase = await getAuthorizedAdminClient()
-  const { error } = await supabase
-    .from('social_links')
-    .delete()
-    .eq('id', id)
+  const { error } = await supabase.from('social_links').delete().eq('id', id)
 
   if (error) {
     return { success: false, error: error.message }
@@ -246,10 +241,12 @@ export async function toggleSocialLinkActive(id: string, isActive: boolean) {
   return { success: true }
 }
 
-export async function updateSocialLinksOrder(items: { id: string; sort_order: number }[]) {
+export async function updateSocialLinksOrder(
+  items: { id: string; sort_order: number }[]
+) {
   const supabase = await getAuthorizedAdminClient()
-  
-  const updates = items.map(item => 
+
+  const updates = items.map((item) =>
     supabase
       .from('social_links')
       .update({ sort_order: item.sort_order })

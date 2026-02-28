@@ -44,7 +44,7 @@ export async function createManga(formData: FormData) {
     width: uploadResult.width,
     height: uploadResult.height,
     order_index: 0,
-    is_completed: false
+    is_completed: false,
   }
   const { error } = await supabase.from('manga_works').insert(insertData)
 
@@ -60,7 +60,10 @@ export async function createManga(formData: FormData) {
 
 export async function deleteMangaWork(id: string) {
   const supabaseAdmin = await getAuthorizedAdminClient()
-  const { error } = await supabaseAdmin.from('manga_works').delete().eq('id', id)
+  const { error } = await supabaseAdmin
+    .from('manga_works')
+    .delete()
+    .eq('id', id)
 
   if (error) {
     console.error('Delete Error:', error)
@@ -89,15 +92,20 @@ export async function toggleMangaActive(id: string, isActive: boolean) {
   return { success: true }
 }
 
-export async function updateMangaOrder(items: { id: string; order_index: number }[]) {
+export async function updateMangaOrder(
+  items: { id: string; order_index: number }[]
+) {
   const supabaseAdmin = await getAuthorizedAdminClient()
 
-  const updates = items.map(item =>
-    supabaseAdmin.from('manga_works').update({ order_index: item.order_index }).eq('id', item.id)
+  const updates = items.map((item) =>
+    supabaseAdmin
+      .from('manga_works')
+      .update({ order_index: item.order_index })
+      .eq('id', item.id)
   )
 
   const results = await Promise.all(updates)
-  const errors = results.filter(r => r.error)
+  const errors = results.filter((r) => r.error)
 
   if (errors.length > 0) {
     console.error('Batch Update Errors:', errors)
@@ -109,7 +117,9 @@ export async function updateMangaOrder(items: { id: string; order_index: number 
   return { success: true }
 }
 
-export async function getMangaWorksAction(year: string): Promise<Tables<'manga_works'>[]> {
+export async function getMangaWorksAction(
+  year: string
+): Promise<Tables<'manga_works'>[]> {
   const supabase = await createClient()
   const { data } = await supabase
     .from('manga_works')
@@ -140,7 +150,9 @@ export async function getMangaYearsAction() {
     .select('year')
     .order('year', { ascending: false })
 
-  const years = Array.from(new Set((data || []).map((item: { year: string }) => item.year)))
+  const years = Array.from(
+    new Set((data || []).map((item: { year: string }) => item.year))
+  )
   return years.sort((a, b) => parseInt(b) - parseInt(a))
 }
 
@@ -192,9 +204,12 @@ export async function updateMangaDetail(id: string, formData: FormData) {
     summary_zh,
     summary_en,
     year,
-    is_completed
+    is_completed,
   }
-  const { error } = await supabase.from('manga_works').update(updateData).eq('id', id)
+  const { error } = await supabase
+    .from('manga_works')
+    .update(updateData)
+    .eq('id', id)
 
   if (error) {
     console.error('Update Manga Detail Error:', error)
@@ -222,7 +237,7 @@ export async function uploadMangaImages(mangaId: string, formData: FormData) {
 
     for (let i = 0; i < files.length; i += CONCURRENCY) {
       const batch = files.slice(i, i + CONCURRENCY)
-      const batchPromises = batch.map(async file => {
+      const batchPromises = batch.map(async (file) => {
         const arrayBuffer = await file.arrayBuffer()
         const buffer = Buffer.from(arrayBuffer)
 
@@ -251,14 +266,16 @@ export async function uploadMangaImages(mangaId: string, formData: FormData) {
 
     const currentMaxOrder = maxOrderData?.order_index || 0
 
-    const inserts: TablesInsert<'manga_images'>[] = results.map((result, index) => ({
-      manga_id: mangaId,
-      url: result.secure_url,
-      width: result.width,
-      height: result.height,
-      locale: locale || null,
-      order_index: currentMaxOrder + index + 1
-    }))
+    const inserts: TablesInsert<'manga_images'>[] = results.map(
+      (result, index) => ({
+        manga_id: mangaId,
+        url: result.secure_url,
+        width: result.width,
+        height: result.height,
+        locale: locale || null,
+        order_index: currentMaxOrder + index + 1,
+      })
+    )
 
     const { error } = await supabase.from('manga_images').insert(inserts)
 
@@ -289,15 +306,20 @@ export async function deleteMangaImage(id: string) {
   return { success: true }
 }
 
-export async function updateMangaImagesOrder(items: { id: string; order_index: number }[]) {
+export async function updateMangaImagesOrder(
+  items: { id: string; order_index: number }[]
+) {
   const supabaseAdmin = await getAuthorizedAdminClient()
 
-  const updates = items.map(item =>
-    supabaseAdmin.from('manga_images').update({ order_index: item.order_index }).eq('id', item.id)
+  const updates = items.map((item) =>
+    supabaseAdmin
+      .from('manga_images')
+      .update({ order_index: item.order_index })
+      .eq('id', item.id)
   )
 
   const results = await Promise.all(updates)
-  const errors = results.filter(r => r.error)
+  const errors = results.filter((r) => r.error)
 
   if (errors.length > 0) {
     console.error('Batch Update Errors:', errors)

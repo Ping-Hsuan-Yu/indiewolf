@@ -6,9 +6,9 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'res.cloudinary.com'
-      }
-    ]
+        hostname: 'res.cloudinary.com',
+      },
+    ],
   },
   experimental: {
     optimizePackageImports: [
@@ -22,21 +22,21 @@ const nextConfig = {
       '@radix-ui/react-scroll-area',
       '@radix-ui/react-switch',
       '@radix-ui/react-tooltip',
-      'class-variance-authority'
+      'class-variance-authority',
     ],
     serverActions: {
-      bodySizeLimit: '500mb'
-    }
+      bodySizeLimit: '500mb',
+    },
   },
   async redirects() {
     return [
       {
         source: '/:locale(zh|en)/manga',
         destination: '/:locale/manga/completed',
-        permanent: false
-      }
+        permanent: false,
+      },
     ]
-  }
+  },
 }
 
 const withNextIntl = createNextIntlPlugin('./i18n/request.ts')

@@ -11,7 +11,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from '@/components/admin/ui/select'
 
 interface CreatableSelectProps {
@@ -25,7 +25,7 @@ export function CreatableSelect({
   options,
   value,
   onChange,
-  placeholder = '選擇年份或新增...'
+  placeholder = '選擇年份或新增...',
 }: CreatableSelectProps) {
   const [isCustom, setIsCustom] = React.useState(false)
 
@@ -40,41 +40,47 @@ export function CreatableSelect({
 
   if (isCustom) {
     return (
-      <div className='flex gap-2'>
+      <div className="flex gap-2">
         <Input
           value={value}
-          onChange={e => onChange(e.target.value)}
-          placeholder='輸入年份...'
+          onChange={(e) => onChange(e.target.value)}
+          placeholder="輸入年份..."
           autoFocus
         />
         <Button
-          type='button'
-          variant='ghost'
-          size='icon'
+          type="button"
+          variant="ghost"
+          size="icon"
           onClick={() => {
             setIsCustom(false)
             onChange(options[0] || '') // Reset to first option or empty
-          }}>
-          <X className='h-4 w-4' />
+          }}
+        >
+          <X className="h-4 w-4" />
         </Button>
       </div>
     )
   }
 
   return (
-    <Select value={options.includes(value) ? value : ''} onValueChange={handleSelectChange}>
+    <Select
+      value={options.includes(value) ? value : ''}
+      onValueChange={handleSelectChange}
+    >
       <SelectTrigger>
-        <SelectValue placeholder={placeholder}>{value || placeholder}</SelectValue>
+        <SelectValue placeholder={placeholder}>
+          {value || placeholder}
+        </SelectValue>
       </SelectTrigger>
       <SelectContent>
-        {options.map(opt => (
+        {options.map((opt) => (
           <SelectItem key={opt} value={opt}>
             {opt}
           </SelectItem>
         ))}
-        <SelectItem value='custom_option_trigger'>
-          <span className='flex items-center text-muted-foreground font-semibold'>
-            <Plus className='mr-2 h-4 w-4' />
+        <SelectItem value="custom_option_trigger">
+          <span className="text-muted-foreground flex items-center font-semibold">
+            <Plus className="mr-2 h-4 w-4" />
             新增年份...
           </span>
         </SelectItem>

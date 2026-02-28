@@ -3,7 +3,7 @@
 import { CldImage } from 'next-cloudinary'
 
 type OptimizedImageProps = {
-  url: string,
+  url: string
   alt: string | null
   width: number
   height: number
@@ -24,7 +24,7 @@ export default function OptimizedImage({
   sizes,
   width,
   height,
-  eager = false
+  eager = false,
 }: OptimizedImageProps) {
   return (
     <CldImage
@@ -34,9 +34,9 @@ export default function OptimizedImage({
       sizes={sizes}
       width={width}
       height={height}
-      format='auto'
-      quality='auto'
-      placeholder='blur'
+      format="auto"
+      quality="auto"
+      placeholder="blur"
       blurDataURL={url.replace('/upload/', '/upload/w_10,e_blur:1000,q_1/')}
       loading={eager ? 'eager' : 'lazy'}
     />

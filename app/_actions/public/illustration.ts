@@ -11,7 +11,9 @@ export async function getIllustrationYears(): Promise<string[]> {
   return (data || []).map((item: { year: string }) => item.year)
 }
 
-export async function getIllustrationWorks(year: string): Promise<IllustrationWork[]> {
+export async function getIllustrationWorks(
+  year: string
+): Promise<IllustrationWork[]> {
   const { data } = await supabase
     .from('illustration_works')
     .select('*, src:public_id')

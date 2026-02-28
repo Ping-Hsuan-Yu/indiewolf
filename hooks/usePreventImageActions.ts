@@ -1,25 +1,25 @@
-import { useEffect } from 'react';
+import { useEffect } from 'react'
 
 export const usePreventImageActions = () => {
   useEffect(() => {
     const handleContextMenu = (e: MouseEvent) => {
       if ((e.target as HTMLElement).tagName === 'IMG') {
-        e.preventDefault();
+        e.preventDefault()
       }
-    };
+    }
 
     const handleDragStart = (e: DragEvent) => {
       if ((e.target as HTMLElement).tagName === 'IMG') {
-        e.preventDefault();
+        e.preventDefault()
       }
-    };
+    }
 
-    document.addEventListener('contextmenu', handleContextMenu);
-    document.addEventListener('dragstart', handleDragStart);
+    document.addEventListener('contextmenu', handleContextMenu)
+    document.addEventListener('dragstart', handleDragStart)
 
     return () => {
-      document.removeEventListener('contextmenu', handleContextMenu);
-      document.removeEventListener('dragstart', handleDragStart);
-    };
-  }, []);
-};
+      document.removeEventListener('contextmenu', handleContextMenu)
+      document.removeEventListener('dragstart', handleDragStart)
+    }
+  }, [])
+}

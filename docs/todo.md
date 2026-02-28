@@ -11,11 +11,13 @@
 # DONE
 
 ## 網站功能與結構調整
+
 - [x] Project 分頁圖片可點擊放大（桌機）
   - [x] 點擊圖片開啟大圖（lightbox / modal / gallery）
-- [x] 官網的聯繫用email需要改成：alchemy17th@gmail.com 
+- [x] 官網的聯繫用email需要改成：alchemy17th@gmail.com
 
 ## 後台管理
+
 - [x] 測試與正式資料庫
 - [x] 後台編輯前台資料
 - [x] Sql function: 根據project slug / illu_year / manga_year 自動更新 nav

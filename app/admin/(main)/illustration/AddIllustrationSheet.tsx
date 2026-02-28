@@ -19,7 +19,7 @@ import {
   SheetTitle,
   SheetTrigger,
   SheetFooter,
-  SheetClose
+  SheetClose,
 } from '@/components/admin/ui/sheet'
 
 import { CreatableSelect } from './CreatableSelect'
@@ -29,11 +29,16 @@ interface AddIllustrationSheetProps {
   onUploadSuccess?: (year: string) => void
 }
 
-export function AddIllustrationSheet({ years, onUploadSuccess }: AddIllustrationSheetProps) {
+export function AddIllustrationSheet({
+  years,
+  onUploadSuccess,
+}: AddIllustrationSheetProps) {
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [year, setYear] = useState(years[0] || new Date().getFullYear().toString())
+  const [year, setYear] = useState(
+    years[0] || new Date().getFullYear().toString()
+  )
   const [alt, setAlt] = useState('')
   const [file, setFile] = useState<File | null>(null)
 
@@ -69,7 +74,7 @@ export function AddIllustrationSheet({ years, onUploadSuccess }: AddIllustration
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button>
-          <Plus className='mr-2 h-4 w-4' /> 新增插畫
+          <Plus className="mr-2 h-4 w-4" /> 新增插畫
         </Button>
       </SheetTrigger>
       <SheetContent>
@@ -77,40 +82,40 @@ export function AddIllustrationSheet({ years, onUploadSuccess }: AddIllustration
           <SheetTitle>新增插畫</SheetTitle>
           <SheetDescription>上傳新的插畫作品。</SheetDescription>
         </SheetHeader>
-        <form onSubmit={handleSubmit} className='grid gap-4 py-4'>
-          <div className='grid gap-2'>
-            <Label htmlFor='year'>年份</Label>
+        <form onSubmit={handleSubmit} className="grid gap-4 py-4">
+          <div className="grid gap-2">
+            <Label htmlFor="year">年份</Label>
             <CreatableSelect
               options={years}
               value={year}
               onChange={setYear}
-              placeholder='選擇或輸入年份'
+              placeholder="選擇或輸入年份"
             />
           </div>
-          <div className='grid gap-2'>
-            <Label htmlFor='alt'>描述 (Alt)</Label>
+          <div className="grid gap-2">
+            <Label htmlFor="alt">描述 (Alt)</Label>
             <Input
-              id='alt'
+              id="alt"
               value={alt}
-              onChange={e => setAlt(e.target.value)}
-              placeholder='圖片描述'
+              onChange={(e) => setAlt(e.target.value)}
+              placeholder="圖片描述"
             />
           </div>
-          <div className='grid gap-2'>
-            <Label htmlFor='image'>圖片</Label>
+          <div className="grid gap-2">
+            <Label htmlFor="image">圖片</Label>
             <Input
-              id='image'
-              type='file'
-              accept='image/*'
-              onChange={e => setFile(e.target.files?.[0] || null)}
+              id="image"
+              type="file"
+              accept="image/*"
+              onChange={(e) => setFile(e.target.files?.[0] || null)}
               required
             />
           </div>
           <SheetFooter>
-            <Button type='submit' disabled={loading || !file}>
+            <Button type="submit" disabled={loading || !file}>
               {loading ? (
                 <>
-                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   上傳中
                 </>
               ) : (

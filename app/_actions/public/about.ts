@@ -21,7 +21,9 @@ export type AboutPageData = {
   contactLinks: SocialLink[]
 }
 
-export async function getAboutPageData(locale: AppLocale): Promise<AboutPageData> {
+export async function getAboutPageData(
+  locale: AppLocale
+): Promise<AboutPageData> {
   const dbLocale = toDatabaseLocale(locale)
 
   const { data: profile } = await supabase
@@ -39,12 +41,12 @@ export async function getAboutPageData(locale: AppLocale): Promise<AboutPageData
   return {
     bio: profile?.bio || '',
     profileImage: profile?.profile_image_url,
-    contactLinks: (links || []).map(link => ({
+    contactLinks: (links || []).map((link) => ({
       id: link.id,
       label: link.label,
       url: link.url,
       logo: link.logo_url,
-      sortOrder: link.sort_order
-    }))
+      sortOrder: link.sort_order,
+    })),
   }
 }

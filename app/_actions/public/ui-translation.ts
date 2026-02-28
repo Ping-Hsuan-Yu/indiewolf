@@ -4,7 +4,10 @@ import { supabase } from '@/lib/supabase'
 
 import type { Tables } from '@/types/database.types'
 
-type UiTranslationRecord = Pick<Tables<'ui_translations'>, 'namespace' | 'key' | 'value'>
+type UiTranslationRecord = Pick<
+  Tables<'ui_translations'>,
+  'namespace' | 'key' | 'value'
+>
 
 export async function getUiMessages(locale: string) {
   const { data, error } = await supabase

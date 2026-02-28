@@ -9,7 +9,7 @@ import { toast } from 'sonner'
 import {
   deleteIllustrationWork,
   toggleIllustrationActive,
-  updateIllustrationAlt
+  updateIllustrationAlt,
 } from '@/app/_actions/admin/illustration'
 
 import { Trash2 } from 'lucide-react'
@@ -21,7 +21,7 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle
+  AlertDialogTitle,
 } from '@/components/admin/ui/alert-dialog'
 import { Button } from '@/components/admin/ui/button'
 import { Input } from '@/components/admin/ui/input'
@@ -41,16 +41,27 @@ interface IllustrationItemProps {
   isReorderMode?: boolean
 }
 
-export function IllustrationItem({ work, onDelete, isReorderMode }: IllustrationItemProps) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+export function IllustrationItem({
+  work,
+  onDelete,
+  isReorderMode,
+}: IllustrationItemProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
     id: work.id,
-    disabled: !isReorderMode
+    disabled: !isReorderMode,
   })
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    opacity: isDragging ? 0.5 : 1
+    opacity: isDragging ? 0.5 : 1,
   }
 
   const [alt, setAlt] = useState(work.alt || '')
@@ -143,19 +154,20 @@ export function IllustrationItem({ work, onDelete, isReorderMode }: Illustration
       style={style}
       {...attributes}
       {...listeners}
-      className={`group space-y-2 ${isReorderMode ? 'cursor-move touch-none' : ''}`}>
-      <div className='relative aspect-square overflow-hidden rounded-md border bg-muted'>
+      className={`group space-y-2 ${isReorderMode ? 'cursor-move touch-none' : ''}`}
+    >
+      <div className="bg-muted relative aspect-square overflow-hidden rounded-md border">
         <Image
           src={work.url}
           alt={work.alt || 'Illustration'}
           fill
-          className='object-contain transition-all hover:scale-105'
-          sizes='(max-width: 768px) 50vw, 33vw'
+          className="object-contain transition-all hover:scale-105"
+          sizes="(max-width: 768px) 50vw, 33vw"
         />
         {!isReorderMode && (
           <div
-            className='absolute left-2 top-4 z-10 opacity-50 transition-opacity group-hover:opacity-100'
-            onPointerDown={e => e.stopPropagation()} // Prevent drag
+            className="absolute top-4 left-2 z-10 opacity-50 transition-opacity group-hover:opacity-100"
+            onPointerDown={(e) => e.stopPropagation()} // Prevent drag
           >
             <Switch
               checked={isActive}
@@ -166,43 +178,44 @@ export function IllustrationItem({ work, onDelete, isReorderMode }: Illustration
           </div>
         )}
         {!isReorderMode && (
-          <div className='absolute right-2 top-2 opacity-0 transition-opacity group-hover:opacity-100'>
+          <div className="absolute top-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
             <Button
-              size='icon'
+              size="icon"
               destructive
-              className='h-8 w-8'
-              onClick={e => {
+              className="h-8 w-8"
+              onClick={(e) => {
                 e.stopPropagation() // Prevent drag start
                 setDeleteDialogOpen(true)
               }}
-              onPointerDown={e => e.stopPropagation()} // Prevent drag start on pointer down
+              onPointerDown={(e) => e.stopPropagation()} // Prevent drag start on pointer down
             >
-              <Trash2 className='h-4 w-4' />
+              <Trash2 className="h-4 w-4" />
             </Button>
           </div>
         )}
       </div>
-      <div className='h-8'>
+      <div className="h-8">
         {isEditing ? (
-          <div className='flex items-center gap-2'>
+          <div className="flex items-center gap-2">
             <Input
               value={alt}
-              onChange={e => setAlt(e.target.value)}
+              onChange={(e) => setAlt(e.target.value)}
               onBlur={handleSave}
               onKeyDown={handleKeyDown}
               disabled={loading}
               autoFocus
-              className='h-8 text-xs'
-              onPointerDown={e => e.stopPropagation()} // Allow text selection
+              className="h-8 text-xs"
+              onPointerDown={(e) => e.stopPropagation()} // Allow text selection
             />
-            {loading && <Spinner className='text-muted-foreground' />}
+            {loading && <Spinner className="text-muted-foreground" />}
           </div>
         ) : (
           <p
             onClick={() => setIsEditing(true)}
-            className='cursor-pointer truncate text-sm text-muted-foreground hover:text-foreground hover:underline'
-            title={alt || 'No description'}>
-            {alt || <span className='italic opacity-50'>No description</span>}
+            className="text-muted-foreground hover:text-foreground cursor-pointer truncate text-sm hover:underline"
+            title={alt || 'No description'}
+          >
+            {alt || <span className="italic opacity-50">No description</span>}
           </p>
         )}
       </div>
@@ -214,7 +227,9 @@ export function IllustrationItem({ work, onDelete, isReorderMode }: Illustration
             <AlertDialogDescription>{errorMessage}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogAction onClick={() => setErrorOpen(false)}>OK</AlertDialogAction>
+            <AlertDialogAction onClick={() => setErrorOpen(false)}>
+              OK
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -231,11 +246,17 @@ export function IllustrationItem({ work, onDelete, isReorderMode }: Illustration
             <AlertDialogAction
               onClick={() => setDeleteDialogOpen(false)}
               disabled={isDeleting}
-              className='bg-muted text-muted-foreground hover:bg-muted/80'>
+              className="bg-muted text-muted-foreground hover:bg-muted/80"
+            >
               取消
             </AlertDialogAction>
-            <Button variant='default' destructive onClick={handleDelete} disabled={isDeleting}>
-              {isDeleting ? <Spinner className='mr-2' /> : null}
+            <Button
+              variant="default"
+              destructive
+              onClick={handleDelete}
+              disabled={isDeleting}
+            >
+              {isDeleting ? <Spinner className="mr-2" /> : null}
               確認刪除
             </Button>
           </AlertDialogFooter>

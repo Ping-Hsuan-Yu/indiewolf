@@ -18,7 +18,7 @@ export async function getMangaYears(): Promise<string[]> {
     .order('year', { ascending: false })
 
   // Deduplicate years and sort descending
-  const years = Array.from(new Set((data || []).map(item => item.year)))
+  const years = Array.from(new Set((data || []).map((item) => item.year)))
   return years.sort((a, b) => Number(b) - Number(a))
 }
 
@@ -42,7 +42,9 @@ export async function getMangaWorks(year: string): Promise<MangaWork[]> {
   return (data || []) as MangaWork[]
 }
 
-export async function getMangaWorksByStatus(status: 'ongoing' | 'completed'): Promise<MangaWork[]> {
+export async function getMangaWorksByStatus(
+  status: 'ongoing' | 'completed'
+): Promise<MangaWork[]> {
   const isCompleted = status === 'completed'
 
   const { data } = await supabase

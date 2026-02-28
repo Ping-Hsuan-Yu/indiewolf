@@ -7,14 +7,14 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-  DragEndEvent
+  DragEndEvent,
 } from '@dnd-kit/core'
 import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
   rectSortingStrategy,
-  useSortable
+  useSortable,
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import Image from 'next/image'
@@ -27,10 +27,18 @@ import {
   uploadProjectImages,
   setProjectCover,
   updateProjectImagesOrder,
-  deleteProjectImage
+  deleteProjectImage,
 } from '@/app/_actions/admin/project'
 
-import { Loader2, ArrowLeft, Upload, GripVertical, Trash2, CheckCircle2, Star } from 'lucide-react'
+import {
+  Loader2,
+  ArrowLeft,
+  Upload,
+  GripVertical,
+  Trash2,
+  CheckCircle2,
+  Star,
+} from 'lucide-react'
 
 import {
   AlertDialog,
@@ -41,7 +49,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger
+  AlertDialogTrigger,
 } from '@/components/admin/ui/alert-dialog'
 import { Badge } from '@/components/admin/ui/badge'
 import { Button } from '@/components/admin/ui/button'
@@ -59,7 +67,7 @@ function SortableImageItem({
   url,
   isMain,
   onSetMain,
-  onDelete
+  onDelete,
 }: {
   id: string
   url: string
@@ -69,70 +77,93 @@ function SortableImageItem({
 }) {
   const [isDeleting, setIsDeleting] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-    id
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id,
   })
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    opacity: isDragging ? 0.5 : 1
+    opacity: isDragging ? 0.5 : 1,
   }
 
   return (
-    <Card ref={setNodeRef} style={style} className='overflow-hidden group relative'>
-      <CardContent className='p-0 aspect-square relative'>
-        <Image src={url} alt='Project Image' fill className='object-cover' />
+    <Card
+      ref={setNodeRef}
+      style={style}
+      className="group relative overflow-hidden"
+    >
+      <CardContent className="relative aspect-square p-0">
+        <Image src={url} alt="Project Image" fill className="object-cover" />
 
         {/* Is Main Indicator */}
         {isMain && (
-          <div className='absolute top-2 left-2 z-10'>
-            <Badge className='bg-green-600 hover:bg-green-700'>
-              <Star className='w-3 h-3 mr-1 fill-current' /> 主圖
+          <div className="absolute top-2 left-2 z-10">
+            <Badge className="bg-green-600 hover:bg-green-700">
+              <Star className="mr-1 h-3 w-3 fill-current" /> 主圖
             </Badge>
           </div>
         )}
 
         {/* Hover Overlay */}
-        <div className='absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-2'>
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-black/50 p-2 opacity-0 transition-opacity group-hover:opacity-100">
           <button
             {...attributes}
             {...listeners}
-            className='absolute top-2 right-2 p-1 bg-white/10 rounded hover:bg-white/20 cursor-grab active:cursor-grabbing text-white'>
-            <GripVertical className='w-5 h-5' />
+            className="absolute top-2 right-2 cursor-grab rounded bg-white/10 p-1 text-white hover:bg-white/20 active:cursor-grabbing"
+          >
+            <GripVertical className="h-5 w-5" />
           </button>
 
           {!isMain && (
-            <Button size='sm' variant='secondary' className='w-full text-xs' onClick={onSetMain}>
+            <Button
+              size="sm"
+              variant="secondary"
+              className="w-full text-xs"
+              onClick={onSetMain}
+            >
               設為主圖
             </Button>
           )}
 
-          <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+          <AlertDialog
+            open={deleteDialogOpen}
+            onOpenChange={setDeleteDialogOpen}
+          >
             <AlertDialogTrigger asChild>
-              <Button size='sm' destructive className='w-full text-xs'>
-                <Trash2 className='w-3 h-3 mr-1' /> 刪除
+              <Button size="sm" destructive className="w-full text-xs">
+                <Trash2 className="mr-1 h-3 w-3" /> 刪除
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>確定要刪除這張圖片嗎？</AlertDialogTitle>
-                <AlertDialogDescription>此動作無法復原。</AlertDialogDescription>
+                <AlertDialogDescription>
+                  此動作無法復原。
+                </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogAction
-                  onClick={e => {
+                  onClick={(e) => {
                     e.preventDefault()
                     setDeleteDialogOpen(false)
                   }}
                   disabled={isDeleting}
-                  className='bg-muted text-muted-foreground hover:bg-muted/80'>
+                  className="bg-muted text-muted-foreground hover:bg-muted/80"
+                >
                   取消
                 </AlertDialogAction>
                 <Button
-                  variant='default'
+                  variant="default"
                   destructive
-                  onClick={async e => {
+                  onClick={async (e) => {
                     e.stopPropagation()
                     setIsDeleting(true)
                     const success = await onDelete()
@@ -140,8 +171,11 @@ function SortableImageItem({
                       setIsDeleting(false)
                     }
                   }}
-                  disabled={isDeleting}>
-                  {isDeleting ? <Loader2 className='mr-2 h-4 w-4 animate-spin' /> : null}
+                  disabled={isDeleting}
+                >
+                  {isDeleting ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : null}
                   確認刪除
                 </Button>
               </AlertDialogFooter>
@@ -171,8 +205,12 @@ export function ProjectDetailForm({ project }: ProjectDetailFormProps) {
   const [titleEn, setTitleEn] = useState(project.title_en || '')
   const [subtitleZh, setSubtitleZh] = useState(project.subtitle_zh || '')
   const [subtitleEn, setSubtitleEn] = useState(project.subtitle_en || '')
-  const [descriptionZh, setDescriptionZh] = useState(project.description_zh || '')
-  const [descriptionEn, setDescriptionEn] = useState(project.description_en || '')
+  const [descriptionZh, setDescriptionZh] = useState(
+    project.description_zh || ''
+  )
+  const [descriptionEn, setDescriptionEn] = useState(
+    project.description_en || ''
+  )
 
   const handleUpdateText = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -210,13 +248,13 @@ export function ProjectDetailForm({ project }: ProjectDetailFormProps) {
     let completed = 0
 
     const getProgressToastContent = (comp: number, tot: number) => (
-      <div className='w-full min-w-50 space-y-2'>
-        <div className='text-sm font-medium'>
+      <div className="w-full min-w-50 space-y-2">
+        <div className="text-sm font-medium">
           已完成 {comp} 張，共 {tot} 張
         </div>
-        <div className='h-2 w-full overflow-hidden rounded-full bg-secondary'>
+        <div className="bg-secondary h-2 w-full overflow-hidden rounded-full">
           <div
-            className='h-full bg-primary transition-all duration-300'
+            className="bg-primary h-full transition-all duration-300"
             style={{ width: `${(comp / tot) * 100}%` }}
           />
         </div>
@@ -226,7 +264,7 @@ export function ProjectDetailForm({ project }: ProjectDetailFormProps) {
     const toastId = toast.loading('上傳進度...', {
       classNames: { content: 'w-full' },
       position: 'bottom-right',
-      description: getProgressToastContent(0, total)
+      description: getProgressToastContent(0, total),
     })
 
     try {
@@ -242,7 +280,7 @@ export function ProjectDetailForm({ project }: ProjectDetailFormProps) {
             id: toastId,
             position: 'bottom-right',
             duration: 5000,
-            closeButton: true
+            closeButton: true,
           })
           setLoading(false)
           e.target.value = ''
@@ -255,7 +293,7 @@ export function ProjectDetailForm({ project }: ProjectDetailFormProps) {
           classNames: { content: 'w-full' },
           id: toastId,
           position: 'bottom-right',
-          description: getProgressToastContent(completed, total)
+          description: getProgressToastContent(completed, total),
         })
 
         // Refresh progressively
@@ -268,7 +306,7 @@ export function ProjectDetailForm({ project }: ProjectDetailFormProps) {
         classNames: { content: 'w-full' },
         duration: 5000,
         closeButton: true,
-        description: getProgressToastContent(total, total)
+        description: getProgressToastContent(total, total),
       })
     } catch (error) {
       toast.error('上傳錯誤', { id: toastId })
@@ -314,7 +352,7 @@ export function ProjectDetailForm({ project }: ProjectDetailFormProps) {
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates
+      coordinateGetter: sortableKeyboardCoordinates,
     })
   )
 
@@ -322,8 +360,8 @@ export function ProjectDetailForm({ project }: ProjectDetailFormProps) {
     const { active, over } = event
     if (over && active.id !== over.id) {
       setImages((items: any[]) => {
-        const oldIndex = items.findIndex(item => item.id === active.id)
-        const newIndex = items.findIndex(item => item.id === over.id)
+        const oldIndex = items.findIndex((item) => item.id === active.id)
+        const newIndex = items.findIndex((item) => item.id === over.id)
         return arrayMove(items, oldIndex, newIndex)
       })
 
@@ -334,7 +372,7 @@ export function ProjectDetailForm({ project }: ProjectDetailFormProps) {
 
       const updates = reordered.map((item: any, index: number) => ({
         id: item.id,
-        order_index: index + 1
+        order_index: index + 1,
       }))
 
       try {
@@ -346,67 +384,84 @@ export function ProjectDetailForm({ project }: ProjectDetailFormProps) {
   }
 
   return (
-    <div className='space-y-6'>
-      <div className='flex items-center gap-4'>
-        <Button variant='ghost' onClick={() => router.back()} size='sm'>
-          <ArrowLeft className='w-4 h-4 mr-2' /> 返回列表
+    <div className="space-y-6">
+      <div className="flex items-center gap-4">
+        <Button variant="ghost" onClick={() => router.back()} size="sm">
+          <ArrowLeft className="mr-2 h-4 w-4" /> 返回列表
         </Button>
-        <h2 className='text-2xl font-bold'>編輯專案: {titleZh || slug}</h2>
+        <h2 className="text-2xl font-bold">編輯專案: {titleZh || slug}</h2>
       </div>
 
-      <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
         {/* Left Column: Text Edit */}
         <Card>
-          <CardContent className='pt-6'>
-            <form onSubmit={handleUpdateText} className='space-y-4'>
-              <div className='grid gap-2'>
-                <Label htmlFor='slug'>Slug</Label>
-                <Input id='slug' value={slug} onChange={e => setSlug(e.target.value)} required />
+          <CardContent className="pt-6">
+            <form onSubmit={handleUpdateText} className="space-y-4">
+              <div className="grid gap-2">
+                <Label htmlFor="slug">Slug</Label>
+                <Input
+                  id="slug"
+                  value={slug}
+                  onChange={(e) => setSlug(e.target.value)}
+                  required
+                />
               </div>
 
-              <div className='grid grid-cols-2 gap-4'>
-                <div className='space-y-2'>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
                   <Label>標題 (中文)</Label>
-                  <Input value={titleZh} onChange={e => setTitleZh(e.target.value)} />
+                  <Input
+                    value={titleZh}
+                    onChange={(e) => setTitleZh(e.target.value)}
+                  />
                 </div>
-                <div className='space-y-2'>
+                <div className="space-y-2">
                   <Label>Title (English)</Label>
-                  <Input value={titleEn} onChange={e => setTitleEn(e.target.value)} />
+                  <Input
+                    value={titleEn}
+                    onChange={(e) => setTitleEn(e.target.value)}
+                  />
                 </div>
               </div>
 
-              <div className='grid grid-cols-2 gap-4'>
-                <div className='space-y-2'>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
                   <Label>副標題 (中文)</Label>
-                  <Textarea value={subtitleZh} onChange={e => setSubtitleZh(e.target.value)} />
+                  <Textarea
+                    value={subtitleZh}
+                    onChange={(e) => setSubtitleZh(e.target.value)}
+                  />
                 </div>
-                <div className='space-y-2'>
+                <div className="space-y-2">
                   <Label>Subtitle (English)</Label>
-                  <Textarea value={subtitleEn} onChange={e => setSubtitleEn(e.target.value)} />
+                  <Textarea
+                    value={subtitleEn}
+                    onChange={(e) => setSubtitleEn(e.target.value)}
+                  />
                 </div>
               </div>
 
-              <div className='space-y-2'>
+              <div className="space-y-2">
                 <Label>說明 (中文)</Label>
                 <Textarea
                   value={descriptionZh}
-                  onChange={e => setDescriptionZh(e.target.value)}
-                  className='min-h-25'
+                  onChange={(e) => setDescriptionZh(e.target.value)}
+                  className="min-h-25"
                 />
               </div>
 
-              <div className='space-y-2'>
+              <div className="space-y-2">
                 <Label>Description (English)</Label>
                 <Textarea
                   value={descriptionEn}
-                  onChange={e => setDescriptionEn(e.target.value)}
-                  className='min-h-25'
+                  onChange={(e) => setDescriptionEn(e.target.value)}
+                  className="min-h-25"
                 />
               </div>
 
-              <div className='flex justify-end'>
-                <Button type='submit' disabled={loading}>
-                  {loading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
+              <div className="flex justify-end">
+                <Button type="submit" disabled={loading}>
+                  {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   儲存變更
                 </Button>
               </div>
@@ -415,20 +470,20 @@ export function ProjectDetailForm({ project }: ProjectDetailFormProps) {
         </Card>
 
         {/* Right Column: Images */}
-        <div className='space-y-6'>
-          <div className='flex items-center justify-between'>
-            <h3 className='text-lg font-medium'>專案圖片</h3>
-            <div className='flex items-center gap-2'>
-              <Label htmlFor='upload-images' className='cursor-pointer'>
-                <div className='flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors text-sm font-medium'>
-                  <Upload className='w-4 h-4' /> 上傳圖片
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-medium">專案圖片</h3>
+            <div className="flex items-center gap-2">
+              <Label htmlFor="upload-images" className="cursor-pointer">
+                <div className="bg-primary text-primary-foreground hover:bg-primary/90 flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors">
+                  <Upload className="h-4 w-4" /> 上傳圖片
                 </div>
                 <Input
-                  id='upload-images'
-                  type='file'
+                  id="upload-images"
+                  type="file"
                   multiple
-                  accept='image/*'
-                  className='hidden'
+                  accept="image/*"
+                  className="hidden"
                   onChange={handleImageUpload}
                   disabled={loading}
                 />
@@ -439,11 +494,13 @@ export function ProjectDetailForm({ project }: ProjectDetailFormProps) {
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}>
+            onDragEnd={handleDragEnd}
+          >
             <SortableContext
               items={images.map((img: any) => img.id)}
-              strategy={rectSortingStrategy}>
-              <div className='grid grid-cols-3 gap-4'>
+              strategy={rectSortingStrategy}
+            >
+              <div className="grid grid-cols-3 gap-4">
                 {images.map((image: any) => (
                   <SortableImageItem
                     key={image.id}
@@ -459,7 +516,7 @@ export function ProjectDetailForm({ project }: ProjectDetailFormProps) {
           </DndContext>
 
           {images.length === 0 && (
-            <div className='text-center py-12 text-muted-foreground border border-dashed rounded-lg bg-muted/50'>
+            <div className="text-muted-foreground bg-muted/50 rounded-lg border border-dashed py-12 text-center">
               尚無其他圖片，請上傳
             </div>
           )}

@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic'
 export async function generateStaticParams() {
   try {
     const projects = await getProjects()
-    return projects.map(project => ({ slug: project.slug }))
+    return projects.map((project) => ({ slug: project.slug }))
   } catch {
     // avoid build error if DB is unreachable
     return []
@@ -24,18 +24,24 @@ type ProjectDetailPageProps = {
   }>
 }
 
-export default async function ProjectDetailPage({ params }: ProjectDetailPageProps) {
+export default async function ProjectDetailPage({
+  params,
+}: ProjectDetailPageProps) {
   const { locale: rawLocale, slug } = await params
   const locale = normalizeLocale(rawLocale)
   const project = await getProjectBySlug(slug)
 
   if (!project) {
-    return <section className='py-12 text-center text-gray-500'>Not Found</section>
+    return (
+      <section className="py-12 text-center text-gray-500">Not Found</section>
+    )
   }
 
   const isZh = locale === 'zh'
   // Use bilingual fields
-  const title = isZh ? project.title_zh || project.title_en : project.title_en || project.title_zh
+  const title = isZh
+    ? project.title_zh || project.title_en
+    : project.title_en || project.title_zh
   const subtitle = isZh
     ? project.subtitle_zh || project.subtitle_en
     : project.subtitle_en || project.subtitle_zh
@@ -44,14 +50,16 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
     : project.description_en || project.description_zh
 
   // Try to find cover image in images list to get dimensions
-  const coverObj = (project.images || []).find(img => img.url === project.cover_url)
+  const coverObj = (project.images || []).find(
+    (img) => img.url === project.cover_url
+  )
   const coverWidth = coverObj?.width || 1200
   const coverHeight = coverObj?.height || 800
 
   return (
     <>
-      <div className='flex flex-col gap-4 md:flex-row'>
-        <div className='basis-1/3'>
+      <div className="flex flex-col gap-4 md:flex-row">
+        <div className="basis-1/3">
           {project.cover_url && (
             <Image
               src={project.cover_url}
@@ -59,16 +67,16 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
               width={coverWidth}
               height={coverHeight}
               priority
-              className='w-full h-auto object-cover'
-              sizes='(max-width: 768px) 100vw, 33vw'
+              className="h-auto w-full object-cover"
+              sizes="(max-width: 768px) 100vw, 33vw"
             />
           )}
         </div>
-        <div className='basis-2/3'>
-          <p className='font-bold'>{title}</p>
-          <p className='text-sm whitespace-pre-line'>{subtitle}</p>
+        <div className="basis-2/3">
+          <p className="font-bold">{title}</p>
+          <p className="text-sm whitespace-pre-line">{subtitle}</p>
           <br />
-          <p className='text-sm whitespace-pre-line'>{description}</p>
+          <p className="text-sm whitespace-pre-line">{description}</p>
         </div>
       </div>
       <ProjectImageGrid images={project.images || []} title={title || ''} />

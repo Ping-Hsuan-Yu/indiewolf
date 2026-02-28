@@ -8,14 +8,16 @@ const PUBLIC_LOCALE_PATHS = ['/admin', '/profile', '/auth', '/api']
 const handleI18nRouting = createIntlMiddleware({
   locales: ['zh', 'en'],
   defaultLocale: 'zh',
-  localePrefix: 'always'
+  localePrefix: 'always',
 })
 
 export default async function proxy(req: Request & { nextUrl: URL }) {
   // 1. 初始化 response
   let response = NextResponse.next()
   const pathname = (req as any).nextUrl.pathname as string
-  const shouldHandleLocale = !PUBLIC_LOCALE_PATHS.some(route => pathname.startsWith(route))
+  const shouldHandleLocale = !PUBLIC_LOCALE_PATHS.some((route) =>
+    pathname.startsWith(route)
+  )
 
   if (shouldHandleLocale) {
     response = handleI18nRouting(req as any)
@@ -36,5 +38,5 @@ export default async function proxy(req: Request & { nextUrl: URL }) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|assets/).*)']
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|assets/).*)'],
 }

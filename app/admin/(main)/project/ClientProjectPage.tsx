@@ -7,13 +7,13 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-  DragEndEvent
+  DragEndEvent,
 } from '@dnd-kit/core'
 import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
-  verticalListSortingStrategy
+  verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 import { useState, useEffect } from 'react'
 import { toast } from 'sonner'
@@ -38,7 +38,7 @@ export function ClientProjectPage({ initialProjects }: ClientProjectPageProps) {
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates
+      coordinateGetter: sortableKeyboardCoordinates,
     })
   )
 
@@ -46,19 +46,19 @@ export function ClientProjectPage({ initialProjects }: ClientProjectPageProps) {
     const { active, over } = event
 
     if (over && active.id !== over.id) {
-      setProjects(items => {
-        const oldIndex = items.findIndex(item => item.id === active.id)
-        const newIndex = items.findIndex(item => item.id === over.id)
+      setProjects((items) => {
+        const oldIndex = items.findIndex((item) => item.id === active.id)
+        const newIndex = items.findIndex((item) => item.id === over.id)
         return arrayMove(items, oldIndex, newIndex)
       })
 
-      const oldIndex = projects.findIndex(item => item.id === active.id)
-      const newIndex = projects.findIndex(item => item.id === over.id)
+      const oldIndex = projects.findIndex((item) => item.id === active.id)
+      const newIndex = projects.findIndex((item) => item.id === over.id)
       const reordered = arrayMove(projects, oldIndex, newIndex)
 
       const updates = reordered.map((item, index) => ({
         id: item.id,
-        order_index: index + 1
+        order_index: index + 1,
       }))
 
       try {
@@ -76,16 +76,25 @@ export function ClientProjectPage({ initialProjects }: ClientProjectPageProps) {
   }
 
   return (
-    <div className='space-y-4'>
-      <div className='flex items-center justify-between'>
-        <div className='text-sm text-muted-foreground'>共 {projects.length} 個專案</div>
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <div className="text-muted-foreground text-sm">
+          共 {projects.length} 個專案
+        </div>
         <AddProjectSheet />
       </div>
 
-      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-        <SortableContext items={projects.map(p => p.id)} strategy={verticalListSortingStrategy}>
-          <div className='space-y-3'>
-            {projects.map(project => (
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext
+          items={projects.map((p) => p.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          <div className="space-y-3">
+            {projects.map((project) => (
               <ProjectItem key={project.id} project={project} />
             ))}
           </div>
@@ -93,7 +102,7 @@ export function ClientProjectPage({ initialProjects }: ClientProjectPageProps) {
       </DndContext>
 
       {projects.length === 0 && (
-        <div className='text-center py-12 text-muted-foreground border border-dashed rounded-lg'>
+        <div className="text-muted-foreground rounded-lg border border-dashed py-12 text-center">
           尚無專案，請新增專案
         </div>
       )}

@@ -12,7 +12,7 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
-  CardFooter
+  CardFooter,
 } from '@/components/admin/ui/card'
 import { Input } from '@/components/admin/ui/input'
 import { Spinner } from '@/components/admin/ui/spinner'
@@ -34,7 +34,7 @@ export default function LoginPage() {
 
     const { error: signInError } = await supabase.auth.signInWithPassword({
       email,
-      password
+      password,
     })
 
     if (signInError) {
@@ -48,43 +48,53 @@ export default function LoginPage() {
   }
 
   return (
-    <div className='flex min-h-screen items-center justify-center bg-background px-4'>
-      <Card className='w-full max-w-sm'>
+    <div className="bg-background flex min-h-screen items-center justify-center px-4">
+      <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle className='text-2xl'>管理員登入</CardTitle>
+          <CardTitle className="text-2xl">管理員登入</CardTitle>
           <CardDescription>v1.0</CardDescription>
         </CardHeader>
         <form onSubmit={handleLogin}>
-          <CardContent className='grid gap-4'>
-            <div className='grid gap-2'>
+          <CardContent className="grid gap-4">
+            <div className="grid gap-2">
               <label
-                htmlFor='email'
-                className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+                htmlFor="email"
+                className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
                 ✉️ 帳號
               </label>
               <Input
-                id='email'
-                name='email'
-                type='email'
-                placeholder='m@example.com'
+                id="email"
+                name="email"
+                type="email"
+                placeholder="m@example.com"
                 required
                 disabled={loading}
               />
             </div>
-            <div className='grid gap-2'>
+            <div className="grid gap-2">
               <label
-                htmlFor='password'
-                className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+                htmlFor="password"
+                className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
                 🤫 密碼
               </label>
-              <Input id='password' name='password' type='password' required disabled={loading} />
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                required
+                disabled={loading}
+              />
             </div>
             {error && (
-              <p className='text-sm text-red-500 text-center bg-red-50 p-2 rounded'>{error}</p>
+              <p className="rounded bg-red-50 p-2 text-center text-sm text-red-500">
+                {error}
+              </p>
             )}
           </CardContent>
           <CardFooter>
-            <Button type='submit' className='w-full' disabled={loading}>
+            <Button type="submit" className="w-full" disabled={loading}>
               {loading ? <Spinner /> : '🚀 登入'}
             </Button>
           </CardFooter>

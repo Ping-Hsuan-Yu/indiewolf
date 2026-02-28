@@ -18,7 +18,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-  SheetFooter
+  SheetFooter,
 } from '@/components/admin/ui/sheet'
 import { Textarea } from '@/components/admin/ui/textarea'
 
@@ -78,99 +78,101 @@ export function AddProjectSheet() {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button>
-          <Plus className='mr-2 h-4 w-4' /> 新增專案
+          <Plus className="mr-2 h-4 w-4" /> 新增專案
         </Button>
       </SheetTrigger>
-      <SheetContent className='w-100 sm:w-135 overflow-y-auto'>
+      <SheetContent className="w-100 overflow-y-auto sm:w-135">
         <SheetHeader>
           <SheetTitle>新增專案</SheetTitle>
-          <SheetDescription>建立新的專案並設定初始內容。建立後可再上傳更多圖片。</SheetDescription>
+          <SheetDescription>
+            建立新的專案並設定初始內容。建立後可再上傳更多圖片。
+          </SheetDescription>
         </SheetHeader>
-        <form onSubmit={handleSubmit} className='grid gap-4 py-4'>
-          <div className='grid gap-2'>
-            <Label htmlFor='slug'>Slug (網址代稱)</Label>
+        <form onSubmit={handleSubmit} className="grid gap-4 py-4">
+          <div className="grid gap-2">
+            <Label htmlFor="slug">Slug (網址代稱)</Label>
             <Input
-              id='slug'
+              id="slug"
               value={slug}
-              onChange={e => setSlug(e.target.value)}
-              placeholder='e.g., my-project-name'
+              onChange={(e) => setSlug(e.target.value)}
+              placeholder="e.g., my-project-name"
               required
             />
           </div>
 
-          <div className='grid gap-2'>
-            <Label htmlFor='cover'>專案封面 (Main Cover)</Label>
+          <div className="grid gap-2">
+            <Label htmlFor="cover">專案封面 (Main Cover)</Label>
             <Input
-              id='cover'
-              type='file'
-              accept='image/*'
-              onChange={e => setFile(e.target.files?.[0] || null)}
+              id="cover"
+              type="file"
+              accept="image/*"
+              onChange={(e) => setFile(e.target.files?.[0] || null)}
               required
             />
           </div>
 
-          <div className='grid gap-2'>
-            <Label htmlFor='title_zh'>標題 (中文)</Label>
+          <div className="grid gap-2">
+            <Label htmlFor="title_zh">標題 (中文)</Label>
             <Input
-              id='title_zh'
+              id="title_zh"
               value={titleZh}
-              onChange={e => setTitleZh(e.target.value)}
-              placeholder='輸入中文標題'
+              onChange={(e) => setTitleZh(e.target.value)}
+              placeholder="輸入中文標題"
             />
           </div>
-          <div className='grid gap-2'>
-            <Label htmlFor='title_en'>Title (English)</Label>
+          <div className="grid gap-2">
+            <Label htmlFor="title_en">Title (English)</Label>
             <Input
-              id='title_en'
+              id="title_en"
               value={titleEn}
-              onChange={e => setTitleEn(e.target.value)}
-              placeholder='Enter English Title'
+              onChange={(e) => setTitleEn(e.target.value)}
+              placeholder="Enter English Title"
             />
           </div>
 
-          <div className='grid gap-2'>
-            <Label htmlFor='subtitle_zh'>副標題 (中文)</Label>
+          <div className="grid gap-2">
+            <Label htmlFor="subtitle_zh">副標題 (中文)</Label>
             <Textarea
-              id='subtitle_zh'
+              id="subtitle_zh"
               value={subtitleZh}
-              onChange={e => setSubtitleZh(e.target.value)}
-              placeholder='輸入中文副標題'
+              onChange={(e) => setSubtitleZh(e.target.value)}
+              placeholder="輸入中文副標題"
             />
           </div>
-          <div className='grid gap-2'>
-            <Label htmlFor='subtitle_en'>Subtitle (English)</Label>
+          <div className="grid gap-2">
+            <Label htmlFor="subtitle_en">Subtitle (English)</Label>
             <Textarea
-              id='subtitle_en'
+              id="subtitle_en"
               value={subtitleEn}
-              onChange={e => setSubtitleEn(e.target.value)}
-              placeholder='Enter English Subtitle'
+              onChange={(e) => setSubtitleEn(e.target.value)}
+              placeholder="Enter English Subtitle"
             />
           </div>
 
-          <div className='grid gap-2'>
-            <Label htmlFor='description_zh'>說明 (中文)</Label>
+          <div className="grid gap-2">
+            <Label htmlFor="description_zh">說明 (中文)</Label>
             <Textarea
-              id='description_zh'
+              id="description_zh"
               value={descriptionZh}
-              onChange={e => setDescriptionZh(e.target.value)}
-              placeholder='輸入中文說明'
+              onChange={(e) => setDescriptionZh(e.target.value)}
+              placeholder="輸入中文說明"
             />
           </div>
-          <div className='grid gap-2'>
-            <Label htmlFor='description_en'>Description (English)</Label>
+          <div className="grid gap-2">
+            <Label htmlFor="description_en">Description (English)</Label>
             <Textarea
-              id='description_en'
+              id="description_en"
               value={descriptionEn}
-              onChange={e => setDescriptionEn(e.target.value)}
-              placeholder='Enter English Description'
+              onChange={(e) => setDescriptionEn(e.target.value)}
+              placeholder="Enter English Description"
             />
           </div>
 
           <SheetFooter>
-            <Button type='submit' disabled={loading || !file || !slug}>
+            <Button type="submit" disabled={loading || !file || !slug}>
               {loading ? (
                 <>
-                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   處理中
                 </>
               ) : (

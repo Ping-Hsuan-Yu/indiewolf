@@ -17,7 +17,7 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-  SheetTrigger
+  SheetTrigger,
 } from '@/components/admin/ui/sheet'
 
 export function AddSocialLinkSheet() {
@@ -60,51 +60,53 @@ export function AddSocialLinkSheet() {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button>
-          <Plus className='mr-2 h-4 w-4' /> 新增連結
+          <Plus className="mr-2 h-4 w-4" /> 新增連結
         </Button>
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
           <SheetTitle>新增社群連結</SheetTitle>
-          <SheetDescription>新增一個外部連結（如 Instagram, Twitter 等）。</SheetDescription>
+          <SheetDescription>
+            新增一個外部連結（如 Instagram, Twitter 等）。
+          </SheetDescription>
         </SheetHeader>
-        <form onSubmit={handleSubmit} className='grid gap-4 py-4'>
-          <div className='grid gap-2'>
-            <Label htmlFor='label'>標籤 (Label)</Label>
+        <form onSubmit={handleSubmit} className="grid gap-4 py-4">
+          <div className="grid gap-2">
+            <Label htmlFor="label">標籤 (Label)</Label>
             <Input
-              id='label'
+              id="label"
               value={label}
-              onChange={e => setLabel(e.target.value)}
-              placeholder='e.g. Instagram'
+              onChange={(e) => setLabel(e.target.value)}
+              placeholder="e.g. Instagram"
               required
             />
           </div>
-          <div className='grid gap-2'>
-            <Label htmlFor='url'>網址 (URL)</Label>
+          <div className="grid gap-2">
+            <Label htmlFor="url">網址 (URL)</Label>
             <Input
-              id='url'
-              type='url'
+              id="url"
+              type="url"
               value={url}
-              onChange={e => setUrl(e.target.value)}
-              placeholder='https://...'
+              onChange={(e) => setUrl(e.target.value)}
+              placeholder="https://..."
               required
             />
           </div>
-          <div className='grid gap-2'>
-            <Label htmlFor='logo'>圖示 (Logo)</Label>
+          <div className="grid gap-2">
+            <Label htmlFor="logo">圖示 (Logo)</Label>
             <Input
-              id='logo'
-              type='file'
-              accept='image/*'
-              onChange={e => setFile(e.target.files?.[0] || null)}
+              id="logo"
+              type="file"
+              accept="image/*"
+              onChange={(e) => setFile(e.target.files?.[0] || null)}
               required
             />
           </div>
           <SheetFooter>
-            <Button type='submit' disabled={loading || !file}>
+            <Button type="submit" disabled={loading || !file}>
               {loading ? (
                 <>
-                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   儲存中
                 </>
               ) : (

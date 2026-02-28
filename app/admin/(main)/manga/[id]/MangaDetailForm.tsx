@@ -7,14 +7,14 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-  DragEndEvent
+  DragEndEvent,
 } from '@dnd-kit/core'
 import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
   rectSortingStrategy,
-  useSortable
+  useSortable,
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import Image from 'next/image'
@@ -26,7 +26,7 @@ import {
   updateMangaDetail,
   uploadMangaImages,
   deleteMangaImage,
-  updateMangaImagesOrder
+  updateMangaImagesOrder,
 } from '@/app/_actions/admin/manga'
 import { Tables } from '@/types/database.types'
 
@@ -39,13 +39,16 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle
+  AlertDialogTitle,
 } from '@/components/admin/ui/alert-dialog'
 import { Button } from '@/components/admin/ui/button'
 import { Input } from '@/components/admin/ui/input'
 import { Label } from '@/components/admin/ui/label'
 import { Separator } from '@/components/admin/ui/separator'
-import { ToggleGroup, ToggleGroupItem } from '@/components/admin/ui/toggle-group'
+import {
+  ToggleGroup,
+  ToggleGroupItem,
+} from '@/components/admin/ui/toggle-group'
 import { Textarea } from '@/components/admin/ui/textarea'
 
 import { CreatableSelect } from '../CreatableSelect'
@@ -62,19 +65,26 @@ interface MangaDetailFormProps {
 // Sortable Image Item Component
 function SortableImageItem({
   image,
-  onDelete
+  onDelete,
 }: {
   image: Tables<'manga_images'>
   onDelete: (id: string) => Promise<boolean>
 }) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-    id: image.id
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: image.id,
   })
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    opacity: isDragging ? 0.5 : 1
+    opacity: isDragging ? 0.5 : 1,
   }
 
   const [isDeleting, setIsDeleting] = useState(false)
@@ -94,30 +104,31 @@ function SortableImageItem({
       style={style}
       {...attributes}
       {...listeners}
-      className='group relative aspect-square cursor-move! overflow-hidden rounded-md border bg-muted touch-none'>
+      className="group bg-muted relative aspect-square cursor-move! touch-none overflow-hidden rounded-md border"
+    >
       <Image
         src={image.url}
-        alt='Manga Page'
+        alt="Manga Page"
         fill
-        className='object-contain'
-        sizes='(max-width: 768px) 33vw, 20vw'
+        className="object-contain"
+        sizes="(max-width: 768px) 33vw, 20vw"
       />
-      <div className='absolute right-1 top-1 opacity-0 transition-opacity group-hover:opacity-100'>
+      <div className="absolute top-1 right-1 opacity-0 transition-opacity group-hover:opacity-100">
         <Button
-          size='icon'
-          variant='ghost'
+          size="icon"
+          variant="ghost"
           destructive
-          onClick={e => {
+          onClick={(e) => {
             e.stopPropagation()
             setDeleteDialogOpen(true)
           }}
           disabled={isDeleting}
-          onPointerDown={e => e.stopPropagation()} // Prevent drag
+          onPointerDown={(e) => e.stopPropagation()} // Prevent drag
         >
           {isDeleting ? (
-            <Loader2 className='h-3 w-3 animate-spin' />
+            <Loader2 className="h-3 w-3 animate-spin" />
           ) : (
-            <Trash2 className='h-3 w-3' />
+            <Trash2 className="h-3 w-3" />
           )}
         </Button>
       </div>
@@ -132,18 +143,22 @@ function SortableImageItem({
             <AlertDialogAction
               onClick={() => setDeleteDialogOpen(false)}
               disabled={isDeleting}
-              className='bg-muted text-muted-foreground hover:bg-muted/80'>
+              className="bg-muted text-muted-foreground hover:bg-muted/80"
+            >
               取消
             </AlertDialogAction>
             <Button
-              variant='default'
+              variant="default"
               destructive
-              onClick={e => {
+              onClick={(e) => {
                 e.stopPropagation()
                 handleConfirmDelete()
               }}
-              disabled={isDeleting}>
-              {isDeleting ? <Loader2 className='mr-2 h-4 w-4 animate-spin' /> : null}
+              disabled={isDeleting}
+            >
+              {isDeleting ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : null}
               確認刪除
             </Button>
           </AlertDialogFooter>
@@ -158,7 +173,7 @@ function ImageGrid({
   images,
   locale,
   mangaId,
-  onUpdate
+  onUpdate,
 }: {
   images: Tables<'manga_images'>[]
   locale: 'zh' | 'en'
@@ -168,7 +183,7 @@ function ImageGrid({
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
     useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates
+      coordinateGetter: sortableKeyboardCoordinates,
     })
   )
   const [isUploading, setIsUploading] = useState(false)
@@ -176,8 +191,8 @@ function ImageGrid({
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event
     if (over && active.id !== over.id) {
-      const oldIndex = images.findIndex(img => img.id === active.id)
-      const newIndex = images.findIndex(img => img.id === over.id)
+      const oldIndex = images.findIndex((img) => img.id === active.id)
+      const newIndex = images.findIndex((img) => img.id === over.id)
 
       const newImages = arrayMove(images, oldIndex, newIndex)
 
@@ -187,7 +202,7 @@ function ImageGrid({
 
       const updates = newImages.map((img, idx) => ({
         id: img.id,
-        order_index: idx
+        order_index: idx,
       }))
 
       await updateMangaImagesOrder(updates)
@@ -204,13 +219,13 @@ function ImageGrid({
     let completed = 0
 
     const getProgressToastContent = (comp: number, tot: number) => (
-      <div className='w-full min-w-50 space-y-2'>
-        <div className='text-sm font-medium'>
+      <div className="w-full min-w-50 space-y-2">
+        <div className="text-sm font-medium">
           已完成 {comp} 張，共 {tot} 張
         </div>
-        <div className='h-2 w-full overflow-hidden rounded-full bg-secondary'>
+        <div className="bg-secondary h-2 w-full overflow-hidden rounded-full">
           <div
-            className='h-full bg-primary transition-all duration-300'
+            className="bg-primary h-full transition-all duration-300"
             style={{ width: `${(comp / tot) * 100}%` }}
           />
         </div>
@@ -220,7 +235,7 @@ function ImageGrid({
     const toastId = toast.loading('上傳進度...', {
       classNames: { content: 'w-full' },
       position: 'bottom-right',
-      description: getProgressToastContent(0, total)
+      description: getProgressToastContent(0, total),
     })
 
     for (let i = 0; i < files.length; i++) {
@@ -236,7 +251,7 @@ function ImageGrid({
           id: toastId,
           position: 'bottom-right',
           duration: 5000,
-          closeButton: true
+          closeButton: true,
         })
         setIsUploading(false)
         e.target.value = ''
@@ -249,7 +264,7 @@ function ImageGrid({
         classNames: { content: 'w-full' },
         id: toastId,
         position: 'bottom-right',
-        description: getProgressToastContent(completed, total)
+        description: getProgressToastContent(completed, total),
       })
 
       // Update the UI progressively
@@ -262,7 +277,7 @@ function ImageGrid({
       classNames: { content: 'w-full' },
       duration: 180000,
       closeButton: true,
-      description: getProgressToastContent(total, total)
+      description: getProgressToastContent(total, total),
     })
 
     setIsUploading(false)
@@ -282,36 +297,46 @@ function ImageGrid({
   }
 
   return (
-    <div className='space-y-4 rounded-lg border p-4 bg-card'>
-      <h4 className='font-medium'>{locale === 'zh' ? '中文內頁' : 'English'}</h4>
+    <div className="bg-card space-y-4 rounded-lg border p-4">
+      <h4 className="font-medium">
+        {locale === 'zh' ? '中文內頁' : 'English'}
+      </h4>
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
         onDragEnd={handleDragEnd}
-        id={`dnd-${locale}`}>
-        <SortableContext items={images.map(i => i.id)} strategy={rectSortingStrategy}>
-          <div className='grid grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-5'>
-            {images.map(img => (
-              <SortableImageItem key={img.id} image={img} onDelete={handleDelete} />
+        id={`dnd-${locale}`}
+      >
+        <SortableContext
+          items={images.map((i) => i.id)}
+          strategy={rectSortingStrategy}
+        >
+          <div className="grid grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-5">
+            {images.map((img) => (
+              <SortableImageItem
+                key={img.id}
+                image={img}
+                onDelete={handleDelete}
+              />
             ))}
             {/* Upload Trigger Button */}
-            <div className='aspect-square'>
-              <label className='flex h-full w-full cursor-pointer flex-col items-center justify-center rounded-md border-2 border-dashed border-muted-foreground/25 hover:border-muted-foreground/50 hover:bg-muted/50 transition-colors'>
+            <div className="aspect-square">
+              <label className="border-muted-foreground/25 hover:border-muted-foreground/50 hover:bg-muted/50 flex h-full w-full cursor-pointer flex-col items-center justify-center rounded-md border-2 border-dashed transition-colors">
                 {isUploading ? (
-                  <Loader2 className='h-6 w-6 animate-spin text-muted-foreground' />
+                  <Loader2 className="text-muted-foreground h-6 w-6 animate-spin" />
                 ) : (
                   <>
-                    <Plus className='h-6 w-6 text-muted-foreground' />
-                    <span className='mt-2 text-xs text-muted-foreground'>
+                    <Plus className="text-muted-foreground h-6 w-6" />
+                    <span className="text-muted-foreground mt-2 text-xs">
                       {isUploading ? 'Uploading...' : 'Add Images'}
                     </span>
                   </>
                 )}
                 <input
-                  type='file'
+                  type="file"
                   multiple
-                  accept='image/*'
-                  className='hidden'
+                  accept="image/*"
+                  className="hidden"
                   onChange={handleUpload}
                   disabled={isUploading}
                 />
@@ -335,12 +360,13 @@ export function MangaDetailForm({ manga, years }: MangaDetailFormProps) {
     title_en: manga.title_en || '',
     summary_zh: manga.summary_zh || '',
     summary_en: manga.summary_en || '',
-    is_completed: manga.is_completed ?? false
+    is_completed: manga.is_completed ?? false,
   })
 
   // Filter images by locale
-  const zhImages = manga.images?.filter(img => img.locale === 'zh' || !img.locale) || []
-  const enImages = manga.images?.filter(img => img.locale === 'en') || []
+  const zhImages =
+    manga.images?.filter((img) => img.locale === 'zh' || !img.locale) || []
+  const enImages = manga.images?.filter((img) => img.locale === 'en') || []
 
   const refreshData = () => {
     router.refresh()
@@ -364,90 +390,119 @@ export function MangaDetailForm({ manga, years }: MangaDetailFormProps) {
   }
 
   return (
-    <div className='space-y-8 pb-10'>
+    <div className="space-y-8 pb-10">
       {/* Header Actions */}
-      <div className='flex items-center justify-between'>
-        <Button variant='secondary' onClick={() => router.back()}>
-          <ChevronLeft className='mr-2 h-4 w-4' />
+      <div className="flex items-center justify-between">
+        <Button variant="secondary" onClick={() => router.back()}>
+          <ChevronLeft className="mr-2 h-4 w-4" />
           返回
         </Button>
         <Button onClick={handleSave} disabled={loading}>
-          {loading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
+          {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           儲存
         </Button>
       </div>
 
       {/* Top Section: Info & Cover */}
-      <div className='grid gap-8 md:grid-cols-[300px_1fr]'>
+      <div className="grid gap-8 md:grid-cols-[300px_1fr]">
         {/* Cover Image - Read Only for now based on actions, creation sets cover */}
-        <div className='space-y-2'>
-          <div className='relative aspect-square overflow-hidden rounded-lg border bg-muted'>
-            <Image src={manga.cover_url} alt='Cover' fill className='object-contain' />
+        <div className="space-y-2">
+          <div className="bg-muted relative aspect-square overflow-hidden rounded-lg border">
+            <Image
+              src={manga.cover_url}
+              alt="Cover"
+              fill
+              className="object-contain"
+            />
           </div>
         </div>
 
         {/* Fields */}
-        <div className='grid gap-6 md:grid-cols-2'>
+        <div className="grid gap-6 md:grid-cols-2">
           {/* Left Column (Desktop) */}
-          <div className='flex flex-col gap-4'>
-            <div className='space-y-2'>
+          <div className="flex flex-col gap-4">
+            <div className="space-y-2">
               <Label>年份</Label>
               <CreatableSelect
                 options={years}
                 value={formData.year}
-                onChange={val => setFormData(prev => ({ ...prev, year: val }))}
+                onChange={(val) =>
+                  setFormData((prev) => ({ ...prev, year: val }))
+                }
               />
             </div>
-            <div className='space-y-2'>
+            <div className="space-y-2">
               <Label>連載狀態</Label>
               <ToggleGroup
-                type='single'
+                type="single"
                 value={formData.is_completed ? 'completed' : 'ongoing'}
-                onValueChange={val => {
-                  if (val) setFormData(prev => ({ ...prev, is_completed: val === 'completed' }))
+                onValueChange={(val) => {
+                  if (val)
+                    setFormData((prev) => ({
+                      ...prev,
+                      is_completed: val === 'completed',
+                    }))
                 }}
-                variant='outline'
-                className='justify-start gap-0'>
-                <ToggleGroupItem value='ongoing' className='rounded-r-none border-r-0'>
+                variant="outline"
+                className="justify-start gap-0"
+              >
+                <ToggleGroupItem
+                  value="ongoing"
+                  className="rounded-r-none border-r-0"
+                >
                   連載中
                 </ToggleGroupItem>
-                <ToggleGroupItem value='completed' className='rounded-l-none'>
+                <ToggleGroupItem value="completed" className="rounded-l-none">
                   連載結束
                 </ToggleGroupItem>
               </ToggleGroup>
             </div>
-            <div className='space-y-2'>
+            <div className="space-y-2">
               <Label>標題 (中文)</Label>
               <Input
                 value={formData.title_zh}
-                onChange={e => setFormData(prev => ({ ...prev, title_zh: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, title_zh: e.target.value }))
+                }
               />
             </div>
-            <div className='space-y-2'>
+            <div className="space-y-2">
               <Label>Title (English)</Label>
               <Input
                 value={formData.title_en}
-                onChange={e => setFormData(prev => ({ ...prev, title_en: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, title_en: e.target.value }))
+                }
               />
             </div>
           </div>
 
           {/* Right Column (Desktop) */}
-          <div className='flex flex-col gap-4'>
-            <div className='space-y-2'>
+          <div className="flex flex-col gap-4">
+            <div className="space-y-2">
               <Label>簡介 (中文)</Label>
               <Textarea
-                className='min-h-30'
+                className="min-h-30"
                 value={formData.summary_zh}
-                onChange={e => setFormData(prev => ({ ...prev, summary_zh: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    summary_zh: e.target.value,
+                  }))
+                }
               />
             </div>
-            <div className='space-y-2'>
+            <div className="space-y-2">
               <Label>Summary (English)</Label>
               <Textarea
-                className='min-h-30'
+                className="min-h-30"
                 value={formData.summary_en}
-                onChange={e => setFormData(prev => ({ ...prev, summary_en: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    summary_en: e.target.value,
+                  }))
+                }
               />
             </div>
           </div>
@@ -457,11 +512,21 @@ export function MangaDetailForm({ manga, years }: MangaDetailFormProps) {
       <Separator />
 
       {/* Image Sections */}
-      <ImageGrid mangaId={manga.id} locale='zh' images={zhImages} onUpdate={refreshData} />
+      <ImageGrid
+        mangaId={manga.id}
+        locale="zh"
+        images={zhImages}
+        onUpdate={refreshData}
+      />
 
-      <div className='border-t my-6' />
+      <div className="my-6 border-t" />
 
-      <ImageGrid mangaId={manga.id} locale='en' images={enImages} onUpdate={refreshData} />
+      <ImageGrid
+        mangaId={manga.id}
+        locale="en"
+        images={enImages}
+        onUpdate={refreshData}
+      />
     </div>
   )
 }

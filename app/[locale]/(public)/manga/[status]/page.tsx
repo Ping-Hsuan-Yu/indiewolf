@@ -12,7 +12,7 @@ type MangaStatus = (typeof VALID_STATUSES)[number]
 export const dynamicParams = true
 
 export function generateStaticParams() {
-  return VALID_STATUSES.map(status => ({ status }))
+  return VALID_STATUSES.map((status) => ({ status }))
 }
 
 type MangaStatusPageProps = {
@@ -22,7 +22,9 @@ type MangaStatusPageProps = {
   }>
 }
 
-export default async function MangaStatusPage({ params }: MangaStatusPageProps) {
+export default async function MangaStatusPage({
+  params,
+}: MangaStatusPageProps) {
   const { locale: rawLocale, status } = await params
 
   if (!VALID_STATUSES.includes(status as MangaStatus)) {
@@ -31,16 +33,16 @@ export default async function MangaStatusPage({ params }: MangaStatusPageProps) 
 
   const locale = normalizeLocale(rawLocale)
   const works = await getMangaWorksByStatus(status as MangaStatus)
-  
+
   const isZh = locale === 'zh'
 
-  const entries = works.map(work => {
+  const entries = works.map((work) => {
     const title = isZh ? work.title_zh : work.title_en
 
     return {
       ...work,
       title: title ?? work.title_zh ?? '',
-      description: (isZh ? work.summary_zh : work.summary_en) ?? undefined
+      description: (isZh ? work.summary_zh : work.summary_en) ?? undefined,
     }
   })
 

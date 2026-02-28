@@ -17,7 +17,7 @@ type MangaStatus = 'ongoing' | 'completed'
 
 const STATUS_OPTIONS: { value: MangaStatus; label: string }[] = [
   { value: 'ongoing', label: '連載中' },
-  { value: 'completed', label: '連載結束' }
+  { value: 'completed', label: '連載結束' },
 ]
 
 interface ClientPageProps {
@@ -47,29 +47,36 @@ export function ClientPage({ years, initialWorks }: ClientPageProps) {
 
   const handleUploadSuccess = async () => {
     // Refresh current tab data
-    const refreshed = await getMangaWorksByStatusAction(selectedStatus === 'completed')
+    const refreshed = await getMangaWorksByStatusAction(
+      selectedStatus === 'completed'
+    )
     setWorks(refreshed)
   }
 
   return (
-    <div className='space-y-6'>
-      <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
-        <div className='flex flex-wrap gap-2'>
-          {STATUS_OPTIONS.map(option => (
+    <div className="space-y-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-wrap gap-2">
+          {STATUS_OPTIONS.map((option) => (
             <Button
               key={option.value}
               variant={selectedStatus === option.value ? 'default' : 'outline'}
               onClick={() => handleStatusChange(option.value)}
-              className='min-w-16'>
+              className="min-w-16"
+            >
               {option.label}
             </Button>
           ))}
         </div>
 
-        <div className='flex items-center gap-4'>
-          <div className='flex items-center space-x-2'>
-            <Switch id='reorder-mode' checked={isReorderMode} onCheckedChange={setIsReorderMode} />
-            <Label htmlFor='reorder-mode'>排序模式</Label>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center space-x-2">
+            <Switch
+              id="reorder-mode"
+              checked={isReorderMode}
+              onCheckedChange={setIsReorderMode}
+            />
+            <Label htmlFor="reorder-mode">排序模式</Label>
           </div>
           <AddMangaSheet years={years} onUploadSuccess={handleUploadSuccess} />
         </div>
@@ -80,7 +87,7 @@ export function ClientPage({ years, initialWorks }: ClientPageProps) {
       ) : (
         <MangaGrid
           works={works}
-          onDelete={id => setWorks(prev => prev.filter(w => w.id !== id))}
+          onDelete={(id) => setWorks((prev) => prev.filter((w) => w.id !== id))}
           isReorderMode={isReorderMode}
           onReorder={setWorks}
         />
