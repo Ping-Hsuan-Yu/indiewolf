@@ -1,92 +1,124 @@
-# IndieWolf 官網調整事項 Checklist 20251212
+# TODO
 
-## 一、網站功能與結構調整
+- [ ] 刪除圖片cloudinary同時刪除
 
-- [x] 調整雙語切換方式  
-  - [x] 移除 emoji 作為語言切換  
-  - [x] 改為常見語言選單（如：ZH / EN 或 Language dropdown）
+- [ ] 漫畫寬版雙頁
+- [ ] 半雙頁瀏覽模式
 
-- [ ] Project 分頁圖片可點擊放大（桌機）
-  - [ ] 點擊圖片開啟大圖（lightbox / modal / gallery）
+- [ ] TanStack Query
+- [ ] Zustand
 
-- [x] 加脆
-- [x] email 改複製
+- [ ] UIUX 邏輯統一 (hover / click / shadow / rounded)
 
----
+# DONE
 
-## 二、內容架構調整（分頁整併）
+## 網站功能與結構調整
 
-https://drive.google.com/drive/folders/13aV04aGkdnFwmr7aplmSQibRSpPaxXwo
+- [x] Project 分頁圖片可點擊放大（桌機）
+  - [x] 點擊圖片開啟大圖（lightbox / modal / gallery）
+- [x] 官網的聯繫用email需要改成：alchemy17th@gmail.com
 
-- [x] 整併子分頁內容至 Project
-  - [x] 將「Books & Zines」內容移入 Project
-  - [x] Project 呈現方式調整
-    - [x] 首圖為封面或第一頁
-    - [x] 下方展開顯示完整作品內容
+## 後台管理
 
-- [x] 調整 Manga 分頁定位
-  - [x] Manga 作為未來漫畫連載專用分頁
-  - [x] 預計 2026 年 3 月開始連載
+- [x] 測試與正式資料庫
+- [x] 後台編輯前台資料
+- [x] Sql function: 根據project slug / illu_year / manga_year 自動更新 nav
+- [x] 統一三種管理頁面在同一個邏輯下
+- [x] https://nextjs.org/docs/app/guides/incremental-static-regeneration
 
----
-
-## 三、內容更新（進行中）
-
-- [x] 更新 Project 專案（共 6 件）
-  - [x] 專案 1
-  - [x] 專案 2
-  - [x] 專案 3
-  - [x] 專案 4
-  - [x] 專案 5
-  - [x] 專案 6
-  - [x] 其中 1 件專案的 2 個素材待案主確認（預計週日回覆）
-
-- [x] 專案圖片處理
-  - [x] 直接使用原始圖片檔（不需事先轉 webp）
-
----
-
-## 四、漫畫雙語內容調整
+- [x] 環境區分
+  - [x] 建立測試站（可顯示未完整內容）
+  - [x] 建立正式站（僅顯示確認完成內容）
 
 - [x] 漫畫內容支援中 / 英切換
-  - [x] 中文版本漫畫圖片
-  - [x] 英文台詞版本漫畫圖片（待提供）
-  - [x] 語言切換時同步切換對應圖片
+
+- [x] Next Cloudinary
+  - [x] not src but public_id
+  - [x] 資料表資料型態設定
+  - [x] 使用 cldimage 改寫 型別重新設定
+
+- [x] service?? actions??
+
+- [x] 排序時關閉啟用與刪除功能
+
+- [x] manga nav 新增 正在連載(先不顯示) / 連載結束
+- [x] 導覽列自動更新
+- [x] 左封面 右名稱 敘述 年份
+
+npx supabase gen types typescript --project-id "$PROJECT_REF" --schema public > types/database.types.ts
 
 ---
 
-## 五、系統與後續規劃
+# 重大變化 2026/02/22
 
-- [ ] 資料庫內容管理
-  - [x] 全站內容已資料庫化
-  - [ ] 後台系統完成後可由後台上傳／修改內容
-  - [ ] 要有排序功能
+## `dev` vs `main` 更新摘要
 
-- [ ] 環境區分
-  - [ ] 建立測試站（可顯示未完整內容）
-  - [ ] 建立正式站（僅顯示確認完成內容）
+> 18 commits · 145 files changed · +14,483 / −2,756
 
-- [ ] 會員制服務（待討論）
-  - [ ] 規劃會員制功能範圍
-  - [ ] 第一階段：Email 帳密註冊 / 登入
-  - [ ] 參考既有會員制網站案例（elephant）
+### 1. 後台管理系統 (Admin Panel)
+
+- 全新 admin 路由結構：`/admin/(auth)` 登入驗證 + `/admin/(main)` 管理介面
+- 新增 **Illustration / Manga / Project / About** 四大管理頁面（CRUD + 排序 + 啟用/停用）
+- 引入 **shadcn/ui** 元件庫（Button, Dialog, Sheet, Sidebar, Tabs, ToggleGroup 等）
+- Login 頁面與 Logout 功能
+- Admin Dashboard `metadata` 與首頁簡化
+
+### 2. 架構重構
+
+- **Service → Actions 模式**：刪除 `lib/services/` 舊服務層，遷移為 `app/_actions/admin/` + `app/_actions/public/` Server Actions
+- **Supabase 整合強化**：
+  - 新增 `utils/supabase/` — `client.ts` / `server.ts` / `admin.ts` / `middleware.ts`
+  - 自動產出 `types/database.types.ts`，完整 type-safe
+- **Import statements** 全面重新排序統一
+
+### 3. 漫畫 (Manga) 路由重構
+
+- 路由從 **年份制** (`/manga/[year]`) 改為 **狀態制** (`/manga/[status]`：`ongoing` / `completed`)
+- 新增 `MangaStatusNav` 元件，頁面頂部切換連載狀態
+- DB 新增 `is_completed` 欄位與狀態翻譯 (`manga__completed` / `manga__ongoing`)
+- `next.config.mjs` redirect：`/:locale/manga` → `/:locale/manga/completed`
+
+### 4. 前端圖片與 Gallery 優化
+
+- 整合 **yet-another-react-lightbox**，替換舊 Gallery 元件（`BooksGallery` / `IllustrationGallery` / `MangaGallery` 刪除）
+- 新增 `OptimizedImage` / `OptimizedImage4Lightbox` 元件
+- 全域圖片保護（`GlobalImageProtection`）+ `usePreventImageActions` hook
+- 全域 error 與 404 頁面實作
+
+### 5. 導覽列同步
+
+- 新增 `sync-nav` utility，admin CRUD 操作時自動同步 `nav_items`
+- `ui_translations` 同步與新增翻譯項目
+
+### 6. 設定與 DevOps
+
+- **Supabase DB Migration** 工作流建立：`supabase/` 目錄 + baseline migration + config
+- `serverActions.bodySizeLimit` 調整為 `1000mb`
+- 移除 dark mode 與 `tailwind.config.ts`
+- 新增 `.nvmrc`、`components.json`、`proxy.ts`
+- 自訂字型 `Gambetta Variable` 引入
 
 ---
 
-## 六、行政與溝通事項
+## 客戶版更新摘要 — 2026/02/22
 
-- [x] 報價與費用確認
-  - [x] 提供調整項目報價
-  - [x] 如有額外服務或第三方費用另行說明
+### 🎨 網站前台
 
-- [x] 素材交付與追蹤
-  - [x] 已收到 6 件 Project 專案素材（Google Drive）
-  - [x] 追蹤英文版漫畫圖片素材交付
+- **漫畫分類方式調整**：漫畫頁面從依「年份」分類改為依「連載狀態」分類，分為「連載中」與「連載結束」兩個分頁，更直覺地瀏覽作品
+- **圖片保護機制**：全站圖片加入右鍵保護，防止未經授權的下載與複製
+- **錯誤頁面優化**：當頁面不存在或發生錯誤時，會顯示友善的提示頁面而非空白畫面
 
-## 七、漫畫連載
+### 🔧 後台管理
 
-- [ ] 直接抄jump
+- **全新後台管理介面**：新增獨立的管理後台，可直接在線上編輯網站內容
+  - 插畫管理：新增、編輯、排序、啟用/停用作品
+  - 漫畫管理：新增、編輯、排序、切換連載狀態
+  - 專案管理：新增、編輯、排序作品
+  - 關於頁面：編輯個人資料與社群連結
+- **導覽列自動更新**：後台新增或刪除作品時，網站導覽列會自動同步更新，不再需要手動處理
+- **登入系統**：後台新增登入驗證，確保只有授權人員可編輯內容
 
-## 參考
-* [Jump](https://shonenjumpplus.com/series)
-* [一拳超人](http://galaxyheavyblow.web.fc2.com/)
+### 📦 其他改進
+
+- 網站整體效能與穩定性提升
+- 資料庫版本管理機制建立，確保資料安全與可追溯性

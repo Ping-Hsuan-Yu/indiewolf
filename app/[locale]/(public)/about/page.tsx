@@ -1,34 +1,38 @@
 export const dynamic = 'force-dynamic'
-import PublicNavbar from '@/components/public/PublicNavbar'
-import Footer from '@/components/public/Footer'
+
+import { getAboutPageData } from '@/app/_actions/public/about'
 import { normalizeLocale } from '@/lib/i18n/config'
-import { AboutService } from '@/lib/services/aboutService'
+
+import Footer from '@/components/public/Footer'
+import PublicNavbar from '@/components/public/PublicNavbar'
+
 import ContactLinks from './ContactLinks'
 
 type AboutPageProps = {
-  params: {
+  params: Promise<{
     locale: string
-  }
+  }>
 }
 
 export default async function AboutPage({ params }: AboutPageProps) {
-  const locale = normalizeLocale(params.locale)
-  const { bio, profileImage, contactLinks } = await AboutService.getPageData(locale)
+  const { locale: rawLocale } = await params
+  const locale = normalizeLocale(rawLocale)
+  const { bio, profileImage, contactLinks } = await getAboutPageData(locale)
 
   return (
-    <div className='h-dvh flex flex-col'>
+    <div className="flex h-dvh flex-col">
       <PublicNavbar />
-      <main className='m-auto'>
+      <main className="m-auto">
         <div>
-          <div className='flex flex-col-reverse md:flex-row items-center gap-4'>
+          <div className="flex flex-col-reverse items-center gap-4 md:flex-row">
             <div>
               <p>{bio}</p>
             </div>
             <div>
-              <img src={profileImage} className='max-w-64' alt='Lin Chao Yu' />
+              <img src={profileImage} className="max-w-64" alt="Lin Chao Yu" />
             </div>
           </div>
-          <div className='flex gap-4 items-center mt-8'>
+          <div className="mt-8 flex items-center gap-4">
             <ContactLinks links={contactLinks} locale={locale} />
           </div>
         </div>

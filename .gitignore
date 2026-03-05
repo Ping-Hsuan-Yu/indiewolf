@@ -150,3 +150,6 @@ styled-system-studio
 
 # Docker volumes
 docker/postgres/data/
+
+# Supabase
+.supabase/

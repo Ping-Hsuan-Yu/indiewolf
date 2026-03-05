@@ -1,8 +1,14 @@
-'use client';
+'use client'
 
-import { useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl'
 
 export default function Footer() {
-    const t = useTranslations('footer');
-    return <footer className="text-center text-sm py-8 mt-auto">{t('copyright')}</footer>;
+  const t = useTranslations('footer')
+  return (
+    <footer className="mt-auto py-8 text-center text-sm">
+      {t('copyright')}
+      <br />
+      <span className="text-[9px] text-gray-400">{t('announcement')}</span>
+    </footer>
+  )
 }
