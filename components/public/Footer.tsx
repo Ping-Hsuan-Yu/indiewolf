@@ -7,6 +7,8 @@ export default function Footer() {
   return (
     <footer className="mt-auto py-8 text-center text-sm">
       {t('copyright')}
+      <br />
+      <span className="text-[9px] text-gray-400">{t('announcement')}</span>
     </footer>
   )
 }
