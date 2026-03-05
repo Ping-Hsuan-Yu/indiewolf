@@ -104,8 +104,12 @@ export function MangaItem({ work, onDelete, isReorderMode }: MangaItemProps) {
     >
       <Link
         href={`/admin/manga/${work.id}`}
-        className="block space-y-2"
-        onClick={(e) => isReorderMode && e.preventDefault()}
+        className={`block space-y-2 ${isReorderMode ? 'pointer-events-none select-none' : ''}`}
+        onClick={(e) => {
+          if (isReorderMode) {
+            e.preventDefault()
+          }
+        }}
       >
         <div className="bg-muted relative aspect-square overflow-hidden rounded-md border">
           <Image
