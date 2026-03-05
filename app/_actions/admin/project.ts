@@ -83,7 +83,7 @@ export async function createProject(formData: FormData) {
   }
 
   revalidatePath('/admin/project')
-  revalidatePath('/[locale]/project', 'layout')
+  revalidatePath('/[locale]/(public)/project', 'layout')
   return { success: true }
 }
 
@@ -119,7 +119,7 @@ export async function updateProject(id: string, formData: FormData) {
 
   revalidatePath(`/admin/project/${id}`)
   revalidatePath('/admin/project')
-  revalidatePath('/[locale]/project', 'layout')
+  revalidatePath('/[locale]/(public)/project', 'layout')
   return { success: true }
 }
 
@@ -134,7 +134,7 @@ export async function deleteProject(id: string) {
   }
 
   revalidatePath('/admin/project')
-  revalidatePath('/[locale]/project', 'layout')
+  revalidatePath('/[locale]/(public)/project', 'layout')
   return { success: true }
 }
 
@@ -222,7 +222,7 @@ export async function uploadProjectImages(
     }
 
     revalidatePath(`/admin/project/${projectId}`)
-    revalidatePath('/[locale]/project', 'layout')
+    revalidatePath('/[locale]/(public)/project', 'layout')
     return { success: true }
   } catch (error) {
     console.error('Upload Project Images Error:', error)
@@ -239,7 +239,7 @@ export async function deleteProjectImage(id: string) {
   }
 
   revalidatePath('/admin/project')
-  revalidatePath('/[locale]/project', 'layout')
+  revalidatePath('/[locale]/(public)/project', 'layout')
   return { success: true }
 }
 
@@ -258,7 +258,7 @@ export async function setProjectCover(projectId: string, imageUrl: string) {
 
   revalidatePath(`/admin/project/${projectId}`)
   revalidatePath('/admin/project')
-  revalidatePath('/[locale]/project', 'layout')
+  revalidatePath('/[locale]/(public)/project', 'layout')
   return { success: true }
 }
 
@@ -289,7 +289,7 @@ export async function updateProjectOrder(
   }
 
   revalidatePath('/admin/project')
-  revalidatePath('/[locale]/project', 'layout')
+  revalidatePath('/[locale]/(public)/project', 'layout')
   return { success: true }
 }
 
@@ -308,7 +308,7 @@ export async function updateProjectImagesOrder(
   await Promise.all(updates)
 
   revalidatePath('/admin/project')
-  revalidatePath('/[locale]/project', 'layout')
+  revalidatePath('/[locale]/(public)/project', 'layout')
   return { success: true }
 }
 
@@ -334,6 +334,6 @@ export async function toggleProjectActive(id: string, isActive: boolean) {
   }
 
   revalidatePath('/admin/project')
-  revalidatePath('/[locale]/project', 'layout')
+  revalidatePath('/[locale]/(public)/project', 'layout')
   return { success: true }
 }

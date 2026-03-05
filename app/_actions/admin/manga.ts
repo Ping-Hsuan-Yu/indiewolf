@@ -54,7 +54,7 @@ export async function createManga(formData: FormData) {
   }
 
   revalidatePath('/admin/manga')
-  revalidatePath('/[locale]/manga', 'layout')
+  revalidatePath('/[locale]/(public)/manga', 'layout')
   return { success: true }
 }
 
@@ -71,7 +71,7 @@ export async function deleteMangaWork(id: string) {
   }
 
   revalidatePath('/admin/manga')
-  revalidatePath('/[locale]/manga', 'layout')
+  revalidatePath('/[locale]/(public)/manga', 'layout')
   return { success: true }
 }
 
@@ -88,7 +88,7 @@ export async function toggleMangaActive(id: string, isActive: boolean) {
   }
 
   revalidatePath('/admin/manga')
-  revalidatePath('/[locale]/manga', 'layout')
+  revalidatePath('/[locale]/(public)/manga', 'layout')
   return { success: true }
 }
 
@@ -113,7 +113,7 @@ export async function updateMangaOrder(
   }
 
   revalidatePath('/admin/manga')
-  revalidatePath('/[locale]/manga', 'layout')
+  revalidatePath('/[locale]/(public)/manga', 'layout')
   return { success: true }
 }
 
@@ -218,7 +218,7 @@ export async function updateMangaDetail(id: string, formData: FormData) {
 
   revalidatePath(`/admin/manga/${id}`)
   revalidatePath('/admin/manga')
-  revalidatePath('/[locale]/manga', 'layout')
+  revalidatePath('/[locale]/(public)/manga', 'layout')
   return { success: true }
 }
 
@@ -285,7 +285,7 @@ export async function uploadMangaImages(mangaId: string, formData: FormData) {
     }
 
     revalidatePath(`/admin/manga/${mangaId}`)
-    revalidatePath('/[locale]/manga', 'layout')
+    revalidatePath('/[locale]/(public)/manga', 'layout')
     return { success: true }
   } catch (error) {
     console.error('Upload Error:', error)
@@ -302,7 +302,7 @@ export async function deleteMangaImage(id: string) {
   }
 
   revalidatePath('/admin/manga')
-  revalidatePath('/[locale]/manga', 'layout')
+  revalidatePath('/[locale]/(public)/manga', 'layout')
   return { success: true }
 }
 
@@ -327,6 +327,6 @@ export async function updateMangaImagesOrder(
   }
 
   revalidatePath('/admin/manga')
-  revalidatePath('/[locale]/manga', 'layout')
+  revalidatePath('/[locale]/(public)/manga', 'layout')
   return { success: true }
 }

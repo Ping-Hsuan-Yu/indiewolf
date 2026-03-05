@@ -15,6 +15,11 @@ export const metadata: Metadata = {
   icons: {
     icon: '/assets/logo.svg',
   },
+  openGraph: {
+    title: 'Lin ChaoYu',
+    description: '插畫修行。',
+    images: ['/assets/open_graph.jpg'],
+  },
 }
 
 const SUPPORTED_LOCALES = ['zh', 'en'] as const
