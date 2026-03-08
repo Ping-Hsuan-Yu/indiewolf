@@ -330,3 +330,48 @@ export async function updateMangaImagesOrder(
   revalidatePath('/[locale]/(public)/manga', 'layout')
   return { success: true }
 }
+
+export async function updateMangaCover(id: string, formData: FormData) {
+  const supabase = await getAuthorizedAdminClient()
+  const file = formData.get('cover') as File
+
+  if (!file) {
+    return { success: false, error: 'No file provided' }
+  }
+
+  try {
+    const arrayBuffer = await file.arrayBuffer()
+    const buffer = Buffer.from(arrayBuffer)
+
+    const uploadResult = await new Promise<any>((resolve, reject) => {
+      cloudinary.uploader
+        .upload_stream({ folder: 'manga' }, (error, result) => {
+          if (error) reject(error)
+          else resolve(result)
+        })
+        .end(buffer)
+    })
+
+    const { error } = await supabase
+      .from('manga_works')
+      .update({
+        cover_url: uploadResult.secure_url,
+        width: uploadResult.width,
+        height: uploadResult.height,
+      })
+      .eq('id', id)
+
+    if (error) {
+      console.error('Update Manga Cover Error:', error)
+      return { success: false, error: error.message }
+    }
+
+    revalidatePath(`/admin/manga/${id}`)
+    revalidatePath('/admin/manga')
+    revalidatePath('/[locale]/(public)/manga', 'layout')
+    return { success: true }
+  } catch (error) {
+    console.error('Upload manga cover error:', error)
+    return { success: false, error: 'Failed to upload cover' }
+  }
+}
