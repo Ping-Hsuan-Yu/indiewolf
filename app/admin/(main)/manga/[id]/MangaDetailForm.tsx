@@ -27,10 +27,11 @@ import {
   uploadMangaImages,
   deleteMangaImage,
   updateMangaImagesOrder,
+  updateMangaCover,
 } from '@/app/_actions/admin/manga'
 import { Tables } from '@/types/database.types'
 
-import { Loader2, Plus, Trash2, ChevronLeft } from 'lucide-react'
+import { Loader2, Plus, Trash2, ChevronLeft, ImagePlus } from 'lucide-react'
 
 import {
   AlertDialog,
@@ -352,6 +353,30 @@ function ImageGrid({
 export function MangaDetailForm({ manga, years }: MangaDetailFormProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
+  const [isUploadingCover, setIsUploadingCover] = useState(false)
+
+  const handleCoverUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setIsUploadingCover(true)
+    const toastId = toast.loading('上傳新首圖中...')
+
+    const formData = new FormData()
+    formData.append('cover', file)
+
+    const res = await updateMangaCover(manga.id, formData)
+
+    if (res.success) {
+      toast.success('首圖更換成功', { id: toastId })
+      router.refresh()
+    } else {
+      toast.error(`更換失敗: ${res.error}`, { id: toastId })
+    }
+
+    setIsUploadingCover(false)
+    e.target.value = ''
+  }
 
   // Form State
   const [formData, setFormData] = useState({
@@ -405,15 +430,33 @@ export function MangaDetailForm({ manga, years }: MangaDetailFormProps) {
 
       {/* Top Section: Info & Cover */}
       <div className="grid gap-8 md:grid-cols-[300px_1fr]">
-        {/* Cover Image - Read Only for now based on actions, creation sets cover */}
+        {/* Cover Image */}
         <div className="space-y-2">
-          <div className="bg-muted relative aspect-square overflow-hidden rounded-lg border">
+          <div className="bg-muted group relative aspect-square overflow-hidden rounded-lg border">
             <Image
               src={manga.cover_url}
               alt="Cover"
               fill
               className="object-contain"
             />
+            {/* Hover overlay with Add Button */}
+            <label className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
+              {isUploadingCover ? (
+                <Loader2 className="h-8 w-8 animate-spin text-white" />
+              ) : (
+                <div className="flex flex-col items-center text-white">
+                  <ImagePlus className="mb-2 h-8 w-8" />
+                  <span className="text-sm font-medium">更換首圖</span>
+                </div>
+              )}
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                disabled={isUploadingCover}
+                onChange={handleCoverUpload}
+              />
+            </label>
           </div>
         </div>
 
