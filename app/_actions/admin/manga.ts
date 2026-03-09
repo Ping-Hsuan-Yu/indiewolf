@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 
-import cloudinary from '@/lib/cloudinary'
+import cloudinary, { deleteCloudinaryImage } from '@/lib/cloudinary'
 import { createClient } from '@/utils/supabase/server'
 
 import { getAuthorizedAdminClient } from '../common'
@@ -27,7 +27,7 @@ export async function createManga(formData: FormData) {
 
   const uploadResult = await new Promise<any>((resolve, reject) => {
     cloudinary.uploader
-      .upload_stream({ folder: 'manga' }, (error, result) => {
+      .upload_stream({ folder: 'indiewolf/manga' }, (error, result) => {
         if (error) reject(error)
         else resolve(result)
       })
@@ -60,6 +60,18 @@ export async function createManga(formData: FormData) {
 
 export async function deleteMangaWork(id: string) {
   const supabaseAdmin = await getAuthorizedAdminClient()
+
+  const { data: manga } = await supabaseAdmin
+    .from('manga_works')
+    .select('cover_url')
+    .eq('id', id)
+    .single()
+
+  const { data: images } = await supabaseAdmin
+    .from('manga_images')
+    .select('url')
+    .eq('manga_id', id)
+
   const { error } = await supabaseAdmin
     .from('manga_works')
     .delete()
@@ -68,6 +80,14 @@ export async function deleteMangaWork(id: string) {
   if (error) {
     console.error('Delete Error:', error)
     return { success: false, error: error.message }
+  }
+
+  if (manga?.cover_url) {
+    await deleteCloudinaryImage(manga.cover_url)
+  }
+
+  if (images && images.length > 0) {
+    await Promise.all(images.map((img) => deleteCloudinaryImage(img.url)))
   }
 
   revalidatePath('/admin/manga')
@@ -243,7 +263,7 @@ export async function uploadMangaImages(mangaId: string, formData: FormData) {
 
         return new Promise<any>((resolve, reject) => {
           cloudinary.uploader
-            .upload_stream({ folder: 'manga_pages' }, (error, result) => {
+            .upload_stream({ folder: 'indiewolf/manga_pages' }, (error, result) => {
               if (error) reject(error)
               else resolve(result)
             })
@@ -295,10 +315,21 @@ export async function uploadMangaImages(mangaId: string, formData: FormData) {
 
 export async function deleteMangaImage(id: string) {
   const supabase = await getAuthorizedAdminClient()
+
+  const { data: existingImage } = await supabase
+    .from('manga_images')
+    .select('url')
+    .eq('id', id)
+    .single()
+
   const { error } = await supabase.from('manga_images').delete().eq('id', id)
 
   if (error) {
     return { success: false, error: error.message }
+  }
+
+  if (existingImage?.url) {
+    await deleteCloudinaryImage(existingImage.url)
   }
 
   revalidatePath('/admin/manga')
@@ -340,12 +371,18 @@ export async function updateMangaCover(id: string, formData: FormData) {
   }
 
   try {
+    const { data: oldManga } = await supabase
+      .from('manga_works')
+      .select('cover_url')
+      .eq('id', id)
+      .single()
+
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
 
     const uploadResult = await new Promise<any>((resolve, reject) => {
       cloudinary.uploader
-        .upload_stream({ folder: 'manga' }, (error, result) => {
+        .upload_stream({ folder: 'indiewolf/manga' }, (error, result) => {
           if (error) reject(error)
           else resolve(result)
         })
@@ -364,6 +401,10 @@ export async function updateMangaCover(id: string, formData: FormData) {
     if (error) {
       console.error('Update Manga Cover Error:', error)
       return { success: false, error: error.message }
+    }
+
+    if (oldManga?.cover_url) {
+      await deleteCloudinaryImage(oldManga.cover_url)
     }
 
     revalidatePath(`/admin/manga/${id}`)
