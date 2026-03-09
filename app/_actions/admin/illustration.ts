@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 
-import cloudinary from '@/lib/cloudinary'
+import cloudinary, { deleteCloudinaryImage } from '@/lib/cloudinary'
 import { createClient } from '@/utils/supabase/server'
 
 import { getAuthorizedAdminClient } from '../common'
@@ -25,7 +25,7 @@ export async function createIllustration(formData: FormData) {
 
   const uploadResult = await new Promise<any>((resolve, reject) => {
     cloudinary.uploader
-      .upload_stream({ folder: 'illustration' }, (error, result) => {
+      .upload_stream({ folder: 'indiewolf/illustration' }, (error, result) => {
         if (error) reject(error)
         else resolve(result)
       })
@@ -80,6 +80,13 @@ export async function updateIllustrationAlt(id: string, alt: string) {
 
 export async function deleteIllustrationWork(id: string) {
   const supabaseAdmin = await getAuthorizedAdminClient()
+
+  const { data: existingData } = await supabaseAdmin
+    .from('illustration_works')
+    .select('url')
+    .eq('id', id)
+    .single()
+
   const { error } = await supabaseAdmin
     .from('illustration_works')
     .delete()
@@ -88,6 +95,10 @@ export async function deleteIllustrationWork(id: string) {
   if (error) {
     console.error('Delete Error:', error)
     return { success: false, error: error.message }
+  }
+
+  if (existingData?.url) {
+    await deleteCloudinaryImage(existingData.url)
   }
 
   revalidatePath('/admin/illustration')

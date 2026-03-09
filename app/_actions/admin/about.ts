@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 
-import cloudinary from '@/lib/cloudinary'
+import cloudinary, { deleteCloudinaryImage } from '@/lib/cloudinary'
 import { AppLocale, toDatabaseLocale } from '@/lib/i18n/config'
 
 import { getAuthorizedAdminClient } from '../common'
@@ -64,16 +64,24 @@ export async function updateAboutProfile(
   const dbLocale = toDatabaseLocale(locale)
 
   let profileImageUrl = formData.get('existing_profile_image_url') as string
+  let oldProfileImageUrl = ''
 
   // Handle Image Upload if provided
   if (imageFile && imageFile.size > 0) {
+    const { data: oldProfile } = await supabase
+      .from('about_profiles')
+      .select('profile_image_url')
+      .eq('locale', dbLocale)
+      .single()
+    oldProfileImageUrl = oldProfile?.profile_image_url || ''
+
     try {
       const arrayBuffer = await imageFile.arrayBuffer()
       const buffer = Buffer.from(arrayBuffer)
 
       const uploadResult: any = await new Promise((resolve, reject) => {
         cloudinary.uploader
-          .upload_stream({ folder: 'about_profile' }, (error, result) => {
+          .upload_stream({ folder: 'indiewolf/about_profile' }, (error, result) => {
             if (error) reject(error)
             else resolve(result)
           })
@@ -103,6 +111,10 @@ export async function updateAboutProfile(
     return { success: false, error: error.message }
   }
 
+  if (oldProfileImageUrl && oldProfileImageUrl !== profileImageUrl) {
+    await deleteCloudinaryImage(oldProfileImageUrl)
+  }
+
   revalidatePath('/admin/about')
   revalidatePath('/(public)/about') // Revalidate public page too
   return { success: true }
@@ -128,7 +140,7 @@ export async function createSocialLink(formData: FormData) {
 
     const uploadResult: any = await new Promise((resolve, reject) => {
       cloudinary.uploader
-        .upload_stream({ folder: 'social_icons' }, (error, result) => {
+        .upload_stream({ folder: 'indiewolf/social_icons' }, (error, result) => {
           if (error) reject(error)
           else resolve(result)
         })
@@ -177,15 +189,23 @@ export async function updateSocialLink(id: string, formData: FormData) {
   const file = formData.get('logo') as File | null
 
   const updates: TablesUpdate<'social_links'> = { label, url }
+  let oldLogoUrl = ''
 
   if (file && file.size > 0) {
+    const { data: oldLink } = await supabase
+      .from('social_links')
+      .select('logo_url')
+      .eq('id', id)
+      .single()
+    oldLogoUrl = oldLink?.logo_url || ''
+
     try {
       const arrayBuffer = await file.arrayBuffer()
       const buffer = Buffer.from(arrayBuffer)
 
       const uploadResult: any = await new Promise((resolve, reject) => {
         cloudinary.uploader
-          .upload_stream({ folder: 'social_icons' }, (error, result) => {
+          .upload_stream({ folder: 'indiewolf/social_icons' }, (error, result) => {
             if (error) reject(error)
             else resolve(result)
           })
@@ -207,6 +227,10 @@ export async function updateSocialLink(id: string, formData: FormData) {
     return { success: false, error: error.message }
   }
 
+  if (oldLogoUrl && oldLogoUrl !== updates.logo_url) {
+    await deleteCloudinaryImage(oldLogoUrl)
+  }
+
   revalidatePath('/admin/about')
   revalidatePath('/(public)/about')
   return { success: true }
@@ -214,10 +238,21 @@ export async function updateSocialLink(id: string, formData: FormData) {
 
 export async function deleteSocialLink(id: string) {
   const supabase = await getAuthorizedAdminClient()
+
+  const { data: existingLink } = await supabase
+    .from('social_links')
+    .select('logo_url')
+    .eq('id', id)
+    .single()
+
   const { error } = await supabase.from('social_links').delete().eq('id', id)
 
   if (error) {
     return { success: false, error: error.message }
+  }
+
+  if (existingLink?.logo_url) {
+    await deleteCloudinaryImage(existingLink.logo_url)
   }
 
   revalidatePath('/admin/about')

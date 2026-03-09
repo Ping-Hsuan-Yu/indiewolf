@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 
-import cloudinary from '@/lib/cloudinary'
+import cloudinary, { deleteCloudinaryImage } from '@/lib/cloudinary'
 import { createClient } from '@/utils/supabase/server'
 
 import { getAuthorizedAdminClient } from '../common'
@@ -45,7 +45,7 @@ export async function createProject(formData: FormData) {
 
   const uploadResult = await new Promise<any>((resolve, reject) => {
     cloudinary.uploader
-      .upload_stream({ folder: 'projects/covers' }, (error, result) => {
+      .upload_stream({ folder: 'indiewolf/projects/covers' }, (error, result) => {
         if (error) reject(error)
         else resolve(result)
       })
@@ -126,11 +126,30 @@ export async function updateProject(id: string, formData: FormData) {
 export async function deleteProject(id: string) {
   const supabase = await getAuthorizedAdminClient()
 
+  const { data: project } = await supabase
+    .from('project_works')
+    .select('cover_url')
+    .eq('id', id)
+    .single()
+
+  const { data: images } = await supabase
+    .from('project_images')
+    .select('url')
+    .eq('project_id', id)
+
   const { error } = await supabase.from('project_works').delete().eq('id', id)
 
   if (error) {
     console.error('Delete Project Error:', error)
     return { success: false, error: error.message }
+  }
+
+  if (project?.cover_url) {
+    await deleteCloudinaryImage(project.cover_url)
+  }
+
+  if (images && images.length > 0) {
+    await Promise.all(images.map((img) => deleteCloudinaryImage(img.url)))
   }
 
   revalidatePath('/admin/project')
@@ -182,7 +201,7 @@ export async function uploadProjectImages(
 
     return new Promise<any>((resolve, reject) => {
       cloudinary.uploader
-        .upload_stream({ folder: 'projects/gallery' }, (error, result) => {
+        .upload_stream({ folder: 'indiewolf/projects/gallery' }, (error, result) => {
           if (error) reject(error)
           else resolve(result)
         })
@@ -232,10 +251,21 @@ export async function uploadProjectImages(
 
 export async function deleteProjectImage(id: string) {
   const supabase = await getAuthorizedAdminClient()
+
+  const { data: existingImage } = await supabase
+    .from('project_images')
+    .select('url')
+    .eq('id', id)
+    .single()
+
   const { error } = await supabase.from('project_images').delete().eq('id', id)
 
   if (error) {
     return { success: false, error: error.message }
+  }
+
+  if (existingImage?.url) {
+    await deleteCloudinaryImage(existingImage.url)
   }
 
   revalidatePath('/admin/project')
