@@ -5,8 +5,7 @@ import { normalizeLocale } from '@/lib/i18n/config'
 
 import MangaGallery from '@/app/[locale]/(public)/manga/[status]/MangaGallery'
 
-// TODO: uncomment 'ongoing' when there is ongoing manga content
-const VALID_STATUSES = [/* 'ongoing', */ 'completed'] as const
+const VALID_STATUSES = ['ongoing', 'completed'] as const
 type MangaStatus = (typeof VALID_STATUSES)[number]
 
 export const dynamicParams = true
