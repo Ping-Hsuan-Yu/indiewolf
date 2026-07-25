@@ -1,4 +1,4 @@
-import { BookOpen, FileText, FolderKanban, Image, Users } from 'lucide-react'
+import { BookOpen, FileText, FolderKanban, Image, Smartphone, Users } from 'lucide-react'
 
 import {
   Sidebar,
@@ -28,6 +28,11 @@ const navData = [
         title: 'Manga',
         url: '/admin/manga',
         icon: BookOpen,
+      },
+      {
+        title: 'Webtoon',
+        url: '/admin/webtoon',
+        icon: Smartphone,
       },
       {
         title: 'Project',

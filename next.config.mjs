@@ -32,7 +32,7 @@ const nextConfig = {
     return [
       {
         source: '/:locale(zh|en)/manga',
-        destination: '/:locale/manga/completed',
+        destination: '/:locale/manga/ongoing',
         permanent: false,
       },
     ]

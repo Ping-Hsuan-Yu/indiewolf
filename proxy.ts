@@ -38,5 +38,7 @@ export default async function proxy(req: Request & { nextUrl: URL }) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|assets/).*)'],
+  // 排除 api、_next、含副檔名的靜態檔（manifest.json、icon.png、apple-icon.png…），
+  // 否則 localePrefix:'always' 會把 /manifest.json 轉址到 /zh/manifest.json 而 404
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|assets/|.*\\..*).*)'],
 }

@@ -11,13 +11,13 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Lin ChaoYu',
-  description: '插畫修行。',
-  icons: {
-    icon: '/assets/logo.svg',
+  description: '林朝昱 Lin Chao Yu，台灣人，《鴉的奇形筆記》漫畫作者。',
+  appleWebApp: {
+    title: 'Lin ChaoYu',
   },
   openGraph: {
     title: 'Lin ChaoYu',
-    description: '插畫修行。',
+    description: '林朝昱 Lin Chao Yu，台灣人，《鴉的奇形筆記》漫畫作者。',
     images: ['/assets/open_graph.jpg'],
   },
 }

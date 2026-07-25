@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl'
 
 import { DEFAULT_APP_LOCALE, isAppLocale } from '@/lib/i18n/config'
 
-const STATUSES = ['ongoing', 'completed'] as const
+const STATUSES = ['ongoing', 'completed', 'webtoon'] as const
 
 export default function MangaStatusNav() {
   const t = useTranslations('navbar')
