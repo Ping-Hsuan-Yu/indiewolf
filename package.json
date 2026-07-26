@@ -1,14 +1,13 @@
 {
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "next lint",
-    "db:push:dev": "npx supabase db push --linked",
-    "db:push:prod": "npx supabase db push --db-url postgresql://postgres.[project-ref]:${SUPABASE_PROD_DB_PASSWORD}@aws-0-ap-northeast-2.pooler.supabase.com:6543/postgres",
+    "db:push": "npx supabase db push --linked",
     "db:diff": "npx supabase db diff --linked",
     "db:new": "npx supabase migration new",
-    "db:types": "npx supabase gen types typescript --project-id yadzgjnsmenwcsonffox --schema public > types/database.types.ts"
+    "db:types": "npx supabase gen types typescript --project-id diwxkpiwnirlvngldcoi --schema public > types/database.types.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

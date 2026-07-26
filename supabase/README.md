@@ -4,12 +4,12 @@
 
 ## 環境
 
-| 環境       | Project Ref            | 用途              |
-| ---------- | ---------------------- | ----------------- |
-| Dev        | `yadzgjnsmenwcsonffox` | 本地開發 + 測試機 |
-| Production | `diwxkpiwnirlvngldcoi` | 正式環境          |
+| 環境       | Project Ref            | 用途                          |
+| ---------- | ---------------------- | ----------------------------- |
+| Production | `diwxkpiwnirlvngldcoi` | 正式環境（唯一活躍 DB）        |
+| ~~Dev~~    | `yadzgjnsmenwcsonffox` | 已永久暫停，不再使用          |
 
-目前 `supabase link` 預設綁定到 **Dev**。
+Dev 專案已永久暫停，`supabase link` 綁定到 **prod**，所有指令直接對 prod。
 
 ## 日常操作
 
@@ -23,30 +23,17 @@ npm run db:new <migration_name>
 # 2. 編輯產生的 SQL 檔案
 #    supabase/migrations/<timestamp>_<migration_name>.sql
 
-# 3. Dry run 確認
-npx supabase db push --linked --dry-run
-
-# 4. Push 到 dev
-npm run db:push:dev
-
-# 5. 更新 TypeScript types
-npm run db:types
-```
-
-### Push 到 Production
-
-```bash
-# 臨時切換到 prod
+# 3. 確認 link 到 prod（只需一次）
 npx supabase link --project-ref diwxkpiwnirlvngldcoi
 
-# Dry run 確認
+# 4. Dry run 確認
 npx supabase db push --linked --dry-run
 
-# 正式 push
-npx supabase db push --linked
+# 5. 正式 push
+npm run db:push
 
-# 切回 dev
-npx supabase link --project-ref yadzgjnsmenwcsonffox
+# 6. 更新 TypeScript types
+npm run db:types
 ```
 
 ### 查看 Migration 狀態
@@ -61,9 +48,9 @@ npx supabase migration list --linked
 | 指令                    | 說明                             |
 | ----------------------- | -------------------------------- |
 | `npm run db:new <name>` | 建立新的 migration 檔案          |
-| `npm run db:push:dev`   | Push migrations 到 dev           |
+| `npm run db:push`       | Push migrations 到 prod          |
 | `npm run db:diff`       | 比較 local 與 remote schema 差異 |
-| `npm run db:types`      | 從 dev 產生 TypeScript types     |
+| `npm run db:types`      | 從 prod 產生 TypeScript types    |
 
 ## 目錄結構
 
@@ -80,12 +67,12 @@ supabase/
 
 - **Schema 變更只透過 migration**，不手動改 DB
 - **Migration 是單向的**，只往前不回退（要改就寫新的 migration）
-- **先 push dev 測試 → 驗證 → 再 push prod**
+- **變更直接對 prod**（無 dev 環境），push 前先 `--dry-run` 確認
 - **Migration 檔案要 commit 進 Git**，跟程式碼一起走 PR review
 - **Seed data 跟 migration 分開**，測試資料用 `seed.sql` 管理
 
 ## 注意事項
 
 - `supabase db dump` 和 `supabase db diff` 需要 **Docker**（用於 `pg_dump`）
-- 不需要跑 `supabase start`，開發直連遠端 dev DB
+- 不需要跑 `supabase start`，直連遠端 prod DB
 - `.supabase/` 目錄已加入 `.gitignore`，不會被 commit

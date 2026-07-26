@@ -39,6 +39,8 @@ export default function Navbar({ navItems }: NavbarProps) {
     return `/${locale}${href}`.replace('//', '/')
   }
 
+  const isExternal = (href?: string) => !!href && /^https?:\/\//.test(href)
+
   const isActive = (href?: string) => {
     if (!href) return false
     const target = withLocale(href)
@@ -69,7 +71,16 @@ export default function Navbar({ navItems }: NavbarProps) {
           <ul className="hidden items-center gap-4 md:flex">
             {navItems.map((item) => (
               <li key={item.key} className="group relative">
-                {item.href ? (
+                {item.href && isExternal(item.href) ? (
+                  <a
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="relative text-xl text-nowrap uppercase after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:rounded-full after:bg-black after:transition-transform after:duration-300 hover:after:scale-x-100"
+                  >
+                    {getLabel(item)}
+                  </a>
+                ) : item.href ? (
                   <Link
                     href={withLocale(item.href)}
                     className={`relative text-xl text-nowrap uppercase after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:rounded-full after:bg-black after:transition-transform after:duration-300 hover:after:scale-x-100 ${
@@ -157,7 +168,19 @@ export default function Navbar({ navItems }: NavbarProps) {
                 return (
                   <li key={item.key}>
                     <div className="flex items-center">
-                      {item.href ? (
+                      {item.href && isExternal(item.href) ? (
+                        <a
+                          href={item.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-1 px-3 py-2"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          <span className="relative text-xl text-nowrap uppercase after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:rounded-full after:bg-black after:transition-transform after:duration-300 hover:after:scale-x-100">
+                            {getLabel(item)}
+                          </span>
+                        </a>
+                      ) : item.href ? (
                         <Link
                           href={withLocale(item.href)}
                           className="flex-1 px-3 py-2"
