@@ -1,14 +1,8 @@
-import {
-  getIllustrationWorks,
-  getIllustrationYears,
-} from '@/app/_actions/public/illustration'
+import { getIllustrationWorks } from '@/app/_actions/public/illustration'
 
 import IllustrationGallery from '@/app/[locale]/(public)/illustration/[year]/IllustrationGallery'
 
-export async function generateStaticParams() {
-  const years = await getIllustrationYears()
-  return years.map((year) => ({ year }))
-}
+export const dynamic = 'force-dynamic'
 
 type IllustrationYearPageProps = {
   params: Promise<{

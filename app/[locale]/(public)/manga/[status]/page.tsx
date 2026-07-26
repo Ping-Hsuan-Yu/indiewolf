@@ -10,11 +10,7 @@ import WebtoonGallery from '@/app/[locale]/(public)/manga/[status]/WebtoonGaller
 const VALID_STATUSES = ['ongoing', 'completed', 'webtoon'] as const
 type MangaStatus = (typeof VALID_STATUSES)[number]
 
-export const dynamicParams = true
-
-export function generateStaticParams() {
-  return VALID_STATUSES.map((status) => ({ status }))
-}
+export const dynamic = 'force-dynamic'
 
 type MangaStatusPageProps = {
   params: Promise<{
