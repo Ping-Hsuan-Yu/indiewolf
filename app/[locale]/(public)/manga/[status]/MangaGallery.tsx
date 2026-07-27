@@ -72,7 +72,7 @@ export default function MangaGallery({ entries, locale }: MangaGalleryProps) {
                 alt={item.title}
                 width={item.width}
                 height={item.height}
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                className="h-auto w-full transition-transform duration-300 group-hover:scale-105"
                 sizes="(max-width: 768px) 100vw, 50vw"
               />
             </button>
@@ -88,7 +88,7 @@ export default function MangaGallery({ entries, locale }: MangaGalleryProps) {
                 </span>
               </p>
               {item.description && (
-                <p className="text-sm">{item.description}</p>
+                <p className="text-sm whitespace-pre-line">{item.description}</p>
               )}
             </div>
           </div>
