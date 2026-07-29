@@ -52,7 +52,11 @@ export function AddWebtoonSheet({ onUploadSuccess }: AddWebtoonSheetProps) {
     formData.append('external_url', externalUrl)
 
     try {
-      await createWebtoon(formData)
+      const res = await createWebtoon(formData)
+      if (!res.success) {
+        toast.error('上傳失敗，請稍後再試')
+        return
+      }
       toast.success('上傳成功')
       setOpen(false)
       setTitleZh('')

@@ -2,10 +2,12 @@
 
 import { revalidatePath } from 'next/cache'
 
-import cloudinary, { deleteCloudinaryImage } from '@/lib/cloudinary'
+import { deleteCloudinaryImage, uploadToCloudinary } from '@/lib/cloudinary'
 import { createClient } from '@/utils/supabase/server'
 
 import { getAuthorizedAdminClient } from '../common'
+
+import { runBatchUpdate } from './_helpers'
 
 import type { Tables, TablesInsert, TablesUpdate } from '@/types/database.types'
 
@@ -16,7 +18,6 @@ function revalidateWebtoon(id?: string) {
 }
 
 export async function createWebtoon(formData: FormData) {
-  const supabase = await getAuthorizedAdminClient()
   const title_zh = formData.get('title_zh') as string
   const title_en = formData.get('title_en') as string
   const summary_zh = formData.get('summary_zh') as string
@@ -25,41 +26,44 @@ export async function createWebtoon(formData: FormData) {
   const file = formData.get('cover') as File
 
   if (!file || !external_url) {
-    throw new Error('Missing required fields')
+    return { success: false, error: 'Missing required fields' }
   }
 
-  const arrayBuffer = await file.arrayBuffer()
-  const buffer = Buffer.from(arrayBuffer)
+  // MAINT-3: mutations report failure via { success, error } (not throw), so call
+  // sites use one consistent pattern. Upload/auth errors are caught here too.
+  try {
+    const supabase = await getAuthorizedAdminClient()
+    const uploadResult = await uploadToCloudinary(file, 'indiewolf/webtoon')
 
-  const uploadResult = await new Promise<any>((resolve, reject) => {
-    cloudinary.uploader
-      .upload_stream({ folder: 'indiewolf/webtoon' }, (error, result) => {
-        if (error) reject(error)
-        else resolve(result)
-      })
-      .end(buffer)
-  })
+    const insertData: TablesInsert<'webtoon_works'> = {
+      cover_url: uploadResult.secure_url,
+      title_zh: title_zh || '',
+      title_en: title_en || '',
+      summary_zh: summary_zh || '',
+      summary_en: summary_en || '',
+      external_url,
+      width: uploadResult.width,
+      height: uploadResult.height,
+      order_index: 0,
+    }
+    const { error } = await supabase.from('webtoon_works').insert(insertData)
 
-  const insertData: TablesInsert<'webtoon_works'> = {
-    cover_url: uploadResult.secure_url,
-    title_zh: title_zh || '',
-    title_en: title_en || '',
-    summary_zh: summary_zh || '',
-    summary_en: summary_en || '',
-    external_url,
-    width: uploadResult.width,
-    height: uploadResult.height,
-    order_index: 0,
+    if (error) {
+      console.error('Database Error:', error)
+      // DATA-3: DB insert failed — remove the just-uploaded cover to avoid orphan
+      await deleteCloudinaryImage(uploadResult.secure_url)
+      return { success: false, error: 'Failed to create webtoon' }
+    }
+
+    revalidateWebtoon()
+    return { success: true }
+  } catch (error) {
+    console.error('Create webtoon error:', error)
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to create webtoon',
+    }
   }
-  const { error } = await supabase.from('webtoon_works').insert(insertData)
-
-  if (error) {
-    console.error('Database Error:', error)
-    throw new Error('Failed to create webtoon')
-  }
-
-  revalidateWebtoon()
-  return { success: true }
 }
 
 export async function getWebtoonsAction(): Promise<Tables<'webtoon_works'>[]> {
@@ -134,17 +138,7 @@ export async function updateWebtoonCover(id: string, formData: FormData) {
       .eq('id', id)
       .single()
 
-    const arrayBuffer = await file.arrayBuffer()
-    const buffer = Buffer.from(arrayBuffer)
-
-    const uploadResult = await new Promise<any>((resolve, reject) => {
-      cloudinary.uploader
-        .upload_stream({ folder: 'indiewolf/webtoon' }, (error, result) => {
-          if (error) reject(error)
-          else resolve(result)
-        })
-        .end(buffer)
-    })
+    const uploadResult = await uploadToCloudinary(file, 'indiewolf/webtoon')
 
     const { error } = await supabase
       .from('webtoon_works')
@@ -157,6 +151,8 @@ export async function updateWebtoonCover(id: string, formData: FormData) {
 
     if (error) {
       console.error('Update Webtoon Cover Error:', error)
+      // DATA-3: DB update failed — remove the just-uploaded cover to avoid orphan
+      await deleteCloudinaryImage(uploadResult.secure_url)
       return { success: false, error: error.message }
     }
 
@@ -217,7 +213,7 @@ export async function deleteWebtoonWork(id: string) {
 
 export async function updateWebtoonOrder(
   items: { id: string; order_index: number }[]
-) {
+): Promise<{ success: true } | { success: false; error: string }> {
   const supabaseAdmin = await getAuthorizedAdminClient()
 
   const updates = items.map((item) =>
@@ -227,13 +223,8 @@ export async function updateWebtoonOrder(
       .eq('id', item.id)
   )
 
-  const results = await Promise.all(updates)
-  const errors = results.filter((r) => r.error)
-
-  if (errors.length > 0) {
-    console.error('Batch Update Errors:', errors)
-    return { success: false, error: 'Some updates failed' }
-  }
+  const batchError = await runBatchUpdate(updates)
+  if (batchError) return batchError
 
   revalidateWebtoon()
   return { success: true }
