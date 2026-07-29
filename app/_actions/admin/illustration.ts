@@ -38,6 +38,8 @@ export async function createIllustration(formData: FormData) {
 
     if (error) {
       console.error('Database Error:', error)
+      // DATA-3: DB insert failed — remove the just-uploaded image to avoid orphan
+      await deleteCloudinaryImage(uploadResult.secure_url)
       return { success: false, error: 'Failed to create illustration' }
     }
 

@@ -43,6 +43,8 @@ export async function createManga(formData: FormData) {
 
     if (error) {
       console.error('Database Error:', error)
+      // DATA-3: DB insert failed — remove the just-uploaded cover to avoid orphan
+      await deleteCloudinaryImage(uploadResult.secure_url)
       return { success: false, error: 'Failed to create manga' }
     }
 
@@ -291,6 +293,8 @@ export async function uploadMangaImages(mangaId: string, formData: FormData) {
 
     if (error) {
       console.error('Batch Insert Error:', error)
+      // DATA-3: DB insert failed — remove the just-uploaded images to avoid orphans
+      await Promise.all(results.map((r) => deleteCloudinaryImage(r.secure_url)))
       return { success: false, error: error.message }
     }
 
@@ -380,6 +384,8 @@ export async function updateMangaCover(id: string, formData: FormData) {
 
     if (error) {
       console.error('Update Manga Cover Error:', error)
+      // DATA-3: DB update failed — remove the just-uploaded cover to avoid orphan
+      await deleteCloudinaryImage(uploadResult.secure_url)
       return { success: false, error: error.message }
     }
 

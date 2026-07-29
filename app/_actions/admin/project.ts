@@ -74,6 +74,8 @@ export async function createProject(formData: FormData) {
 
     if (error) {
       console.error('Create Project Error:', error)
+      // DATA-3: DB insert failed — remove the just-uploaded cover to avoid orphan
+      await deleteCloudinaryImage(uploadResult.secure_url)
       return { success: false, error: 'Failed to create project: ' + error.message }
     }
 
@@ -229,6 +231,8 @@ export async function uploadProjectImages(
 
     if (error) {
       console.error('Batch Insert Project Images Error:', error)
+      // DATA-3: DB insert failed — remove the just-uploaded images to avoid orphans
+      await Promise.all(results.map((r) => deleteCloudinaryImage(r.secure_url)))
       return { success: false, error: error.message }
     }
 
@@ -327,7 +331,13 @@ export async function updateProjectImagesOrder(
       .eq('id', item.id)
   )
 
-  await Promise.all(updates)
+  const results = await Promise.all(updates)
+  const errors = results.filter((r) => r.error)
+
+  if (errors.length > 0) {
+    console.error('Batch Update Errors:', errors)
+    return { success: false, error: 'Some updates failed' }
+  }
 
   revalidatePath('/admin/project')
   revalidatePath('/[locale]/(public)/project', 'layout')

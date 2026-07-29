@@ -65,6 +65,7 @@ export async function updateAboutProfile(
 
   let profileImageUrl = formData.get('existing_profile_image_url') as string
   let oldProfileImageUrl = ''
+  let newlyUploadedUrl = ''
 
   // Handle Image Upload if provided
   if (imageFile && imageFile.size > 0) {
@@ -81,6 +82,7 @@ export async function updateAboutProfile(
         'indiewolf/about_profile'
       )
       profileImageUrl = uploadResult.secure_url
+      newlyUploadedUrl = uploadResult.secure_url
     } catch (error) {
       console.error('Image upload failed:', error)
       return { success: false, error: 'Failed to upload image' }
@@ -100,6 +102,10 @@ export async function updateAboutProfile(
 
   if (error) {
     console.error('Profile update failed:', error)
+    // DATA-3: DB upsert failed — remove the just-uploaded image (if any) to avoid orphan
+    if (newlyUploadedUrl) {
+      await deleteCloudinaryImage(newlyUploadedUrl)
+    }
     return { success: false, error: error.message }
   }
 
@@ -155,6 +161,8 @@ export async function createSocialLink(formData: FormData) {
 
   if (error) {
     console.error('Create social link failed:', error)
+    // DATA-3: DB insert failed — remove the just-uploaded logo to avoid orphan
+    await deleteCloudinaryImage(logoUrl)
     return { success: false, error: error.message }
   }
 
@@ -194,6 +202,10 @@ export async function updateSocialLink(id: string, formData: FormData) {
     .eq('id', id)
 
   if (error) {
+    // DATA-3: DB update failed — remove the just-uploaded logo (if any) to avoid orphan
+    if (updates.logo_url) {
+      await deleteCloudinaryImage(updates.logo_url)
+    }
     return { success: false, error: error.message }
   }
 
@@ -258,7 +270,13 @@ export async function updateSocialLinksOrder(
       .eq('id', item.id)
   )
 
-  await Promise.all(updates)
+  const results = await Promise.all(updates)
+  const errors = results.filter((r) => r.error)
+
+  if (errors.length > 0) {
+    console.error('Batch Update Errors:', errors)
+    return { success: false, error: 'Some updates failed' }
+  }
 
   revalidatePath('/admin/about')
   revalidatePath('/[locale]/(public)/about', 'layout')

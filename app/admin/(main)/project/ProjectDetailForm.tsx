@@ -376,9 +376,14 @@ export function ProjectDetailForm({ project }: ProjectDetailFormProps) {
       }))
 
       try {
-        await updateProjectImagesOrder(updates)
+        const res = await updateProjectImagesOrder(updates)
+        if (!res.success) {
+          toast.error('排序更新失敗')
+          router.refresh()
+        }
       } catch (error) {
         toast.error('排序更新失敗')
+        router.refresh()
       }
     }
   }
