@@ -1,17 +1,11 @@
 'use server'
 
 import { supabase } from '@/lib/supabase'
+import { buildTree } from '@/lib/nav-tree'
 
-import type { Tables } from '@/types/database.types'
+export type { NavItem } from '@/lib/nav-tree'
 
-export type NavItem = Omit<
-  Tables<'nav_items'>,
-  'parent_id' | 'is_active' | 'created_at' | 'updated_at'
-> & {
-  children?: NavItem[]
-}
-
-export async function getNavItems(): Promise<NavItem[]> {
+export async function getNavItems() {
   const { data, error } = await supabase
     .from('nav_items')
     .select('*')
@@ -20,49 +14,8 @@ export async function getNavItems(): Promise<NavItem[]> {
 
   if (error) {
     console.error('Error fetching nav items:', error)
-    return []
+    throw new Error(`Failed to load nav items: ${error.message}`)
   }
 
   return buildTree(data || [])
-}
-
-function buildTree(items: any[]): NavItem[] {
-  const itemMap = new Map<string, NavItem>()
-  const rootItems: NavItem[] = []
-
-  // First pass: create all items
-  items.forEach((item) => {
-    itemMap.set(item.id, {
-      id: item.id,
-      key: item.key,
-      href: item.href,
-      order_index: item.order_index,
-      children: [],
-    })
-  })
-
-  // Second pass: build tree
-  items.forEach((item) => {
-    const navItem = itemMap.get(item.id)!
-
-    if (item.parent_id) {
-      // Is a child item
-      const parent = itemMap.get(item.parent_id)
-      if (parent) {
-        parent.children!.push(navItem)
-      }
-    } else {
-      // Is a root item
-      rootItems.push(navItem)
-    }
-  })
-
-  // Sort children by order_index
-  rootItems.forEach((item) => {
-    if (item.children && item.children.length > 0) {
-      item.children.sort((a, b) => a.order_index - b.order_index)
-    }
-  })
-
-  return rootItems.sort((a, b) => a.order_index - b.order_index)
 }
