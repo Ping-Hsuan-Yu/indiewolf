@@ -7,6 +7,8 @@ import { AppLocale, toDatabaseLocale } from '@/lib/i18n/config'
 
 import { getAuthorizedAdminClient } from '../common'
 
+import { runBatchUpdate } from './_helpers'
+
 import type { Tables, TablesInsert, TablesUpdate } from '@/types/database.types'
 
 // -- Types --
@@ -260,7 +262,7 @@ export async function toggleSocialLinkActive(id: string, isActive: boolean) {
 
 export async function updateSocialLinksOrder(
   items: { id: string; sort_order: number }[]
-) {
+): Promise<{ success: true } | { success: false; error: string }> {
   const supabase = await getAuthorizedAdminClient()
 
   const updates = items.map((item) =>
@@ -270,13 +272,8 @@ export async function updateSocialLinksOrder(
       .eq('id', item.id)
   )
 
-  const results = await Promise.all(updates)
-  const errors = results.filter((r) => r.error)
-
-  if (errors.length > 0) {
-    console.error('Batch Update Errors:', errors)
-    return { success: false, error: 'Some updates failed' }
-  }
+  const batchError = await runBatchUpdate(updates)
+  if (batchError) return batchError
 
   revalidatePath('/admin/about')
   revalidatePath('/[locale]/(public)/about', 'layout')

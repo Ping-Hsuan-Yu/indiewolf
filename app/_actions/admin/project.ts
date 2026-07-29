@@ -7,6 +7,8 @@ import { createClient } from '@/utils/supabase/server'
 
 import { getAuthorizedAdminClient } from '../common'
 
+import { runBatchUpdate } from './_helpers'
+
 import type { TablesInsert, TablesUpdate } from '@/types/database.types'
 
 export async function getProjectsAction() {
@@ -321,7 +323,7 @@ export async function updateProjectOrder(
 
 export async function updateProjectImagesOrder(
   items: { id: string; order_index: number }[]
-) {
+): Promise<{ success: true } | { success: false; error: string }> {
   const supabase = await getAuthorizedAdminClient()
 
   const updates = items.map((item) =>
@@ -331,13 +333,8 @@ export async function updateProjectImagesOrder(
       .eq('id', item.id)
   )
 
-  const results = await Promise.all(updates)
-  const errors = results.filter((r) => r.error)
-
-  if (errors.length > 0) {
-    console.error('Batch Update Errors:', errors)
-    return { success: false, error: 'Some updates failed' }
-  }
+  const batchError = await runBatchUpdate(updates)
+  if (batchError) return batchError
 
   revalidatePath('/admin/project')
   revalidatePath('/[locale]/(public)/project', 'layout')
