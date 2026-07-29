@@ -72,7 +72,6 @@ export function ProjectItem({ project }: ProjectItemProps) {
   const handleToggleActive = async (value: boolean) => {
     try {
       const result = await toggleProjectActive(project.id, value)
-      console.log(result)
       if (result.success) {
         toast.success(value ? '專案已顯示' : '專案已隱藏')
       } else {

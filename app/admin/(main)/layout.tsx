@@ -1,5 +1,5 @@
 import { AppSidebar } from '@/app/admin/(main)/AppSidebar'
-import { notoSans, chocolateClassicalSans } from '@/app/font'
+import { notoSans, chocolateClassicalSans } from '@/app/admin/font'
 import { SidebarProvider, SidebarTrigger } from '@/components/admin/ui/sidebar'
 import { Toaster } from '@/components/admin/ui/sonner'
 

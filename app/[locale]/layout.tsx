@@ -10,6 +10,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://www.linchaoyu.com'),
   title: 'Lin ChaoYu',
   description: '林朝昱 Lin Chao Yu，台灣人，《鴉的奇形筆記》漫畫作者。',
   appleWebApp: {

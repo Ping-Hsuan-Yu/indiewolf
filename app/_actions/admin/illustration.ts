@@ -55,7 +55,6 @@ export async function createIllustration(formData: FormData) {
 
 export async function updateIllustrationAlt(id: string, alt: string) {
   const supabaseAdmin = await getAuthorizedAdminClient()
-  console.log(id, alt)
   const updateData: TablesUpdate<'illustration_works'> = { alt }
   const { data, error } = await supabaseAdmin
     .from('illustration_works')

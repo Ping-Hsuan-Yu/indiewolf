@@ -16,8 +16,11 @@ export async function getUiMessages(locale: string) {
     .eq('locale', locale)
 
   if (error) {
+    // AVAIL-1: surface real query failures (e.g. DB offline) to the error boundary
+    // instead of returning {} — which the root layout would misread as "no such
+    // page" and render a 404, masking the outage.
     console.error('Error fetching UI translations:', error)
-    return {}
+    throw new Error(`Failed to load UI translations: ${error.message}`)
   }
 
   // Transform flat records to nested JSON

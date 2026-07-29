@@ -1,4 +1,6 @@
-export const dynamic = 'force-dynamic'
+// PERF-2: was force-dynamic; content is CMS data that changes only via admin writes,
+// which revalidate this path. ISR lets it serve from the edge cache.
+export const revalidate = 3600
 
 import { getAboutPageData } from '@/app/_actions/public/about'
 import { normalizeLocale } from '@/lib/i18n/config'

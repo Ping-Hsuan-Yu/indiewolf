@@ -1,10 +1,8 @@
-import {
-  Noto_Serif_TC,
-  Abhaya_Libre,
-  Chocolate_Classical_Sans,
-  Noto_Sans,
-} from 'next/font/google'
+import { Noto_Serif_TC, Abhaya_Libre } from 'next/font/google'
 import localFont from 'next/font/local'
+
+// ponytail: public-site fonts only. Admin fonts moved to app/admin/font.ts so their
+// @font-face CSS no longer leaks into public pages (PERF-5).
 
 export const notoSerifTC = Noto_Serif_TC({
   subsets: ['latin'],

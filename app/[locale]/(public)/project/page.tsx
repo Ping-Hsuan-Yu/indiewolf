@@ -9,7 +9,8 @@ type ProjectListPageProps = {
   }>
 }
 
-export const dynamic = 'force-dynamic'
+// PERF-2: was force-dynamic; admin writes revalidate this path, so ISR is safe.
+export const revalidate = 3600
 
 export default async function ProjectListPage({
   params,

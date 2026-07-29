@@ -116,7 +116,7 @@ export async function updateAboutProfile(
   }
 
   revalidatePath('/admin/about')
-  revalidatePath('/(public)/about') // Revalidate public page too
+  revalidatePath('/[locale]/(public)/about', 'layout') // Revalidate public page too
   return { success: true }
 }
 
@@ -178,7 +178,7 @@ export async function createSocialLink(formData: FormData) {
   }
 
   revalidatePath('/admin/about')
-  revalidatePath('/(public)/about')
+  revalidatePath('/[locale]/(public)/about', 'layout')
   return { success: true }
 }
 
@@ -232,7 +232,7 @@ export async function updateSocialLink(id: string, formData: FormData) {
   }
 
   revalidatePath('/admin/about')
-  revalidatePath('/(public)/about')
+  revalidatePath('/[locale]/(public)/about', 'layout')
   return { success: true }
 }
 
@@ -256,7 +256,7 @@ export async function deleteSocialLink(id: string) {
   }
 
   revalidatePath('/admin/about')
-  revalidatePath('/(public)/about')
+  revalidatePath('/[locale]/(public)/about', 'layout')
   return { success: true }
 }
 
@@ -272,7 +272,7 @@ export async function toggleSocialLinkActive(id: string, isActive: boolean) {
   }
 
   revalidatePath('/admin/about')
-  revalidatePath('/(public)/about')
+  revalidatePath('/[locale]/(public)/about', 'layout')
   return { success: true }
 }
 
@@ -291,6 +291,6 @@ export async function updateSocialLinksOrder(
   await Promise.all(updates)
 
   revalidatePath('/admin/about')
-  revalidatePath('/(public)/about')
+  revalidatePath('/[locale]/(public)/about', 'layout')
   return { success: true }
 }

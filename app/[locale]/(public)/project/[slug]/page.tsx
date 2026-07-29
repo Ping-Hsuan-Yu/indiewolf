@@ -5,7 +5,9 @@ import { normalizeLocale } from '@/lib/i18n/config'
 
 import ProjectImageGrid from '@/app/[locale]/(public)/project/[slug]/ProjectImageGrid'
 
-export const dynamic = 'force-dynamic'
+// PERF-2 / MAINT-9: dropped force-dynamic (which was silently disabling the
+// generateStaticParams below). Now pre-rendered per slug + ISR; admin writes revalidate.
+export const revalidate = 3600
 
 export async function generateStaticParams() {
   try {

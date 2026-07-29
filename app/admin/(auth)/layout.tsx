@@ -1,4 +1,4 @@
-import { notoSans, chocolateClassicalSans } from '@/app/font'
+import { notoSans, chocolateClassicalSans } from '@/app/admin/font'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import '../globals.css'

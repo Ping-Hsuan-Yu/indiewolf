@@ -19,17 +19,16 @@ export async function getProjects(): Promise<ProjectWork[]> {
 
   if (error) {
     console.error('getProjects error:', error)
-    return []
+    throw new Error(`Failed to load projects: ${error.message}`)
   }
 
-  console.log('Projects fetched:', data?.length)
   return (data || []) as ProjectWork[]
 }
 
 export async function getProjectBySlug(
   slug: string
 ): Promise<ProjectWork | null> {
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('project_works')
     .select(
       `
@@ -41,12 +40,16 @@ export async function getProjectBySlug(
     .eq('is_active', true)
     .single()
 
+  // PGRST116 = slug not found → return null so the page can notFound(); other errors
+  // are real failures that should surface (AVAIL-2).
+  if (error && error.code !== 'PGRST116') {
+    console.error('getProjectBySlug error:', error)
+    throw new Error(`Failed to load project: ${error.message}`)
+  }
+
   if (data?.images) {
     // Ensure images are sorted by order_index
-    data.images.sort(
-      (a: ProjectImage, b: ProjectImage) =>
-        (a.order_index || 0) - (b.order_index || 0)
-    )
+    data.images.sort((a, b) => (a.order_index || 0) - (b.order_index || 0))
   }
 
   return data as ProjectWork | null

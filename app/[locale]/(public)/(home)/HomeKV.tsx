@@ -76,6 +76,7 @@ export default function HomeKV({
             index === currentFrame ? 'z-10 opacity-100' : 'z-0 opacity-0'
           }`}
           loading={index === 0 ? 'eager' : undefined}
+          fetchPriority={index === 0 ? 'high' : undefined}
         />
       ))}
     </div>

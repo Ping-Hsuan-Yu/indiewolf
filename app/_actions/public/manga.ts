@@ -11,11 +11,16 @@ export type MangaWork = Tables<'manga_works'> & {
 export type MangaImage = Tables<'manga_images'>
 
 export async function getMangaYears(): Promise<string[]> {
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('manga_works')
     .select('year')
     .eq('is_active', true)
     .order('year', { ascending: false })
+
+  if (error) {
+    console.error('getMangaYears error:', error)
+    throw new Error(`Failed to load manga years: ${error.message}`)
+  }
 
   // Deduplicate years and sort descending
   const years = Array.from(new Set((data || []).map((item) => item.year)))
@@ -23,7 +28,7 @@ export async function getMangaYears(): Promise<string[]> {
 }
 
 export async function getMangaWorks(year: string): Promise<MangaWork[]> {
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('manga_works')
     .select(
       `
@@ -37,9 +42,15 @@ export async function getMangaWorks(year: string): Promise<MangaWork[]> {
     .order('order_index', { ascending: true })
     .order('order_index', { referencedTable: 'manga_images', ascending: true })
 
-  console.log(data)
+  if (error) {
+    console.error('getMangaWorks error:', error)
+    throw new Error(`Failed to load manga works: ${error.message}`)
+  }
 
-  return (data || []) as MangaWork[]
+  // ponytail: cast needed — `src:public_id` is a PostgREST computed column backed by
+  // a DB function not present in the generated types (DATA-1). Drop the cast once
+  // types are regenerated from prod (BUILD-3).
+  return (data ?? []) as unknown as MangaWork[]
 }
 
 export async function getMangaWorksByStatus(
@@ -47,7 +58,7 @@ export async function getMangaWorksByStatus(
 ): Promise<MangaWork[]> {
   const isCompleted = status === 'completed'
 
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('manga_works')
     .select(
       `
@@ -61,5 +72,10 @@ export async function getMangaWorksByStatus(
     .order('order_index', { ascending: true })
     .order('order_index', { referencedTable: 'manga_images', ascending: true })
 
-  return (data || []) as MangaWork[]
+  if (error) {
+    console.error('getMangaWorksByStatus error:', error)
+    throw new Error(`Failed to load manga works: ${error.message}`)
+  }
+
+  return (data ?? []) as unknown as MangaWork[]
 }
