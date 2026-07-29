@@ -22,7 +22,7 @@ import {
 } from '@/components/admin/ui/sheet'
 import { Textarea } from '@/components/admin/ui/textarea'
 
-import { CreatableSelect } from './CreatableSelect'
+import { CreatableSelect } from '@/components/admin/CreatableSelect'
 
 interface AddMangaSheetProps {
   years: string[]

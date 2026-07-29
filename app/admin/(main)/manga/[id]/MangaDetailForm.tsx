@@ -52,7 +52,7 @@ import {
 } from '@/components/admin/ui/toggle-group'
 import { Textarea } from '@/components/admin/ui/textarea'
 
-import { CreatableSelect } from '../CreatableSelect'
+import { CreatableSelect } from '@/components/admin/CreatableSelect'
 
 type MangaDetail = Tables<'manga_works'> & {
   images: Tables<'manga_images'>[]

@@ -22,7 +22,7 @@ import {
   SheetClose,
 } from '@/components/admin/ui/sheet'
 
-import { CreatableSelect } from './CreatableSelect'
+import { CreatableSelect } from '@/components/admin/CreatableSelect'
 
 interface AddIllustrationSheetProps {
   years: string[]
