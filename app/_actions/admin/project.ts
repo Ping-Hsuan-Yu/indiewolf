@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 
-import cloudinary, { deleteCloudinaryImage } from '@/lib/cloudinary'
+import { deleteCloudinaryImage, uploadToCloudinary } from '@/lib/cloudinary'
 import { createClient } from '@/utils/supabase/server'
 
 import { getAuthorizedAdminClient } from '../common'
@@ -39,18 +39,10 @@ export async function createProject(formData: FormData) {
     throw new Error('Missing required fields: slug or cover')
   }
 
-  // Upload Cover to Cloudinary
-  const arrayBuffer = await file.arrayBuffer()
-  const buffer = Buffer.from(arrayBuffer)
-
-  const uploadResult = await new Promise<any>((resolve, reject) => {
-    cloudinary.uploader
-      .upload_stream({ folder: 'indiewolf/projects/covers' }, (error, result) => {
-        if (error) reject(error)
-        else resolve(result)
-      })
-      .end(buffer)
-  })
+  const uploadResult = await uploadToCloudinary(
+    file,
+    'indiewolf/projects/covers'
+  )
 
   // Get max order_index
   const { data: maxOrderData } = await supabase
@@ -195,19 +187,9 @@ export async function uploadProjectImages(
     return { success: false, error: 'No files provided' }
   }
 
-  const uploadPromises = files.map(async (file) => {
-    const arrayBuffer = await file.arrayBuffer()
-    const buffer = Buffer.from(arrayBuffer)
-
-    return new Promise<any>((resolve, reject) => {
-      cloudinary.uploader
-        .upload_stream({ folder: 'indiewolf/projects/gallery' }, (error, result) => {
-          if (error) reject(error)
-          else resolve(result)
-        })
-        .end(buffer)
-    })
-  })
+  const uploadPromises = files.map((file) =>
+    uploadToCloudinary(file, 'indiewolf/projects/gallery')
+  )
 
   try {
     const results = await Promise.all(uploadPromises)

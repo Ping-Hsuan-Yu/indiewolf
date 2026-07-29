@@ -25,7 +25,11 @@ const nextConfig = {
       'class-variance-authority',
     ],
     serverActions: {
-      bodySizeLimit: '500mb',
+      // SEC-3: per-file size/type is enforced in uploadToCloudinary (15MB/file).
+      // This bounds the whole request; batch uploads send all selected files at once,
+      // so it must stay well above one file. 100mb (was 500mb) cuts the DoS surface
+      // while keeping multi-image batches working — lower further if real batches are small.
+      bodySizeLimit: '100mb',
     },
   },
   async redirects() {

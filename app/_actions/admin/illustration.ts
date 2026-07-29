@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 
-import cloudinary, { deleteCloudinaryImage } from '@/lib/cloudinary'
+import { deleteCloudinaryImage, uploadToCloudinary } from '@/lib/cloudinary'
 import { createClient } from '@/utils/supabase/server'
 
 import { getAuthorizedAdminClient } from '../common'
@@ -19,18 +19,7 @@ export async function createIllustration(formData: FormData) {
     throw new Error('Missing required fields')
   }
 
-  // Upload to Cloudinary
-  const arrayBuffer = await file.arrayBuffer()
-  const buffer = Buffer.from(arrayBuffer)
-
-  const uploadResult = await new Promise<any>((resolve, reject) => {
-    cloudinary.uploader
-      .upload_stream({ folder: 'indiewolf/illustration' }, (error, result) => {
-        if (error) reject(error)
-        else resolve(result)
-      })
-      .end(buffer)
-  })
+  const uploadResult = await uploadToCloudinary(file, 'indiewolf/illustration')
 
   // Insert into Supabase
   const insertData: TablesInsert<'illustration_works'> = {

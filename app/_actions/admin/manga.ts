@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 
-import cloudinary, { deleteCloudinaryImage } from '@/lib/cloudinary'
+import { deleteCloudinaryImage, uploadToCloudinary } from '@/lib/cloudinary'
 import { createClient } from '@/utils/supabase/server'
 
 import { getAuthorizedAdminClient } from '../common'
@@ -22,17 +22,7 @@ export async function createManga(formData: FormData) {
     throw new Error('Missing required fields')
   }
 
-  const arrayBuffer = await file.arrayBuffer()
-  const buffer = Buffer.from(arrayBuffer)
-
-  const uploadResult = await new Promise<any>((resolve, reject) => {
-    cloudinary.uploader
-      .upload_stream({ folder: 'indiewolf/manga' }, (error, result) => {
-        if (error) reject(error)
-        else resolve(result)
-      })
-      .end(buffer)
-  })
+  const uploadResult = await uploadToCloudinary(file, 'indiewolf/manga')
 
   const insertData: TablesInsert<'manga_works'> = {
     cover_url: uploadResult.secure_url,
@@ -257,19 +247,9 @@ export async function uploadMangaImages(mangaId: string, formData: FormData) {
 
     for (let i = 0; i < files.length; i += CONCURRENCY) {
       const batch = files.slice(i, i + CONCURRENCY)
-      const batchPromises = batch.map(async (file) => {
-        const arrayBuffer = await file.arrayBuffer()
-        const buffer = Buffer.from(arrayBuffer)
-
-        return new Promise<any>((resolve, reject) => {
-          cloudinary.uploader
-            .upload_stream({ folder: 'indiewolf/manga_pages' }, (error, result) => {
-              if (error) reject(error)
-              else resolve(result)
-            })
-            .end(buffer)
-        })
-      })
+      const batchPromises = batch.map((file) =>
+        uploadToCloudinary(file, 'indiewolf/manga_pages')
+      )
 
       const batchResults = await Promise.all(batchPromises)
       results.push(...batchResults)
@@ -377,17 +357,7 @@ export async function updateMangaCover(id: string, formData: FormData) {
       .eq('id', id)
       .single()
 
-    const arrayBuffer = await file.arrayBuffer()
-    const buffer = Buffer.from(arrayBuffer)
-
-    const uploadResult = await new Promise<any>((resolve, reject) => {
-      cloudinary.uploader
-        .upload_stream({ folder: 'indiewolf/manga' }, (error, result) => {
-          if (error) reject(error)
-          else resolve(result)
-        })
-        .end(buffer)
-    })
+    const uploadResult = await uploadToCloudinary(file, 'indiewolf/manga')
 
     const { error } = await supabase
       .from('manga_works')

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 
-import cloudinary, { deleteCloudinaryImage } from '@/lib/cloudinary'
+import { deleteCloudinaryImage, uploadToCloudinary } from '@/lib/cloudinary'
 import { AppLocale, toDatabaseLocale } from '@/lib/i18n/config'
 
 import { getAuthorizedAdminClient } from '../common'
@@ -76,18 +76,10 @@ export async function updateAboutProfile(
     oldProfileImageUrl = oldProfile?.profile_image_url || ''
 
     try {
-      const arrayBuffer = await imageFile.arrayBuffer()
-      const buffer = Buffer.from(arrayBuffer)
-
-      const uploadResult: any = await new Promise((resolve, reject) => {
-        cloudinary.uploader
-          .upload_stream({ folder: 'indiewolf/about_profile' }, (error, result) => {
-            if (error) reject(error)
-            else resolve(result)
-          })
-          .end(buffer)
-      })
-
+      const uploadResult = await uploadToCloudinary(
+        imageFile,
+        'indiewolf/about_profile'
+      )
       profileImageUrl = uploadResult.secure_url
     } catch (error) {
       console.error('Image upload failed:', error)
@@ -135,18 +127,7 @@ export async function createSocialLink(formData: FormData) {
   // Upload Logo
   let logoUrl = ''
   try {
-    const arrayBuffer = await file.arrayBuffer()
-    const buffer = Buffer.from(arrayBuffer)
-
-    const uploadResult: any = await new Promise((resolve, reject) => {
-      cloudinary.uploader
-        .upload_stream({ folder: 'indiewolf/social_icons' }, (error, result) => {
-          if (error) reject(error)
-          else resolve(result)
-        })
-        .end(buffer)
-    })
-
+    const uploadResult = await uploadToCloudinary(file, 'indiewolf/social_icons')
     logoUrl = uploadResult.secure_url
   } catch (error) {
     console.error('Logo upload failed:', error)
@@ -200,18 +181,7 @@ export async function updateSocialLink(id: string, formData: FormData) {
     oldLogoUrl = oldLink?.logo_url || ''
 
     try {
-      const arrayBuffer = await file.arrayBuffer()
-      const buffer = Buffer.from(arrayBuffer)
-
-      const uploadResult: any = await new Promise((resolve, reject) => {
-        cloudinary.uploader
-          .upload_stream({ folder: 'indiewolf/social_icons' }, (error, result) => {
-            if (error) reject(error)
-            else resolve(result)
-          })
-          .end(buffer)
-      })
-
+      const uploadResult = await uploadToCloudinary(file, 'indiewolf/social_icons')
       updates.logo_url = uploadResult.secure_url
     } catch (error) {
       return { success: false, error: 'Failed to upload logo' }
