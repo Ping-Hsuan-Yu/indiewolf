@@ -34,17 +34,3 @@ export const gambetta = localFont({
   variable: '--font-gambetta',
   display: 'swap',
 })
-
-export const chocolateClassicalSans = Chocolate_Classical_Sans({
-  subsets: ['latin'],
-  weight: ['400'],
-  variable: '--font-chocolate',
-  display: 'swap',
-})
-
-export const notoSans = Noto_Sans({
-  subsets: ['latin'],
-  weight: 'variable',
-  variable: '--font-noto-sans',
-  display: 'swap',
-})

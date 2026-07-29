@@ -4,6 +4,7 @@ import { Chocolate_Classical_Sans, Noto_Sans } from 'next/font/google'
 // pull their @font-face CSS into the public bundle (PERF-5 / L3-L4 leak fix).
 
 export const chocolateClassicalSans = Chocolate_Classical_Sans({
+  subsets: ['latin'],
   weight: ['400'],
   variable: '--font-chocolate',
   display: 'swap',
