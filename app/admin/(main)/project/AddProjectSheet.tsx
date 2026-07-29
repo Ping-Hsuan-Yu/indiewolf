@@ -52,7 +52,11 @@ export function AddProjectSheet() {
     formData.append('description_en', descriptionEn)
 
     try {
-      await createProject(formData)
+      const res = await createProject(formData)
+      if (!res.success) {
+        toast.error('新增失敗，請稍後再試')
+        return
+      }
       toast.success('專案新增成功')
       setOpen(false)
       // Reset form

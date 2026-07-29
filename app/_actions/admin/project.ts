@@ -25,7 +25,6 @@ export async function getProjectsAction() {
 }
 
 export async function createProject(formData: FormData) {
-  const supabase = await getAuthorizedAdminClient()
   const slug = formData.get('slug') as string
   const title_zh = formData.get('title_zh') as string
   const title_en = formData.get('title_en') as string
@@ -36,47 +35,58 @@ export async function createProject(formData: FormData) {
   const file = formData.get('cover') as File
 
   if (!slug || !file) {
-    throw new Error('Missing required fields: slug or cover')
+    return { success: false, error: 'Missing required fields: slug or cover' }
   }
 
-  const uploadResult = await uploadToCloudinary(
-    file,
-    'indiewolf/projects/covers'
-  )
+  // MAINT-3: report failure via { success, error } (not throw) for a consistent
+  // call-site contract; upload/auth errors are caught here too.
+  try {
+    const supabase = await getAuthorizedAdminClient()
+    const uploadResult = await uploadToCloudinary(
+      file,
+      'indiewolf/projects/covers'
+    )
 
-  // Get max order_index
-  const { data: maxOrderData } = await supabase
-    .from('project_works')
-    .select('order_index')
-    .order('order_index', { ascending: false })
-    .limit(1)
-    .single()
+    // Get max order_index
+    const { data: maxOrderData } = await supabase
+      .from('project_works')
+      .select('order_index')
+      .order('order_index', { ascending: false })
+      .limit(1)
+      .single()
 
-  const nextOrderIndex = (maxOrderData?.order_index || 0) + 1
+    const nextOrderIndex = (maxOrderData?.order_index || 0) + 1
 
-  // Insert into Supabase
-  const insertData: TablesInsert<'project_works'> = {
-    slug,
-    title_zh: title_zh || '',
-    title_en: title_en || '',
-    subtitle_zh: subtitle_zh || '',
-    subtitle_en: subtitle_en || '',
-    description_zh: description_zh || '',
-    description_en: description_en || '',
-    cover_url: uploadResult.secure_url,
-    order_index: nextOrderIndex,
-    is_active: false, // Default to inactive or active? Mapped to requirement "只需先提供一張主圖以及其他文字說明", active state is usually manual.
+    // Insert into Supabase
+    const insertData: TablesInsert<'project_works'> = {
+      slug,
+      title_zh: title_zh || '',
+      title_en: title_en || '',
+      subtitle_zh: subtitle_zh || '',
+      subtitle_en: subtitle_en || '',
+      description_zh: description_zh || '',
+      description_en: description_en || '',
+      cover_url: uploadResult.secure_url,
+      order_index: nextOrderIndex,
+      is_active: false, // Default to inactive or active? Mapped to requirement "只需先提供一張主圖以及其他文字說明", active state is usually manual.
+    }
+    const { error } = await supabase.from('project_works').insert(insertData)
+
+    if (error) {
+      console.error('Create Project Error:', error)
+      return { success: false, error: 'Failed to create project: ' + error.message }
+    }
+
+    revalidatePath('/admin/project')
+    revalidatePath('/[locale]/(public)/project', 'layout')
+    return { success: true }
+  } catch (error) {
+    console.error('Create project error:', error)
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to create project',
+    }
   }
-  const { error } = await supabase.from('project_works').insert(insertData)
-
-  if (error) {
-    console.error('Create Project Error:', error)
-    throw new Error('Failed to create project: ' + error.message)
-  }
-
-  revalidatePath('/admin/project')
-  revalidatePath('/[locale]/(public)/project', 'layout')
-  return { success: true }
 }
 
 export async function updateProject(id: string, formData: FormData) {

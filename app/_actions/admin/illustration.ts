@@ -10,36 +10,48 @@ import { getAuthorizedAdminClient } from '../common'
 import type { TablesInsert, TablesUpdate } from '@/types/database.types'
 
 export async function createIllustration(formData: FormData) {
-  const supabase = await getAuthorizedAdminClient()
   const year = formData.get('year') as string
   const alt = formData.get('alt') as string
   const file = formData.get('image') as File
 
   if (!file || !year) {
-    throw new Error('Missing required fields')
+    return { success: false, error: 'Missing required fields' }
   }
 
-  const uploadResult = await uploadToCloudinary(file, 'indiewolf/illustration')
+  // MAINT-3: report failure via { success, error } (not throw) for a consistent
+  // call-site contract; upload/auth errors are caught here too.
+  try {
+    const supabase = await getAuthorizedAdminClient()
+    const uploadResult = await uploadToCloudinary(file, 'indiewolf/illustration')
 
-  // Insert into Supabase
-  const insertData: TablesInsert<'illustration_works'> = {
-    url: uploadResult.secure_url,
-    alt: alt || '',
-    year,
-    width: uploadResult.width,
-    height: uploadResult.height,
-    order_index: 0,
+    const insertData: TablesInsert<'illustration_works'> = {
+      url: uploadResult.secure_url,
+      alt: alt || '',
+      year,
+      width: uploadResult.width,
+      height: uploadResult.height,
+      order_index: 0,
+    }
+    const { error } = await supabase
+      .from('illustration_works')
+      .insert(insertData)
+
+    if (error) {
+      console.error('Database Error:', error)
+      return { success: false, error: 'Failed to create illustration' }
+    }
+
+    revalidatePath('/admin/illustration')
+    revalidatePath('/[locale]/(public)/illustration', 'layout')
+    return { success: true }
+  } catch (error) {
+    console.error('Create illustration error:', error)
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : 'Failed to create illustration',
+    }
   }
-  const { error } = await supabase.from('illustration_works').insert(insertData)
-
-  if (error) {
-    console.error('Database Error:', error)
-    throw new Error('Failed to create illustration')
-  }
-
-  revalidatePath('/admin/illustration')
-  revalidatePath('/[locale]/(public)/illustration', 'layout')
-  return { success: true }
 }
 
 export async function updateIllustrationAlt(id: string, alt: string) {

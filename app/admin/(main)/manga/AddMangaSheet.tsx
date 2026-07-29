@@ -58,7 +58,11 @@ export function AddMangaSheet({ years, onUploadSuccess }: AddMangaSheetProps) {
     formData.append('summary_en', summaryEn)
 
     try {
-      await createManga(formData)
+      const res = await createManga(formData)
+      if (!res.success) {
+        toast.error('上傳失敗，請稍後再試')
+        return
+      }
       toast.success('上傳成功')
       setOpen(false)
       // Reset form

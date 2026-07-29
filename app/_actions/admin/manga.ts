@@ -10,7 +10,6 @@ import { getAuthorizedAdminClient } from '../common'
 import type { Tables, TablesInsert, TablesUpdate } from '@/types/database.types'
 
 export async function createManga(formData: FormData) {
-  const supabase = await getAuthorizedAdminClient()
   const year = formData.get('year') as string
   const title_zh = formData.get('title_zh') as string
   const title_en = formData.get('title_en') as string
@@ -19,33 +18,44 @@ export async function createManga(formData: FormData) {
   const file = formData.get('cover') as File
 
   if (!file || !year) {
-    throw new Error('Missing required fields')
+    return { success: false, error: 'Missing required fields' }
   }
 
-  const uploadResult = await uploadToCloudinary(file, 'indiewolf/manga')
+  // MAINT-3: mutations report failure via { success, error } (not throw), so call
+  // sites use one consistent pattern. Upload/auth errors are caught here too.
+  try {
+    const supabase = await getAuthorizedAdminClient()
+    const uploadResult = await uploadToCloudinary(file, 'indiewolf/manga')
 
-  const insertData: TablesInsert<'manga_works'> = {
-    cover_url: uploadResult.secure_url,
-    title_zh: title_zh || '',
-    title_en: title_en || '',
-    summary_zh: summary_zh || '',
-    summary_en: summary_en || '',
-    year,
-    width: uploadResult.width,
-    height: uploadResult.height,
-    order_index: 0,
-    is_completed: false,
+    const insertData: TablesInsert<'manga_works'> = {
+      cover_url: uploadResult.secure_url,
+      title_zh: title_zh || '',
+      title_en: title_en || '',
+      summary_zh: summary_zh || '',
+      summary_en: summary_en || '',
+      year,
+      width: uploadResult.width,
+      height: uploadResult.height,
+      order_index: 0,
+      is_completed: false,
+    }
+    const { error } = await supabase.from('manga_works').insert(insertData)
+
+    if (error) {
+      console.error('Database Error:', error)
+      return { success: false, error: 'Failed to create manga' }
+    }
+
+    revalidatePath('/admin/manga')
+    revalidatePath('/[locale]/(public)/manga', 'layout')
+    return { success: true }
+  } catch (error) {
+    console.error('Create manga error:', error)
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to create manga',
+    }
   }
-  const { error } = await supabase.from('manga_works').insert(insertData)
-
-  if (error) {
-    console.error('Database Error:', error)
-    throw new Error('Failed to create manga')
-  }
-
-  revalidatePath('/admin/manga')
-  revalidatePath('/[locale]/(public)/manga', 'layout')
-  return { success: true }
 }
 
 export async function deleteMangaWork(id: string) {

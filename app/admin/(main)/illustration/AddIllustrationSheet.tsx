@@ -53,7 +53,11 @@ export function AddIllustrationSheet({
     formData.append('alt', alt)
 
     try {
-      await createIllustration(formData)
+      const res = await createIllustration(formData)
+      if (!res.success) {
+        toast.error('上傳失敗，請稍後再試')
+        return
+      }
       toast.success('上傳成功')
       setOpen(false)
       setAlt('')
